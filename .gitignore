@@ -24,7 +24,7 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-.env
+.env.production
 *.user
 bin/
 obj/
