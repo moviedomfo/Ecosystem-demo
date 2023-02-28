@@ -1,0 +1,45 @@
+# Build Stage 1
+FROM node:14.5.0-alpine as build
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY ./src ./src
+COPY ./babel.config.js ./
+COPY ./nginx/nginx.conf ./nginx
+COPY ./tsconfig.json ./
+
+RUN yarn build
+
+COPY ./dist ./dist
+# RUN npm run build
+
+# CREATE IMAGE STEP
+FROM node:14.5.0-alpine
+LABEL maintainer="Pelsoft SF by @moviedo"
+
+# RUN npm install pm2@3.5.1 -g
+
+WORKDIR /app
+
+# copia los archivos compilados y node_modules
+COPY --from=build /app/dist .
+COPY --from=build /app/node_modules ./node_modules
+
+# copia pm2.json y .env
+# ADD ./pm2.json .
+ADD ./.env.production ./.env
+
+# ENV PORT 3008
+# ENV PM2_HEALTH_PORT 3001
+ENV NODE_ENV production
+
+EXPOSE ${PORT}
+# EXPOSE ${PM2_HEALTH_PORT}
+
+CMD  node index.js
+
+
+
+
+

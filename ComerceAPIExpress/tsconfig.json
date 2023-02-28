@@ -1,0 +1,34 @@
+{
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "noLib": false,
+    "allowJs": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "skipLibCheck": true,
+    // "rootDir": "./src",
+    "outDir": "dist",
+    "baseUrl": "./",
+    "paths": {
+      "@common/*": ["./src/common/*"],
+      "@infra/*": ["./src/infra/*"],
+       "@models/*": ["./src/models/*"],
+      "@domain/*": ["./src/domain/*"],
+      "@application/*": ["./src/application/*"]
+    },
+
+    "noEmit": false,
+    "strict": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": ["reflect-metadata"],
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/build", "**/dist", "**/*.md", "**/rollup.config.js", "src/**/*.test.ts"]
+}

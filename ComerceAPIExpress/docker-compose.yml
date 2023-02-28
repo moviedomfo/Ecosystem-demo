@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  ercules:
+    container_name: ercules
+    image: moviedomfo/express_comerce
+    ports:
+      - 3015:3008
+    environment:
+      - SERVER_NAME="Ercules comerce ${PORT}"
+    networks:
+      net_eco:
+        ipv4_address: 172.20.0.3
+  platon:
+    image: moviedomfo/express_comerce
+    container_name: platon
+    ports:
+      - 3016:3008
+    environment:
+      - SERVER_NAME="Platon comerce ${PORT}"
+      # - PORT=3016
+    networks:
+      net_eco:
+        ipv4_address: 172.20.0.4
+
+  comerce-nginx:
+    container_name: comerce-nginx
+    image: nginx:latest
+    restart: always
+    # build:
+    #   context: ./nginx
+    ports:
+      - 6000:80
+      - 443:443
+    volumes:
+      - /e/volumens/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - ercules
+      - platon
+    networks:
+      net_eco:
+        ipv4_address: 172.20.0.5
+
+# networking for the Redis container
+networks:
+  net_eco:
+    ipam:
+      #driver: default
+      config:
+        - subnet: 172.20.0.0/16

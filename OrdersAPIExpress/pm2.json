@@ -1,0 +1,13 @@
+{
+    "name": "expressAuth0",
+    "script": "./index.js",
+    "instances": "3",
+    "env": {
+        "NODE_ENV": "development",
+        "PORT": 3008
+    },
+    "env_production": {
+        "NODE_ENV": "production",
+        "PORT": 3008
+    }
+}

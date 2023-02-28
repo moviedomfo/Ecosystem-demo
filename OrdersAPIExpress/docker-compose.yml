@@ -1,0 +1,43 @@
+version: "3.2"
+services:
+  ercules:
+    container_name: socrates
+    image: moviedomfo/express_orderpub
+    ports:
+      - 3025:${PORT}
+    environment:
+      - SERVER_NAME="Socrates orderpub ${PORT}"
+    networks:
+      net_pelsoft:
+        ipv4_address: 172.22.0.3
+  ulises:
+    image: moviedomfo/express_orderpub
+    container_name: ulises
+    ports:
+      - 3026:${PORT}
+
+    environment:
+      - SERVER_NAME="Ulises AUTH0 ${PORT}"
+    networks:
+      net_pelsoft:
+        ipv4_address: 172.22.0.4
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+      - 7000:80
+      - 443:443
+    networks:
+      net_pelsoft:
+        ipv4_address: 172.22.0.5
+
+# networking for the Redis container
+networks:
+  net_pelsoft:
+    ipam:
+      #driver: default
+      config:
+        - subnet: 172.22.0.0/16

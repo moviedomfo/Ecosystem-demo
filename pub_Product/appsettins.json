@@ -1,0 +1,8 @@
+{
+    "ProducerSettings": {
+        "apiUrlBase" : "http://localhost:58000/",
+        "sourceFolder": "e:\\cobranzas\\",
+        "destFolder": "c:\\Users\\moviedo\\Dropbox\\celam\\Cobranzas\\"
+  }
+  
+}

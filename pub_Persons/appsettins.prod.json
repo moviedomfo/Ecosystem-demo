@@ -1,0 +1,11 @@
+{
+    "cobranza": {
+        "apiUrlBase" : "http://localhost:58000/",
+      "apiUrlBase_" : "http://moviedo-001-site2.itempurl.com/",
+       "sourceFolder": "\\\\192.168.0.10\\sistema\\factuweb\\",
+        
+        "destFolder": "c:\\Users\\pelsoft\\Dropbox\\celam\\Cobranzas\\", 
+        "destFolder_": "c:\\Users\\moviedo\\Dropbox\\celam\\Cobranzas\\"
+  }
+  
+}
