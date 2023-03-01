@@ -15,7 +15,6 @@ import swaggerUi from "swagger-ui-express";
 import {logsMiddle} from "@common/log.middlewar";
 import {productRouter} from "@infra/router/productPub.router";
 require("dotenv").config();
-console.log(process.env.KAFKA_CLIENT_ID);
 
 if (!process.env.PORT) {
   process.exit(1);
@@ -64,7 +63,7 @@ app.use("/api/products/", logsMiddle);
 //app.use(loadControllers("./infra/controllers/*.ts", {cwd: __dirname}));
 
 app.use("/api/products/", productRouter);
-//app.use("/api/persons/", personRouter);
+app.use("/api/persons/", personRouter);
 
 // Attach the first Error handling Middleware
 app.use(notFoundHandler);
