@@ -14,7 +14,7 @@ export default class CustomersService {
     });
   }
 
-  // @Get("/getAll")
+  
   async GetAll(): Promise<PersonBE[]> {
     const url = AppSettings.BASE_COMERCE_URL + '/api/persons/customers';
     return new Promise<any>((resolve, reject) => {

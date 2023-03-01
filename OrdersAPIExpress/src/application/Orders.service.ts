@@ -17,7 +17,7 @@ export default class OrdersService implements IOrdersService {
     this._eventBusRepo = eventBusRepo;
   }
 
-  // @Post("/message")
+  
   public async CreateOrder(order: OrderDTO, origin: string): Promise<void> {
     order.OrderId = uuidv4();
     order.Status = "created";
@@ -38,7 +38,7 @@ export default class OrdersService implements IOrdersService {
     }
   }
 
-  // @Get("/getAll")
+ 
   public async GetAll(): Promise<OrderBE[]> {
     return this._ordersRepo.GetAll();
   }

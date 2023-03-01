@@ -29,4 +29,4 @@ Thumbs.db
 bin/
 obj/
 *_logs.txt
-
+*.bak

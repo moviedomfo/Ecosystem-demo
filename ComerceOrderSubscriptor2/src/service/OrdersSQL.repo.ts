@@ -1,7 +1,7 @@
 import { ExeptionFunctions } from '../utils/handleErrorFunctions';
 import { OrderDTO } from './../models/Order';
-
 import { OrderDetailsSchema, OrdersSchema } from './sql.schemas';
+import dayjs from 'dayjs';
 
 /**Persist to mongodb Persons */
 export default class OrdersRepository {
@@ -10,6 +10,9 @@ export default class OrdersRepository {
       // const f2 = dayjs(req.GeneratedDate).toISOString();
       // const f3 = dayjs(req.GeneratedDate).format("YYYY-MM-DD HH:mm:ss.SSS");
       // const f4 = dayjs(req.GeneratedDate.toString()).toDate();
+      const generatedDateString = dayjs(req.GeneratedDate).format(
+        'YYYY-MM-DD HH:mm:ss.SSS'
+      );
 
       const order = {
         // OrderId: req.OrderId,
@@ -17,7 +20,7 @@ export default class OrdersRepository {
         Department: req.Department,
         Status: req.Status,
         // DeliverryStatus: req.DeliverryStatus,
-        CreatedDate: req.GeneratedDate ? req.GeneratedDate : new Date(),
+        CreatedDate: generatedDateString,
         // CloudId: "Comerce",
       };
 
