@@ -3,7 +3,7 @@ node_modules/
 dist/
 .vs/
 
-# Log files
+
 *.log
 
 # Unit test reports
@@ -24,9 +24,9 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-.env.production
+.env
 *.user
 bin/
 obj/
 *_logs.txt
-*.bak
+

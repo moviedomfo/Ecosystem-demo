@@ -26,7 +26,7 @@ export class OrderPublisher {
 
     setInterval(async () => {
       await this.DoWork();
-    }, AppSettings.SECONDS * 1000);
+    }, AppSettings.SECONDS * 2000);
 
     Helper.LogConsole(
       `------------------${AppSettings.APP_NAME} started  ${

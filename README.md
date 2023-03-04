@@ -90,16 +90,24 @@ We use Apache Kafka packaged by Bitnami
         - zookeeper
 ```
 
-Next run:
+Next run :
 
 ```
-     docker-compose up -d
+   docker-compose up -d
+   docker-compose  -f docker-compose-kafka.yml up
+   docker-compose  up docker-compose-kafka.yml -d
+
 ```
 
-or
+ Below command will stop running containers, but it also removes the stopped containers as well as any networks that were created.
+   And.. for to remove vulumes append -v flag
 
-     1) docker-compose  -f docker-compose-kafka.yml down
-     2) docker-compose up -d
+```
+    docker-compose down
+    or
+    docker-compose down -v
+```
+
 
 ### kafka documentations
 
@@ -108,12 +116,20 @@ or
 
 ### kafka packages
 
+    yarn add kafkajs
+    this trow this error ✕ missing peer openapi-types@>=7...so you have to install
+
+        pnpm openapi-types@>=7
+
+    yarn add @kafkajs/confluent-schema-registry
+
+### kafka packages
+
     pnpm i kafkajs
     this trow this error ✕ missing peer openapi-types@>=7...so you have to install
 
         pnpm openapi-types@>=7
 
-    pnpm i @kafkajs/confluent-schema-registry
+    yarn add i @kafkajs/confluent-schema-registry
 
  
- docker-compose  up docker-compose-kafka.yml -d
