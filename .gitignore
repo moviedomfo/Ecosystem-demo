@@ -30,3 +30,5 @@ bin/
 obj/
 *_logs.txt
 
+OrdersAPIExpress/build/swagger.json
+OrdersAPIExpress/build/routes.ts
