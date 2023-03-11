@@ -1,11 +1,12 @@
-import { LogFunctions } from './../../common/helpers/logFunctions';
+import {LogFunctions} from "./../../common/helpers/logFunctions";
 import {PersonsSchema} from "@infra/schemas/sql.schemas";
 import {IPersonsRepository} from "@application/interfases/IPersonsRepository";
 
 import {PersonBE} from "@domain/Entities/PersonBE";
 import {Op} from "sequelize";
 import {DateFunctions} from "@common/helpers/dateFunctions";
-import { ExeptionFunctions } from '@common/helpers/handleErrorFunctions';
+import {ExeptionFunctions} from "@common/helpers/handleErrorFunctions";
+import {rejects} from "assert";
 
 /**Persist to mongodb Persons */
 export default class CustomersRepository implements IPersonsRepository {
@@ -41,28 +42,31 @@ export default class CustomersRepository implements IPersonsRepository {
         const cp = await PersonsSchema.create(person, {});
 
         resolve(cp.getDataValue("Id"));
-      } catch (error) {
-        let e = new Error("Insert into SQL errors : " + ExeptionFunctions.GetMessageError(error));
-        reject(e);
+      } catch (err) {
+        reject(err);
       }
     });
   }
 
   public GetById(id: string): Promise<PersonBE> {
-    return new Promise<PersonBE>(async (resolve) => {
-      const res = await PersonsSchema.findByPk(id);
-      const person: PersonBE = {
-        Id: res.getDataValue("Id"),
-        Name: res.getDataValue("Name"),
-        Lastname: res.getDataValue("LastName"),
-        City: res.getDataValue("LastName"),
-        Phone: res.getDataValue("Phone"),
-        kafka_Topic: res.getDataValue("kafka_Topic"),
-        DocNumber: res.getDataValue("DocNumber"),
-        GeneratedDate: res.getDataValue("GeneratedDate"),
-        CreatedDate: res.getDataValue("CreatedDate"),
-      };
-      resolve(person);
+    return new Promise<PersonBE>(async (resolve, reject) => {
+      try {
+        const res = await PersonsSchema.findByPk(id);
+        const person: PersonBE = {
+          Id: res.getDataValue("Id"),
+          Name: res.getDataValue("Name"),
+          Lastname: res.getDataValue("LastName"),
+          City: res.getDataValue("LastName"),
+          Phone: res.getDataValue("Phone"),
+          kafka_Topic: res.getDataValue("kafka_Topic"),
+          DocNumber: res.getDataValue("DocNumber"),
+          GeneratedDate: res.getDataValue("GeneratedDate"),
+          CreatedDate: res.getDataValue("CreatedDate"),
+        };
+        resolve(person);
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 
@@ -74,37 +78,40 @@ export default class CustomersRepository implements IPersonsRepository {
   }
 
   public async GetAll(name?: string): Promise<PersonBE[]> {
-    return new Promise<PersonBE[]>(async (resolve) => {
-      const where = {
-        Name: {
-          [Op.like]: name ? `${name}%` : "%",
-        },
-        kafka_Topic: {
-          [Op.eq]: "customers",
-        },
-      };
+    const where = {
+      Name: {
+        [Op.like]: name ? `${name}%` : "%",
+      },
+      kafka_Topic: {
+        [Op.eq]: "customers",
+      },
+    };
+    return new Promise<PersonBE[]>(async (resolve, reject) => {
+      try {
+        const res = await PersonsSchema.findAll({
+          where,
+        });
 
-      const res = await PersonsSchema.findAll({
-        where,
-      });
+        const persons = res.map((p, index) => {
+          const person: PersonBE = {
+            Id: p.getDataValue("Id"),
+            Name: p.getDataValue("Name"),
+            Lastname: p.getDataValue("LastName"),
+            City: p.getDataValue("LastName"),
+            Phone: p.getDataValue("Phone"),
+            kafka_Topic: p.getDataValue("kafka_Topic"),
+            DocNumber: p.getDataValue("DocNumber"),
+            GeneratedDate: p.getDataValue("GeneratedDate"),
+            CreatedDate: p.getDataValue("CreatedDate"),
+          };
 
-      const persons = res.map((p, index) => {
-        const person: PersonBE = {
-          Id: p.getDataValue("Id"),
-          Name: p.getDataValue("Name"),
-          Lastname: p.getDataValue("LastName"),
-          City: p.getDataValue("LastName"),
-          Phone: p.getDataValue("Phone"),
-          kafka_Topic: p.getDataValue("kafka_Topic"),
-          DocNumber: p.getDataValue("DocNumber"),
-          GeneratedDate: p.getDataValue("GeneratedDate"),
-          CreatedDate: p.getDataValue("CreatedDate"),
-        };
+          return person;
+        });
 
-        return person;
-      });
-
-      resolve(persons);
+        resolve(persons);
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 }

@@ -4,6 +4,9 @@ import {IKafkaMessageDto, ImessageDto} from "@domain/DTOs/MessageDto";
 import {IEventBusRepository} from "./interfases/IEventBusRepository";
 import {IPersonsRepository} from "./interfases/IPersonsRepository";
 import {IPersonsService} from "./../domain/IPersonsService";
+import CustomersRepository from "@infra/repos/CustomersSQL.repo";
+import PersonWasCreatedEvent from "./events/PersonWasCreatedEvents";
+import {or} from "sequelize";
 
 // @Route("PersonsService")
 export default class PersonsService implements IPersonsService {
@@ -31,15 +34,17 @@ export default class PersonsService implements IPersonsService {
 
       const id = await this._customersRepository.Insert(person);
       person.Id = id;
-      const msg: IKafkaMessageDto = {
-        key: person.Id.toString(),
-        command: "CreateCustomerEvent",
-        content: JSON.stringify(person),
-        origin: origin,
-      };
+      // const msg: IKafkaMessageDto = {
+      //   key: person.Id.toString(),
+      //   command: "CreateCustomerEvent",
+      //   content: JSON.stringify(person),
+      //   origin: origin,
+      // };
 
       /** send to Event Buss */
-      await this._EventBusRepo.PushToQueue(msg, "customers");
+      //await this._EventBusRepo.PushToQueue(msg, "customers");
+      const event: PersonWasCreatedEvent = new PersonWasCreatedEvent(person, origin);
+      await event.Emit();
     } catch (err) {
       //console.log("push err  " + JSON.stringify(err));
       throw err;
@@ -76,11 +81,15 @@ export default class PersonsService implements IPersonsService {
 
   // @Get("/getAll")
   public async GetAllCustomers(name?: string): Promise<PersonBE[]> {
-    return this._customersRepository.GetAll(name);
+    return await this._customersRepository.GetAll(name);
   }
   // @Get("/getById")
   public async GetProviderById(id: string): Promise<PersonBE> {
-    return this._providersRepository.GetById(id);
+    //try {
+    return await this._providersRepository.GetById(id);
+    // } catch (err) {
+    //   throw err;
+    // }
   }
 
   // @Get("/getAll")

@@ -5,7 +5,8 @@ export const logsMiddle = (request: Request, response: Response, next: NextFunct
   console.log("--------------logs middleware-------------------");
   console.log(request.headers);
   // const ip = request.headers["x-forwarded-for"];
-  // console.log(`cliente ${ip}`);
+  //const seccontext = request.headers["seccontext"];
+  //console.log(`seccontext ${seccontext}`);
   console.log("---------------------------------");
 
   next();

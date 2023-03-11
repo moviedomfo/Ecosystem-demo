@@ -1,5 +1,6 @@
-export class PersonBE {
+import EntityBase from "@common/EntityBase";
 
+export class PersonBE extends EntityBase {
   public Id: string;
   public Name: string;
   public Lastname: string;

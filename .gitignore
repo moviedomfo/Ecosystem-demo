@@ -25,6 +25,7 @@ Thumbs.db
 *.mov
 *.wmv
 .env
+*.bak
 *.user
 bin/
 obj/

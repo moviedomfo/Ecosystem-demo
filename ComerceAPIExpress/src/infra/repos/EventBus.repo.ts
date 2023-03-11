@@ -24,14 +24,15 @@ export default class KafkaEventBusRepository implements IEventBusRepository {
       });
       console.log(`message was sended to TOPIC ${topic} from ${AppConstants.CLIENT_ID}, message origin : ${req.origin}`);
     } catch (err) {
-      console.log(
-        "*****************************Error from KAFKA *****************************        "
-      );
-      console.log(err.message);
+      // console.log(
+      //   "*****************************Error from KAFKA *****************************        "
+      // );
+      // console.log(err.message);
 
-      console.log(
-        "*****************************End ERROR  KAFKA *****************************        "
-      );
+      // console.log(
+      //   "*****************************End ERROR  KAFKA *****************************        "
+      // );
+      throw err;
     }
   };
 }

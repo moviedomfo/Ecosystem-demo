@@ -8,7 +8,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import {notFoundHandler} from "@common/not-found.middleware";
-import {errorHandler} from "@common/http-exception";
+import {errorHandler} from "@common/ErrorHandle/errorHandler";
 import {loadControllers} from "awilix-express";
 //import {loadContainer} from "@common/Container";
 import swaggerUi from "swagger-ui-express";
@@ -58,7 +58,7 @@ app.use(
   })
 );
 
-app.use("/api/products/", logsMiddle);
+app.use("/api/persons/", logsMiddle);
 //loadContainer(app);
 //app.use(loadControllers("./infra/controllers/*.ts", {cwd: __dirname}));
 

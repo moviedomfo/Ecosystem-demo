@@ -44,6 +44,7 @@ export default class PersonsPubController {
   public GetAllCustomer = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {name, lastname} = req.query;
+
       //const name = req.query.name;
       //const result = await personsService.GetAllCustomers(name);
       const result = await this.personsService.GetAllCustomers();
