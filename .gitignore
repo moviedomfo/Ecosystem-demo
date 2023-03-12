@@ -33,3 +33,6 @@ obj/
 
 OrdersAPIExpress/build/swagger.json
 OrdersAPIExpress/build/routes.ts
+ComerceAPIExpress/.env.production
+ComerceAPIExpress/.env.production
+OrdersAPIExpress/.env.production

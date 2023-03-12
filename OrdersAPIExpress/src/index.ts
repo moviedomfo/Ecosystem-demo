@@ -7,11 +7,12 @@ import helmet from "helmet";
 import {AppConstants} from "@common/commonConstants";
 import morgan from "morgan";
 import {notFoundHandler} from "./common/not-found.middleware";
-import {errorHandler} from "./common/http-exception";
+
 import swaggerUi from "swagger-ui-express";
 import {loadControllers, scopePerRequest} from "awilix-express";
 import {loadContainer} from "@common/Container";
 import {ordersRouter} from "@infra/router/orders.router";
+import {errorHandler} from "@common/ErrorHandle/errorHandler";
 // import container from "@common/Container";
 //import {ordersRouter} from "./infra/router/orders.router";
 require("dotenv").config();

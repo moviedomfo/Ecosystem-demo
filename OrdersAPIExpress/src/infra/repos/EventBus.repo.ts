@@ -3,10 +3,9 @@ import {Kafka, Partitioners} from "kafkajs";
 
 import {ImessageDto} from "@domain/DTOs/MessageDto";
 import {IEventBusRepository} from "@application/interfases/IEventBusRepository";
-import { AppConstants } from "@common/commonConstants";
+import {AppConstants} from "@common/commonConstants";
 
 export default class KafkaEventBusRepository implements IEventBusRepository {
-  
   PushToQueue = async (req: ImessageDto, topic: string) => {
     try {
       const kafka = new Kafka(kconfig);
@@ -25,17 +24,19 @@ export default class KafkaEventBusRepository implements IEventBusRepository {
         ],
       });
       console.log(
-        `message was sended to TOPIC ${topic} from ${AppConstants.BD_USER}, message origin : ${req.origin}`
+        `message was sended to TOPIC ${topic} from ${AppConstants.KAFKA_BROKERS}, message origin : ${req.origin}`
       );
     } catch (err) {
-      console.log(
-        "*****************************Error from KAFKA *****************************        "
-      );
-      console.log(err.message);
+      throw err;
 
-      console.log(
-        "*****************************End ERROR  KAFKA *****************************        "
-      );
+      // console.log(
+      //   "*****************************Error from KAFKA *****************************        "
+      // );
+      // console.log(err.message);
+
+      // console.log(
+      //   "*****************************End ERROR  KAFKA *****************************        "
+      // );
     }
   };
 }

@@ -1,10 +1,10 @@
-import { rejects } from 'assert';
+import {rejects} from "assert";
 import {IProductRepository} from "./../../application/interfases/IProductRepository";
 import {CreateProductDto} from "./../../domain/DTOs/ProductDto";
 import {ProductBE} from "./../../domain/Entities/ProductBE";
 import {ProductsSchema} from "./../../infra/schemas/sql.schemas";
 import {Op, UUIDV4} from "sequelize";
-import {ExeptionFunctions} from "@common/helpers/handleErrorFunctions";
+import {ExeptionFunctions} from "@common/helpers/ExeptionFunctions";
 import dayjs from "dayjs";
 
 /** read products from mongodb, but not insert any record. this API is for Orders only */
@@ -36,15 +36,13 @@ export default class ProductMongoRepository implements IProductRepository {
 
         resolve(product_db.getDataValue("Id"));
       } catch (error) {
-        
         reject(error);
       }
     });
   }
   public GetById(id: string): Promise<ProductBE> {
     return new Promise<ProductBE>(async (resolve, reject) => {
-
-      try{
+      try {
         const res = await ProductsSchema.findByPk(id);
 
         const product: ProductBE = {
@@ -62,10 +60,8 @@ export default class ProductMongoRepository implements IProductRepository {
         };
         resolve(product);
       } catch (error) {
-        
         reject(error);
       }
-    
     });
   }
 
@@ -77,18 +73,17 @@ export default class ProductMongoRepository implements IProductRepository {
   }
 
   public async GetAll(name?: string): Promise<ProductBE[]> {
-    return new Promise<ProductBE[]>(async (resolve,reject) => {
+    return new Promise<ProductBE[]>(async (resolve, reject) => {
       const where = {
         Name: {
           [Op.like]: name ? `${name}%` : "%",
         },
       };
-      try{
-        
+      try {
         const res = await ProductsSchema.findAll({
           where,
         });
-  
+
         const list = res.map((p) => {
           const item: ProductBE = {
             Id: p.getDataValue("Id"),
@@ -106,10 +101,8 @@ export default class ProductMongoRepository implements IProductRepository {
         });
         resolve(list);
       } catch (error) {
-        
         reject(error);
       }
-  
     });
   }
 }

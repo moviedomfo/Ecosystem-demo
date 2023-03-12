@@ -27,17 +27,20 @@ export class ExeptionFunctions {
     /** */
     if (error.name === "SequelizeConnectionError") {
       if (error.original?.code === "ETIMEOUT") {
-        message = "Error de conexi髇 al servidor de base de datos .-";
+        message = "Error de conexi贸n al servidor de base de datos .-";
         errorCode = ErrorStatusCodeEnum.SEQUALIZE_TIMEOUT;
       }
-
-      errorCode = ErrorStatusCodeEnum.SEQUALIZE_DATA;
-      message = error.message;
+    }
+    if (!message && error.name === "SequelizeAccessDeniedError") {
+      if (error.original?.code === "ELOGIN") {
+        message = "Error de conexi贸n de permisos contra el servidor de base de datos .-";
+        errorCode = ErrorStatusCodeEnum.SEQUALIZE_ELOGIN;
+      }
     }
 
     if (!message && error.name === "SequelizeDatabaseError") {
+      errorCode = ErrorStatusCodeEnum.SEQUALIZE_DATA;
       message = error.message;
-
       const errors: [String] = error.parent.errors as [String];
       errors.forEach((element) => {
         message += element;
@@ -53,12 +56,32 @@ export class ExeptionFunctions {
   };
 
   public static Parse_KafkaError = (error: any): AppError => {
-    // let message = ExeptionFunctions.GetMessageError(error);
+    //name:'KafkaJSNumberOfRetriesExceeded'
     let message = undefined;
     let errorCode = undefined;
     if (error.cause.code === "ECONNREFUSED") {
-      message = "Error de conexi髇 al buss de eventos Kafka .-";
+      message = "Error de conexi贸n al buss de eventos Kafka .-";
       errorCode = ErrorStatusCodeEnum.KAFKA_TIMEOUT;
+    }
+    if (!message) {
+      message = error.message;
+    }
+
+    let err: AppError = new AppError(500, errorCode, message, ErrorTypeEnum.TecnicalException);
+
+    err.originalMessage = error.message;
+    err.name = error.name;
+    err.stack = err.stack;
+    return err;
+  };
+
+  public static Parse_MongoError = (error: any): AppError => {
+    //name:'KafkaJSNumberOfRetriesExceeded'
+    let message = undefined;
+    let errorCode = undefined;
+    if (error.codeName === "AtlasError") {
+      message = "Error de conexi贸n al la base de datos mongo.-";
+      errorCode = ErrorStatusCodeEnum.MONGO_TIMEOUT;
     }
     if (!message) {
       message = error.message;

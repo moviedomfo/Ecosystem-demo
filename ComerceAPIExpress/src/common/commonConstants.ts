@@ -6,9 +6,9 @@ require('dotenv').config();
 export const AppConstants = {
   Verion: process.env.APP_VERSION as string,
   COMPANY: 'Pelsoft',
-  CLIENT_ID: process.env.CLIENT_ID ,
+  KAFKA_CLIENT_ID: process.env.KAFKA_CLIENT_ID ,
   CLIENT_NAME: process.env.CLIENT_NAME ,
-  Brokers: process.env.KAFKA_BROKERS.split(',') || [],
+  KAFKA_BROKERS: process.env.KAFKA_BROKERS.split(',') || [],
   BD_HOST: process.env.BD_HOST,
   BD_INSTANCE: process.env.BD_INSTANCE,
   BD_DATABASE_NAME: process.env.BD_DATABASE_NAME,

@@ -1,10 +1,8 @@
-import { AppConstants } from "@common/commonConstants";
-import { KafkaConfig } from "kafkajs";
+import {AppConstants} from "@common/commonConstants";
+import {KafkaConfig} from "kafkajs";
 
 export const kconfig: KafkaConfig = {
-  brokers: AppConstants.Brokers,
+  brokers: AppConstants.KAFKA_BROKERS,
   ssl: false,
-  clientId: AppConstants.ClientId,
-}
-
-
+  clientId: AppConstants.KAFKA_CLIENT_ID,
+};

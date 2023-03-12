@@ -14,7 +14,7 @@ export const errorHandler = (error: any, request: Request, response: Response, n
   if ((error.name as string).startsWith("Sequelize")) {
     appError = ExeptionFunctions.Parse_SequelizeError(error);
   }
-  if (!appError && (error.name as string).startsWith("Kafka")) {
+  if ((error.name as string).startsWith("Kafka")) {
     appError = ExeptionFunctions.Parse_KafkaError(error);
   }
   if (error.response) appError.message = appError.message.concat(error.response.data.Message, "\n");

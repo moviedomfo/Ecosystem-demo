@@ -5,7 +5,7 @@ import {IPersonsRepository} from "@application/interfases/IPersonsRepository";
 import {PersonBE} from "@domain/Entities/PersonBE";
 import {Op} from "sequelize";
 import {DateFunctions} from "@common/helpers/dateFunctions";
-import {ExeptionFunctions} from "@common/helpers/handleErrorFunctions";
+import {ExeptionFunctions} from "@common/helpers/ExeptionFunctions";
 import {rejects} from "assert";
 
 /**Persist to mongodb Persons */

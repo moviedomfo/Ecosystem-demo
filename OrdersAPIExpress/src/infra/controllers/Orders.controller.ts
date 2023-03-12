@@ -9,24 +9,15 @@ import {GET, POST, DELETE, route} from "awilix-express";
  */
 @route("/api/orders")
 export default class OrdersController {
-  // private readonly _ordersService: IOrdersService;
-
-  constructor(private readonly ordersService: IOrdersService) {
-    // this._ordersService = ordersService;
-  }
+  constructor(private readonly ordersService: IOrdersService) {}
   @route("/")
   @POST()
-  public OrderCreate = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public OrderCreate = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqBody: CreateOrderReq = req.body as CreateOrderReq;
 
       await this.ordersService.CreateOrder(reqBody.Content, reqBody.Origin);
       res.status(200).send(reqBody.Content);
-      //else res.status(403).send();
     } catch (e) {
       console.log("push err  " + JSON.stringify(e));
       next(e);
@@ -47,28 +38,18 @@ export default class OrdersController {
 
   @route("/getByParams")
   @GET()
-  public GetByParams = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public GetByParams = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (!req.query.startDate || !req.query.endDate)
-        throw new Error(`Fecha inicio o de fin son obligatorias`);
+      if (!req.query.startDate || !req.query.endDate) throw new Error(`Fecha inicio o de fin son obligatorias`);
 
       const startDate = new Date(req.query.startDate.toString());
       const endDate = new Date(req.query.endDate.toString());
       let includeDetails: boolean = null;
-      if (req.query.includeDetails)
-        includeDetails = parseBoolean(req.query.includeDetails.toString());
+      if (req.query.includeDetails) includeDetails = parseBoolean(req.query.includeDetails.toString());
 
       // req.startDate = dayjs(req.fechadesde.toString()).toDate(); // uso de DaysJS
       // req.endDate = new Date(req.fechahasta.toString()); // uso de build-in Date
-      const orders = await this.ordersService.GetByParams(
-        startDate,
-        endDate,
-        includeDetails
-      );
+      const orders = await this.ordersService.GetByParams(startDate, endDate, includeDetails);
       const result = {
         length: orders.length,
         data: orders,

@@ -8,7 +8,7 @@ import {fileURLToPath} from "url";
 /**Persist to mongodb Orders */
 export default class OrdersMongoRepository implements IOrderRepository {
   public Insert(order: OrderDTO): Promise<void> {
-    return new Promise<void>(async (resolve) => {
+    return new Promise<void>(async (resolve, reject) => {
       const now = new Date();
 
       const pschema = new OrderSchema({
@@ -20,38 +20,46 @@ export default class OrdersMongoRepository implements IOrderRepository {
         Status: order.Status,
         GeneratedDate: order.GeneratedDate,
       });
-      await pschema.save();
-      resolve();
+      try {
+        await pschema.save();
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
   public GetById(id: string): Promise<OrderBE> {
     return new Promise<OrderBE>(async (resolve, reject) => {
-      const res = await OrderSchema.findById(id);
+      try {
+        const res = await OrderSchema.findById(id);
 
-      // const orderBE = {
-      //   OrderId: res.OrderId,
-      //   PersonId: res.PersonId,
-      //   CreatedDate: res.CreatedDate,
-      //   OrderDetail: res.OrderDetail,
-      // };
+        // const orderBE = {
+        //   OrderId: res.OrderId,
+        //   PersonId: res.PersonId,
+        //   CreatedDate: res.CreatedDate,
+        //   OrderDetail: res.OrderDetail,
+        // };
 
-      resolve(res);
+        resolve(res);
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
   public async ClearAll(): Promise<void> {
-    return new Promise<void>(async (resolve) => {
-      await OrderSchema.collection.deleteMany({});
-      resolve();
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await OrderSchema.collection.deleteMany({});
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
-  public async GetByParams(
-    startDate: Date,
-    endDate: Date,
-    includeDetails: boolean = false
-  ): Promise<OrderBE[]> {
+  public async GetByParams(startDate: Date, endDate: Date, includeDetails: boolean = false): Promise<OrderBE[]> {
     return new Promise<OrderBE[]>(async (resolve, reject) => {
       //createdAt
       const query = {
@@ -77,19 +85,26 @@ export default class OrdersMongoRepository implements IOrderRepository {
             createdAt: 1,
             Status: 1,
           };
+      try {
+        const res = await OrderSchema.find(query, fields);
 
-      const res = await OrderSchema.find(query, fields);
-
-      resolve(res);
+        resolve(res);
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
   public async GetAll(): Promise<OrderBE[]> {
     return new Promise<OrderBE[]>(async (resolve, reject) => {
-      const res = await OrderSchema.find({});
-      // const Orders: OrderBE[] = [];
+      try {
+        const res = await OrderSchema.find({});
+        // const Orders: OrderBE[] = [];
 
-      resolve(res);
+        resolve(res);
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 }
