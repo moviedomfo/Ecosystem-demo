@@ -1,0 +1,62 @@
+{
+  "name": "AuthorizationAPIExpress",
+  "version": "1.0.0",
+  "description": " Este servidor recibe las solicitudes de tokens de acceso del cliente y las emite una vez que el propietario del recurso se ha autenticado y ha dado su consentimiento.",
+  "main": "index.js",
+  "author": "moviedo",
+  "scripts": {
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/index.ts",
+    "build": "babel src --extensions \".ts,.js\" -d dist --copy-files",
+    "start": "npm run build && node dist/index.js",
+    "start3": "tsc babel-node --extensions \".ts,.js\" src/index.ts",
+    "restart": "rimraf dist && npm run start"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/index.ts",
+    "ext": "ts, js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/morgan": "^1.9.4",
+    "awilix": "^8.0.0",
+    "awilix-express": "^8.0.0",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
+    "redis": "^4.6.5",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.0",
+    "@babel/plugin-proposal-decorators": "^7.21.0",
+    "@babel/plugin-transform-typescript": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.21.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/node": "^18.15.1",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "cors": "^2.8.5",
+    "nodemon": "^2.0.21",
+    "tsconfig-paths": "^4.1.2",
+    "typescript": "^4.9.5"
+  }
+}

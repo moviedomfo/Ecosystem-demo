@@ -8,7 +8,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import {notFoundHandler} from "@common/not-found.middleware";
-import {errorHandler} from "@common/ErrorHandle/errorHandler";
+import {ExpressErrorHandler} from "./common/ErrorHandle/ExpressErrorHandler";
 import {loadControllers} from "awilix-express";
 //import {loadContainer} from "@common/Container";
 import swaggerUi from "swagger-ui-express";
@@ -67,7 +67,7 @@ app.use("/api/persons/", personRouter);
 
 // Attach the first Error handling Middleware
 app.use(notFoundHandler);
-app.use(errorHandler);
+app.use(ExpressErrorHandler);
 
 const PORT = process.env.PORT || 5000;
 const URL = `${process.env.BASE_URL}:${PORT}`;

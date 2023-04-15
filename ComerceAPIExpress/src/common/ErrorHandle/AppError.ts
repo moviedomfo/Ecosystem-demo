@@ -9,10 +9,17 @@ export class AppError extends Error {
     /**El código de error canónico para las API. Códigos que deberian estar documentados y detallados en un dns compartido para la todo
      * el desarrollo en comun. */
     errorCode: string;
-    /**This code is internal */
-    // errorCode: number;
+    
     type: ErrorTypeEnum;
-  
+
+     /**
+     * 
+     * @param statusCode This is the status code generally returned by thirt party
+     * @param errorCode El código de error canónico para las API. Códigos que deberian estar documentados y detallados en un dns compartido para la todo
+     * el desarrollo en comun.
+     * @param message 
+     * @param type 
+     */
     constructor(statusCode: number, errorCode: string, message: string, type: ErrorTypeEnum = ErrorTypeEnum.TecnicalException) {
       super(message);
   

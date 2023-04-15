@@ -7,25 +7,23 @@ import {AppError} from "./AppError";
 */
 // Error handling Middleware function reads the error message
 // and sends back a response in JSON format
-export const errorHandler = (error: any, request: Request, response: Response, next: NextFunction) => {
+export const ExpressErrorHandler = (error: any, request: Request, response: Response, next: NextFunction) => {
   response.header("Content-Type", "application/json");
 
   let appError: AppError;
-  if ((error.name as string).startsWith("Sequelize")) {
-    appError = ExeptionFunctions.Parse_SequelizeError(error);
-  }
-  if (!appError && (error.name as string).startsWith("Kafka")) {
-    appError = ExeptionFunctions.Parse_KafkaError(error);
-  }
-  if (error.response) appError.message = appError.message.concat(error.response.data.Message, "\n");
 
-  const status = error.statusCode || appError.statusCode;
+  if (error instanceof AppError) {
+    appError = error as AppError;
+  } else {
+    appError = ExeptionFunctions.GetAppError(error);
+  }
 
   const err = {
     message: appError.message,
+    originalMessage: appError.originalMessage,
     type: error.type,
     errorCode: appError.errorCode,
-    status,
+    status: appError.statusCode
   };
-  response.status(status).send(err);
+  response.status(appError.statusCode).send(err);
 };

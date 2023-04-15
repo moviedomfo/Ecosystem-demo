@@ -1,0 +1,30 @@
+version: '3.2'
+services:
+  redis:
+    container_name: 'redis-pelsoft'
+    image: 'redis:alpine'
+    command: redis-server --requirepass pletorico28
+
+    ports:
+      - '6379:6379'
+
+    volumes:
+      - $RUTA_REDIS/redis-data:/var/lib/redis
+      - $RUTA_REDIS/redis.conf:/usr/local/etc/redis/redis.conf
+
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - RUTA_REDIS=e:/volumens/redis3
+      - REDIS_MASTER_PORT_NUMBER=6379 # Port number for local
+      - ALLOW_EMPTY_PASSWORD=yes # No password required to connect to node (not used)
+    networks:
+      redis_net:
+        ipv4_address: 172.28.0.4
+
+# networking for the Redis container
+networks:
+  redis_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

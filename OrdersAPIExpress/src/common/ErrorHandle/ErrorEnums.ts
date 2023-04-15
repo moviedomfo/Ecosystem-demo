@@ -3,7 +3,7 @@ export enum ErrorTypeEnum {
   TecnicalException = "TecnicalException",
 }
 
-export enum ErrorStatusCodeEnum {
+export enum ErrorCodeEnum {
   SEQUALIZE_TIMEOUT = "5000",
   SEQUALIZE_ELOGIN = "5001",
 

@@ -6,11 +6,7 @@ import {GET, POST, route} from "awilix-express";
 
 @route("/api/persons")
 export default class PersonsPubController {
-  //private readonly _personsService: IPersonsService;
-
-  constructor(private readonly personsService: IPersonsService) {
-    //  this._personsService = personsService;
-  }
+  constructor(private readonly personsService: IPersonsService) {}
   @route("/providers")
   @GET()
   public GetAllProviders = async (req: Request, res: Response, next: NextFunction) => {

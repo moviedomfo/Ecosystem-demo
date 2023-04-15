@@ -1,10 +1,10 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
     "esModuleInterop": true,
     "moduleResolution": "node",
+    "declaration": false,
     "noImplicitAny": false,
     "sourceMap": true,
     "noLib": false,
@@ -14,13 +14,14 @@
     // "rootDir": "./src",
     "outDir": "dist",
     "baseUrl": "./",
+
+    //Rutas absolutas de los componentes. requiere tsconfig-paths en el script
     "paths": {
       "@common/*": ["./src/common/*"],
       "@infra/*": ["./src/infra/*"],
       "@domain/*": ["./src/domain/*"],
       "@application/*": ["./src/application/*"]
     },
-
     "noEmit": false,
     "strict": false,
     "experimentalDecorators": true,
