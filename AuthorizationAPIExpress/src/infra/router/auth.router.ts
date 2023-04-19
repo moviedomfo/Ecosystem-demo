@@ -9,3 +9,5 @@ const authController: AuthController = container.resolve("authController") as Au
 
 authRouter.post("/authenticate", authController.Auth);
 authRouter.get("/RefreshToken", authController.RefreshToken);
+
+authRouter.get("/getuser", authController.GetUser);

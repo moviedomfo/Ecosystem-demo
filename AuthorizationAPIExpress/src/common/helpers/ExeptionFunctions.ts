@@ -1,5 +1,6 @@
 import {AppError} from "@common/ErrorHandle/AppError";
 import {ErrorCodeEnum, ErrorTypeEnum} from "@common/Enums/ErrorEnums";
+import HttpStatusCode from "@common/Enums/HttpStatusCode";
 
 export class ExeptionFunctions {
   /**
@@ -20,7 +21,11 @@ export class ExeptionFunctions {
     if (error.message && error.message.startsWith("REDIS->")) {
       appError = ExeptionFunctions.Parse_Redis(error);
     }
-    const statusCode = error.statusCode || appError.statusCode;
+
+    // By default http status 500
+    let statusCode = error.statusCode || HttpStatusCode.INTERNAL_SERVER_ERROR;
+    if (appError?.statusCode) statusCode = appError.statusCode;
+
     if (!appError) {
       appError = new AppError(statusCode, ErrorCodeEnum.UNKNOWED, error.message, ErrorTypeEnum.TecnicalException);
     }

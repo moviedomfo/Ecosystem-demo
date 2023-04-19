@@ -9,6 +9,7 @@ export class RefreshTokenReq {
   export class RefreshTokenRes {
     
     public refresh_token: string;
+    public jwt:string;
  
   }
   

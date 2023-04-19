@@ -1,27 +1,48 @@
+import {MokUsers, User} from "@domain/Entities/User";
 import {IUserRepository} from "@application/interfases/IUserRepository";
-import {User} from "@domain/Entities/User";
+import {FileFunctions} from "@common/helpers";
 import {compare, hash, hashSync} from "bcryptjs";
+
+async () => {
+  const usersJson = await FileFunctions.OpenFile("./assets/usermok.json");
+  const mokUsers: MokUsers = JSON.parse(usersJson) as MokUsers;
+  UserRepository.setUsers(mokUsers);
+};
+
 /**Persist to mongodb Orders */
 export default class UserRepository implements IUserRepository {
-  public FindByUserName(userName: string): Promise<User> {
-    return new Promise<User>(async (resolve, reject) => {
-      try {
-        const user: User = {
-          userName: "olecram",
-          pwd: "olecram",
-          email: "olecram@gmail.com",
-          id: "100000",
-          status: "Active",
-          roles: ["secre", "user"],
+  private static MokUsers: MokUsers;
 
-          phoneNumbers: ["23423423423", "0998-3457688796"],
-        };
-        resolve(user);
-      } catch (err) {
-        reject(err);
-      }
-    });
+  public static async setUsers(mokUsers) {
+    UserRepository.MokUsers = mokUsers;
   }
+  private static async LoadUsers() {
+    const usersJson = await FileFunctions.OpenFile("./assets/usermok.json");
+    const mokUsers: MokUsers = JSON.parse(usersJson) as MokUsers;
+    UserRepository.MokUsers = mokUsers;
+  }
+
+  public async GetUserById(userId: string): Promise<User> {
+    if (UserRepository.MokUsers.Users.length === 0) {
+      await UserRepository.LoadUsers();
+    }
+    const user = UserRepository.MokUsers.Users.find((p) => p.id === userId);
+    return user;
+  }
+
+  public async FindByUserName(userName: string): Promise<User> {
+    if (!UserRepository.MokUsers) {
+      await UserRepository.LoadUsers();
+    }
+    const user = UserRepository.MokUsers.Users.find((p) => p.userName === userName);
+
+    return user;
+  
+  }
+
+  
+
+  
   /**
    *
    * @param password

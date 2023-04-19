@@ -1,7 +1,6 @@
-
-import * as fs from 'fs';
-import { readFileSync } from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import {readFileSync} from "fs";
+import * as path from "path";
 
 export class FileFunctions {
   public static WriteFile(fileName, data): Promise<void> {
@@ -29,12 +28,11 @@ export class FileFunctions {
 
   public static OpenFile(fileName: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      const json = fs.readFileSync(fileName, 'utf8');
-      console.log(json);
+      const json = fs.readFileSync(fileName, "utf8");
+
       resolve(json);
     });
   }
 
   public static saveFile = (fileName: string, content: string) => ({});
-
 }

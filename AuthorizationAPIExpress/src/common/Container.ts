@@ -1,4 +1,5 @@
 import AuthService from "@application/Auth.service";
+import RefreshTokenService from "@application/RefreshToken.service";
 import AuthController from "@infra/controllers/auth.controller";
 import TokenController from "@infra/controllers/token.controller";
 import RedisCacheRepository from "@infra/repos/RedisCahce.repo";
@@ -12,14 +13,17 @@ const container = createContainer({
 
 container.register({
   authService: asClass(AuthService).scoped(),
+  refreshTokenService: asClass(RefreshTokenService).scoped(),
   userRepository: asClass(UserRepository).scoped(),
   cacheRepository: asClass(RedisCacheRepository).scoped(),
 
   authController: asClass(AuthController).scoped(),
   tokenController:asClass(TokenController).scoped()
+
 });
 
 export const authService = container.resolve("authService");
+export const refreshTokenService = container.resolve("refreshTokenService");
 export const userRepository = container.resolve("userRepository");
 export const cacheRepository = container.resolve("cacheRepository");
 export const authController = container.resolve("authController");

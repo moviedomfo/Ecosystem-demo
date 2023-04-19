@@ -6,5 +6,7 @@ export const tokenRouter = express.Router();
 
 const controller: TokenController = container.resolve("tokenController") as TokenController;
 
-tokenRouter.get("/RefreshToken", controller.RefreshToken);
-tokenRouter.get("/RemoveRefreshToken", controller.RemoveRefreshToken);
+tokenRouter.get("/GetRefreshToken", controller.GetRefreshToken);
+tokenRouter.get("/GetAllToken", controller.GetAllToken);
+//tokenRouter.delete("/DelRefreshToken:tk", controller.DelRefreshToken);
+tokenRouter.delete("/DelRefreshToken", controller.DelRefreshToken);
