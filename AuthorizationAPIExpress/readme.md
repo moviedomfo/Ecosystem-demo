@@ -1,23 +1,61 @@
-# Auth service
+# Auth service Autenticación con JWT en Express
+
+`Description:`
+
+In this porject, we have implemented JSON Web Token (JWT) authentication using mok database user stored in an json file.-
+
+When a user sussefully logued in, a JWT and Refresh token are generated. JWT contaqins information abaut user session.
+The minimal info is recomended.-
+
+This token is returned to the client and is used to identify and authenticate the user on future requests.
+In addition, we have also implemented the generation of Refresh Tokens, which allow the user to renew their access token without having to log in again.
+
+## Working with the project
+
+`To run the project, follow the steps below:`
+
+- Clone the repository to your local machine.
+- Go to the folder
+- Install the dependencies with the **yarn install** command
+- Create an .env file in the root of the project and define the following environment variables:
+
+### Enviroment values
+
+- JWT_SECRET : Secret key used to create jwt
+- JWT_Expires : jwt expiration time in minutes
+- JWT_ExpiresRefreshToken : jwt expiration time in minutes e.. 1440 1 day
+  Generally refresh tk are expressed in long times, but the lenght of times is relative.
+  So, a "minute" is used as minimal unit
+
+- REDIS_EXPIRES_TIME : Expiry time of redis cache items in minutes
+- REDIS_PATH : 'e:/volumens/redis' in localhost represent where the redis
+  cache is perists.-
+
+## sample NODE_ENV="development"
+
+```
+PORT=3010
+BASE_URL = 'http://localhost'
+CLIENT_NAME='Authorization API Express'
+REDIS_USER = 'authExpress'
+REDIS_HOST='localhost:9092'
+JWT_SECRET='000111222333'
+JWT_Expires=5
+JWT_ExpiresRefreshToken=600
+JWT_AUDIENCE='https://pelsoft.com'
+JWT_ISSUER='notused'
+REDIS_PATH='e:/volumens/redis'
+REDIS_EXPIRES_TIME=30
 
 ## run redis container with compose
+```
 
-[likn](https://kb.objectrocket.com/redis/run-redis-with-docker-compose-1055)
+## Redis docker ref [likn](https://kb.objectrocket.com/redis/run-redis-with-docker-compose-1055)
+
+## In aour porject we can run redis in local dockerhub runing the below command
 
 run
 
 ```
      docker-compose up docker-compose-redis.yml --build
 ```
-
-## Enviroment values
-
-- JWT_SECRET : secret key used to create jwt
-- JWT_Expires=jwt expiration time in minutes
-- JWT_ExpiresRefreshToken=jwt expiration time in minutes e.. 1440 1 day
-  Generally refresh tk are expressed in long times, but the lenght of times is relative.
-  So, a "minute" is used as minimal unit
-
-- REDIS_EXPIRES_TIME : Expiry time of redis cache items in minutes
-- RUTA_REDIS='e:/volumens/redis' in localhost represent where the redis
-  cache is perists.-

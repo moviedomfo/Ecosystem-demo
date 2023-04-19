@@ -46,26 +46,6 @@ export default class RedisCacheRepository implements ICacheRepository {
       resolve(list);
     });
 
-    // return new Promise(async (resolve) => {
-
-    //   RedisCacheRepository.CreateClient();
-    //   const list: RedisKey[] = [];
-
-    //   //recorro las claves y luego los contenidos de las claves
-    //   await RedisCacheRepository.redisClient.keys("*", (err, keys) => {
-    //     if (err) reject(err);
-
-    //     keys.forEach(async (key) => {
-    //       await RedisCacheRepository.redisClient.get(key, (err, value) => {
-    //         if (err) reject(err);
-    //         list.push(new RedisKey(key, value));
-    //         //console.log(`${key}: ${value}`);
-    //       });
-    //     });
-    //   });
-
-    //   resolve(list);
-    // });
   }
 
   public PushTk = async (tk: RefreshToken, refresTokenKey: string) => {
@@ -79,7 +59,7 @@ export default class RedisCacheRepository implements ICacheRepository {
     }
   };
 
-  public FushTk = async () => {
+  public FlushAll = async () => {
     try {
       RedisCacheRepository.CreateClient();
       await RedisCacheRepository.redisClient.flushall();
