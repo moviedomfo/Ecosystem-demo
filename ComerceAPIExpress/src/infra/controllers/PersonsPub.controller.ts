@@ -1,4 +1,4 @@
-import {PersonBE} from "./../../domain/Entities/PersonBE";
+import {PersonBE} from "@domain/Entities/PersonBE";
 import {ImessageDto} from "@domain/DTOs/MessageDto";
 import {NextFunction, Request, Response} from "express";
 import {IPersonsService} from "@domain/IPersonsService";

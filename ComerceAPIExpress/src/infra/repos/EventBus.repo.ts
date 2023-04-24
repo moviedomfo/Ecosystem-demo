@@ -1,4 +1,4 @@
-import {AppConstants} from "./../../common/commonConstants";
+import {AppConstants} from "@common/commonConstants";
 import {kconfig} from "../db/kafka.config";
 import {Kafka, Partitioners} from "kafkajs";
 import {ImessageDto} from "@domain/DTOs/MessageDto";

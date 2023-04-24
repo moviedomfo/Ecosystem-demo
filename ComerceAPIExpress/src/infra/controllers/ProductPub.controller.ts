@@ -1,4 +1,4 @@
-import {CreateProductDto} from "./../../domain/DTOs/ProductDto";
+import {CreateProductDto} from "@domain/DTOs/ProductDto";
 import {NextFunction, Request, Response} from "express";
 import {IProductService} from "@domain/IProductService";
 import {GET, POST, route} from "awilix-express";

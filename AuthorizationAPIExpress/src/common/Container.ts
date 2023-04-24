@@ -3,7 +3,7 @@ import RefreshTokenService from "@application/RefreshToken.service";
 import AuthController from "@infra/controllers/auth.controller";
 import TokenController from "@infra/controllers/token.controller";
 import RedisCacheRepository from "@infra/repos/RedisCahce.repo";
-import UserRepository from "@infra/repos/Users.repo";
+import UserRepository from "@infra/repos/UserMock.repo";
 import {createContainer, asClass, InjectionMode} from "awilix";
 
 //Container par ase urilizado por ordersRouter (caso en el que funciona)

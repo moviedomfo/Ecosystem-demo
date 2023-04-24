@@ -3,7 +3,7 @@ import {PersonBE} from "@domain/Entities/PersonBE";
 import {IKafkaMessageDto, ImessageDto} from "@domain/DTOs/MessageDto";
 import {IEventBusRepository} from "./interfases/IEventBusRepository";
 import {IPersonsRepository} from "./interfases/IPersonsRepository";
-import {IPersonsService} from "./../domain/IPersonsService";
+import {IPersonsService} from "@domain/IPersonsService";
 import CustomersRepository from "@infra/repos/CustomersSQL.repo";
 import PersonWasCreatedEvent from "./events/PersonWasCreatedEvents";
 import {or} from "sequelize";

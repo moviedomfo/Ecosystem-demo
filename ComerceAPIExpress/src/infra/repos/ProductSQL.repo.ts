@@ -1,10 +1,9 @@
 import {rejects} from "assert";
-import {IProductRepository} from "./../../application/interfases/IProductRepository";
-import {CreateProductDto} from "./../../domain/DTOs/ProductDto";
-import {ProductBE} from "./../../domain/Entities/ProductBE";
-import {ProductsSchema} from "./../../infra/schemas/sql.schemas";
+import {IProductRepository} from "@application/interfases/IProductRepository";
+import {CreateProductDto} from "@domain/DTOs/ProductDto";
+import {ProductBE} from "@domain/Entities/ProductBE";
+import {ProductsSchema} from "@infra/schemas/sql.schemas";
 import {Op, UUIDV4} from "sequelize";
-import {ExeptionFunctions} from "@common/helpers/ExeptionFunctions";
 import dayjs from "dayjs";
 
 /** read products from mongodb, but not insert any record. this API is for Orders only */

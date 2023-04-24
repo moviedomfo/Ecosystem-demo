@@ -1,0 +1,34 @@
+{
+  "Users": [
+    {
+      "id": "6bf87313-3d4d-4a6e-89b4-6d69e096e9d1",
+      "userName": "maria123",
+      "name": "María",
+      "lastName": "González",
+      "email": "maria123@example.com",
+      "password": "1234",
+      "avatar": "https://via.placeholder.com/150",
+      "roles": ["admin", "manager"]
+    },
+    {
+      "id": "c3a9c9ac-2bc7-4d3c-aeb7-c06dfdc56f95",
+      "userName": "juan87",
+      "name": "Juan",
+      "lastName": "Pérez",
+      "email": "juan87@example.com",
+      "password": "qweasd123",
+      "avatar": "https://via.placeholder.com/150",
+      "roles": ["secretary"]
+    },
+    {
+      "id": "1da4a6a3-6cd4-4a2c-a4ea-f6dc2f6b9a88",
+      "userName": "pedro65",
+      "name": "Pedro",
+      "lastName": "Ramírez",
+      "email": "pedro65@example.com",
+      "password": "1q2w3e4r",
+      "avatar": "https://via.placeholder.com/150",
+      "roles": ["manager"]
+    }
+  ]
+}

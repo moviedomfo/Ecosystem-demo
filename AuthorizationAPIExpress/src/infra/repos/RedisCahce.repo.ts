@@ -45,7 +45,6 @@ export default class RedisCacheRepository implements ICacheRepository {
 
       resolve(list);
     });
-
   }
 
   public PushTk = async (tk: RefreshToken, refresTokenKey: string) => {
@@ -55,7 +54,7 @@ export default class RedisCacheRepository implements ICacheRepository {
 
       await RedisCacheRepository.redisClient.setEx(refresTokenKey, Number(AppConstants.REDIS_EXPIRES_TIME) * 60, JSON.stringify(tk));
     } catch (err) {
-      throw err;
+      throw new Error("REDIS->" + err.message);
     }
   };
 
@@ -64,7 +63,7 @@ export default class RedisCacheRepository implements ICacheRepository {
       RedisCacheRepository.CreateClient();
       await RedisCacheRepository.redisClient.flushall();
     } catch (err) {
-      throw err;
+      throw new Error("REDIS->" + err.message);
     }
   };
 
@@ -83,7 +82,11 @@ export default class RedisCacheRepository implements ICacheRepository {
         password: "pletorico28"
         // username: "pletorico28",
       });
-      await RedisCacheRepository.redisClient.connect();
+      try {
+        await RedisCacheRepository.redisClient.connect();
+      } catch (err) {
+        throw new Error("REDIS->" + err.message);
+      }
     }
   }
 }

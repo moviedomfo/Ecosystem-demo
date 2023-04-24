@@ -59,3 +59,5 @@ run
 ```
      docker-compose up docker-compose-redis.yml --build
 ```
+
+    // "test": "jest  --coverage --watchAll"

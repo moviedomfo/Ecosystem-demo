@@ -1,4 +1,4 @@
-import {PersonBE} from "./../../domain/Entities/PersonBE";
+import {PersonBE} from "@domain/Entities/PersonBE";
 
 export interface IPersonsRepository {
   ClearAll: () => Promise<void>;

@@ -6,6 +6,5 @@ export interface ICacheRepository {
   FlushAll: () => void;
   PushTk: (tk: RefreshToken, refresTokenKey: string) => void;
   Remove(refresTokenKey: string): void;
-  //GetAll: () => RedisKey[];
   GetAll(): Promise<RedisKey[]>;
 }

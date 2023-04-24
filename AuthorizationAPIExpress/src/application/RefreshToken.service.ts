@@ -51,6 +51,7 @@ export default class RefreshTokenService implements IRefreshTokenService {
           CreatedByIp: clientIp
         };
         await this.cacheRepository.PushTk(rt, rt.Token);
+
         resolve(rt);
       } catch (err) {
         reject(err);

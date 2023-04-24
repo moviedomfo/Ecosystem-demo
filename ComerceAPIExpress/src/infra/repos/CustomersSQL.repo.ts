@@ -1,4 +1,4 @@
-import {LogFunctions} from "./../../common/helpers/logFunctions";
+import {LogFunctions} from "@common/helpers/logFunctions";
 import {PersonsSchema} from "@infra/schemas/sql.schemas";
 import {IPersonsRepository} from "@application/interfases/IPersonsRepository";
 
