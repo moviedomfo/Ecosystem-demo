@@ -1,28 +1,9 @@
 export default {
-  port: 1337,
-  dbUri: "mongodb://localhost:27017/rest-api-tutorial",
-  saltWorkFactor: 10,
-  accessTokenTtl: "15m",
-  refreshTokenTtl: "1y",
-  publicKey: `-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCXzZerpx9qdaelwt1U7NCpWXQK
-km1OW4ohDF/7g01xDtYf8Nox9wzhhVQrFD+G4eaJoWxIhJYQTgT4ijMlpjXs07Mc
-wktcMX49h6Eoo6ZddOMl380UpivkaO+h80miG4JCFAM0G0pUoeNT8h6L9zHqr/yE
-oBRd3RAsqxeCKwKrswIDAQAB
------END PUBLIC KEY-----`,
-  privateKey: `-----BEGIN RSA PRIVATE KEY-----
-MIICXAIBAAKBgQCXzZerpx9qdaelwt1U7NCpWXQKkm1OW4ohDF/7g01xDtYf8Nox
-9wzhhVQrFD+G4eaJoWxIhJYQTgT4ijMlpjXs07McwktcMX49h6Eoo6ZddOMl380U
-pivkaO+h80miG4JCFAM0G0pUoeNT8h6L9zHqr/yEoBRd3RAsqxeCKwKrswIDAQAB
-AoGASdYpcMewQzMJIVpgF7+8WrL0+3NvkU57KEoBoa+jClviENUw/F6jOEqGvxFx
-OOVGIimPJtK+vx2D03Q9HpHy5gfG3Q0hXq8RABfzOkgKOQJYEb/CtkadRo9sqPpw
-PtXaFrwYNPevqzUydk5Y4imQN0yycmKPirgWP2GGZj8nAxECQQDMmWI6BkE+8p0H
-PszrkpDlAo3p/4oMW4XgoxBbIuHMuzYZi6d6FUvcOjGI88ktTBSMIhwjF5K/lIBU
-RXcKjzKJAkEAvfCtHN6oLs22MXp1AZBTSIfLp/8C4nLfW6VMboR+Sw9R5MatTuTI
-W4seeBxn1/DU88IhU579maYMX8TFMITNWwJATAPMz9wVD6saFmAJyJhKxxsc2Mx9
-YLv8UIqlAAdEt0jy/6i4T45sAeWJE+XnX7H9jFb79znB5vXoe+bXJJAxaQJBAK9P
-WeigleiFFBl85kvoMwZp2A4Z8EakMgX7fp0vCwYqgLLAsat0vHzJ3fiMd0g3T8Yg
-svPkdjt/qEIocryChqsCQGnInFDk9fC5C8G1Ez2N/p0WztoPDNKfYVDGZ8IRMjEy
-rPeH03CIhIoh6QPPg02GKC3VumQxgwOe2wkQ2OgHYLE=
------END RSA PRIVATE KEY-----`,
+  server: {
+    saltWorkFactor: 10,
+    accessTokenTtl: "15m",
+    refreshTokenTtl: "1y",
+    oldJwtTest: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YmY4NzMxMy0zZDRkLTRhNmUtODliNC02ZDY5ZTA5NmU5ZDEiLCJuYW1lIjoibWFyaWExMjMiLCJyb2xlIjpbImFkbWluIiwibWFuYWdlciJdLCJpYXQiOjE2ODIyNzIxNTcsImV4cCI6MTY4MjI3MjQ1NywiYXVkIjpbInBlbHNvZnRjbGllbnQiXSwiaXNzIjoibm90dXNlZCJ9.jw9Q6ZeBkhDGZ3ttlBFl4eL6EZ18WM1Xe5t6JGy1gCqNdP9Jj58B3ceYgGx03IrOce_b87hULUhqORX77GDyoDpt_RJK40dMkUwu4GmdHs4zS1MVeZdGAWfPMAl4hQyFv1tvE_QbJAuf7BYTM-agdpFQt9YsW1ZbsUDq4gXAFJfnd_-GtcSr27mPzTqSdN57jhzkdeu3fDUmQGi6DxvO6QUZBngehTW6t6SU24poY4Iy1rPg32adNJjevxEhx4mW3StZL3rJDwD1r-zItEqlhhz2LTqNeZI2BfQ8z0NOkAwiYmUKiKh5YedJBqwzXhHrYx2RAyPHofPkWyl7t-3PEA`,
+    
+  }
 };

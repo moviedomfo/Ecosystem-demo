@@ -1,7 +1,7 @@
 import {MokUsers, User} from "@domain/Entities/User";
 import {IUserRepository} from "@application/interfases/IUserRepository";
 import {compare, hash, hashSync} from "bcryptjs";
-const mockData = require("/assets/usermok.json");
+const mockData = require("../../../assets/usermok.json");
 
 /**Persist to mongodb Orders */
 export default class UserMockRepository implements IUserRepository {
