@@ -1,17 +1,20 @@
+import {Token} from "./../domain/Entities/Token";
+import {createContainer} from "awilix";
 import RefreshTokenService from "../application/RefreshToken.service";
 import {describe, expect, test} from "@jest/globals";
 import {v4 as uuidv4} from "uuid";
-// import {RefreshToken} from "@domain/Entities/RefreshToken";
 import {ICacheRepository} from "../application/interfases/ICacheRepository";
 import InMemRedisCahceRepository from "../infra/repos/InMemRedisCahce.repo";
 import {RefreshToken} from "../domain/Entities/RefreshToken";
 import {DateFunctions} from "../common/helpers";
 import {json} from "stream/consumers";
+import {CreateRefreshToken} from "./testUtils";
 
 describe("RefreshTokenService", () => {
   let cacheRepository: ICacheRepository;
   let refreshTokenService: RefreshTokenService;
   let refresh_token: RefreshToken;
+  let _token = "";
 
   beforeEach(() => {
     cacheRepository = new InMemRedisCahceRepository();
@@ -19,37 +22,31 @@ describe("RefreshTokenService", () => {
   });
 
   describe("CreateRefreshToken", () => {
-    it("should create refreshToken ", async () => {
-      const expireAt = DateFunctions.getExpirationDate(1);
+    it("Should create NEW refreshToken ", async () => {
+      refresh_token = CreateRefreshToken(_token);
+      const newTk: RefreshToken = await refreshTokenService.CreateRefreshToken(refresh_token.UserID, refresh_token.CreatedByIp);
+      _token = newTk.Token;
+      expect(newTk).toBeDefined();
 
-      const _token = uuidv4();
-
-      refresh_token = {
-        Token: _token,
-        Expires: expireAt,
-        Created: DateFunctions.getCurrent(),
-        UserID: "10000",
-        CreatedByIp: "192.168.2.3"
-      };
-      const refresh_token_to_compare = JSON.parse(JSON.stringify(refresh_token));
-      await cacheRepository.PushTk(refresh_token, refresh_token.Token);
-      const recoveredTk = await cacheRepository.GetTk(_token);
-
-      expect(refresh_token_to_compare).toEqual(recoveredTk);
+      //expect(refresh_token).toEqual(recoveredTk);
     });
   });
 
   describe("RefreshToken", () => {
-    it("should return a RefreshToken type RefreshToken", async () => {
-      // try to retrive created refresh_token en mim
+    it("Whit valid token should return a new RefreshToken ", async () => {
+      //_token = uuidv4();
+      //refresh_token = CreateRefreshToken(_token);
 
-      const result = await refreshTokenService.RefreshToken(refresh_token.Token);
+      const newTk = await refreshTokenService.RefreshToken(_token);
       // Verify that the result matches the original token
-      expect(result).toBeDefined();
+      //const areNotThesame = _token !== result.Token;
+      const areNotThesame = _token !== newTk.Token && newTk.Created !== refresh_token.Created;
+      //expect(result).toBeDefined();
+      expect(areNotThesame).toEqual(true);
     });
 
     it("should be undefined when given an invalid key", async () => {
-      const refreshTokenKey = "refreshToken:xyz789";
+      const refreshTokenKey = uuidv4();
       // Retrieve a non-existent token using the GetTk method
       const result = await cacheRepository.GetTk(refreshTokenKey);
       // Verify that the result is null
@@ -61,8 +58,8 @@ describe("RefreshTokenService", () => {
     it("should remove RefreshToken ", async () => {
       // try to retrive created refresh_token en mim
 
-      await refreshTokenService.Remove(refresh_token.Token);
-      const result = await cacheRepository.GetTk(refresh_token.Token);
+      await refreshTokenService.Remove(_token);
+      const result = await cacheRepository.GetTk(_token);
 
       // Verify that the result null
       expect(result).toEqual(undefined);

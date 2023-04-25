@@ -51,7 +51,7 @@ export class JWTFunctions {
     // it's less safe than RSA
     //const virification = verify(token.jwt, AppConstants.JWT_SECRET);
     const virification = verify(token.jwt, publicKey);
-
+    
     return virification;
   }
 }
