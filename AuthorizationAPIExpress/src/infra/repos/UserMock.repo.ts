@@ -43,9 +43,14 @@ export default class UserMockRepository implements IUserRepository {
    * @param hash
    * @returns
    */
-  public VerifyPassword(password: string, hash: string): Promise<boolean> {
+  public async VerifyPassword(password: string, hash: string): Promise<boolean> {
     //  Salt length to generate or salt to use, default to 10
     const salt = 12;
+
+    // let p = await this.HassPassword("1234");
+    // p = await this.HassPassword("elevisor+455");
+    // p = await this.HassPassword("hiMrbrownstono");
+    // p = await this.HassPassword("Pletolince21++");
     return compare(password, hash);
   }
 }

@@ -2,6 +2,7 @@ export class AuthenticationReq {
   
   public  username :string;
   public  password :string;
+  public  passwordHash :string;
   public  grant_type :string;
 
   /**allows to identify user data store o */

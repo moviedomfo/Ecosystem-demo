@@ -10,21 +10,13 @@ import HttpStatusCode from "@common/Enums/HttpStatusCode";
 import {LoginResultEnum} from "@common/Enums/LoginResultEnum";
 import {RefreshTokenReq, RefreshTokenRes} from "@domain/DTOs/Auth/RefreshTokenDto";
 import {GetUserReq, GetUserRes} from "@domain/DTOs/Auth/GetUserDto";
-import { IRefreshTokenService } from "@domain/interfases/IRefreshTokenService";
+import {IRefreshTokenService} from "@domain/interfases/IRefreshTokenService";
 
 export default class AuthService implements IAuthService {
-  constructor(private userRepository: IUserRepository, 
-    private refreshTokenService: IRefreshTokenService) {}
+  constructor(private userRepository: IUserRepository, private refreshTokenService: IRefreshTokenService) {}
 
   public async RefreshToken(req: RefreshTokenReq): Promise<RefreshTokenRes> {
-
-    if (!req.client_id) 
-        throw new AppError(
-          HttpStatusCode.BAD_REQUEST, 
-          ErrorCodeEnum.PARAMETER_REQUIRED.toString(), 
-          "client_id is required not found", 
-          ErrorTypeEnum.TecnicalException);
-
+    if (!req.client_id) throw new AppError(HttpStatusCode.BAD_REQUEST, ErrorCodeEnum.PARAMETER_REQUIRED.toString(), "client_id is required not found", ErrorTypeEnum.TecnicalException);
 
     const tokenData = await this.refreshTokenService.RefreshToken(req.refresh_token);
 
@@ -58,7 +50,7 @@ export default class AuthService implements IAuthService {
 
       if (!user) throw new AppError(1, LoginResultEnum.LOGIN_USER_DOESNT_EXIST.toString(), "User not found", ErrorTypeEnum.SecurityException);
 
-      const valid = this.userRepository.VerifyPassword(req.password, user.password);
+      const valid = await this.userRepository.VerifyPassword(req.password, user.passwordHash);
 
       if (!valid) throw new AppError(1, LoginResultEnum.LOGIN_USER_OR_PASSWORD_INCORRECT.toExponential(), "Password is not correct", ErrorTypeEnum.SecurityException);
       const jwt = JWTFunctions.GenerateToken(user, req.client_id);

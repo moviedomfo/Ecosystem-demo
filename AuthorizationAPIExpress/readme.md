@@ -59,5 +59,9 @@ run
 ```
      docker-compose up docker-compose-redis.yml --build
 ```
+##
+yarn test : use this script for simple unit testing
+yarn test --detectOpenHandles --watchAll we'll see -> collect and print open
+                              handles preventing detected
 
-    // "test": "jest  --coverage --watchAll"
+"test": "jest  --coverage --watchAll"

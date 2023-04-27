@@ -6,11 +6,71 @@ import {describe, expect, test} from "@jest/globals";
 import {Token} from "../domain/Entities/Token";
 import {v4 as uuidv4} from "uuid";
 import config from "config";
+import supertest from "supertest";
+import container from "../__test__/jest.setup";
+import {AuthenticationReq, AuthenticationRes} from "../domain/DTOs/Auth/AuthorizationDto";
+import {app, server} from "../index";
+
+describe("Auth controller", () => {
+  //const app = CreateServer();
+  const api = supertest(app);
+  const PORT = process.env.PORT || 5000;
+  //const URL = `${process.env.BASE_URL}:${PORT}`;
+
+  // describe(`${process.env.BASE_URL}:${PORT}/api/sec/authenticate/`, () => {
+  //   const req = new AuthenticationReq();
+  //   req.username = "maria123";
+  //   req.password = "1234";
+  //   req.grant_type = "password";
+  //   req.client_id = "pelsoftclient";
+
+  //   it("Should authorize return 200 OK"),
+  //     async () => {
+  //       await api
+  //         .post("/api/sec/authenticate/")
+  //         .send(JSON.stringify(req))
+  //         .set("Accept", "application/json")
+  //         .expect(200)
+  //         .expect("Content-Type", /application\/json/)
+  //         .then((response) => {
+  //           expect(response.body).toBeDefined();
+  //         });
+
+  //       // .expect("Content-Type", "application/json")
+  //       // .end(function (err, res) {
+  //       //   if (err) throw err;
+  //       // });
+  //     };
+  // });
+  it(`/api/sec/authenticate/ 200`, async () => {
+    const req = new AuthenticationReq();
+    req.username = "maria123";
+    req.password = "1234";
+    req.grant_type = "password";
+    req.client_id = "pelsoftclient";
+
+    const res = await api
+      .post("/api/sec/authenticate/")
+      .set("Accept", "application/json")
+      .send(req)
+      // .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDcSemACt8x4iTMCda8Yhe3iZaWbvV5XKSTbuAn0M')
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const result = res.body as AuthenticationRes;
+    expect(result.refresh_token).toBeDefined();
+    expect(result.token).toBeDefined();
+  });
+  afterAll(() => {
+    server.close();
+  });
+});
 describe("JWT Util test", () => {
   let userRepository: IUserRepository;
 
   beforeEach(() => {
-    userRepository = new UserMockRepository();
+    //userRepository = new UserMockRepository();
+    userRepository = container.resolve("userRepository") as UserMockRepository;
   });
 
   describe("JWT Tool", () => {

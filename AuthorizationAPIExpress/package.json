@@ -10,8 +10,8 @@
     "start": "npm run build && node dist/index.js",
     "start3": "tsc babel-node --extensions \".ts,.js\" src/index.ts",
     "restart": "rimraf dist && npm run start",
-    "test": "jest " 
-    
+    "test": "jest --verbose --silent --detectOpenHandles",
+    "test:whatch": "yarn test -- --watchAll"
   },
   "nodemonConfig": {
     "ignore": [

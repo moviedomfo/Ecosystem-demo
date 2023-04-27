@@ -7,6 +7,7 @@
       "lastName": "González",
       "email": "maria123@example.com",
       "password": "1234",
+      "passwordHash": "$2a$12$iPWftDXhb91g6mU63CqU0e7coNxpilfkyaecy6h30CKQ1SWCb1Afy",
       "avatar": "https://via.placeholder.com/150",
       "roles": ["admin", "manager"]
     },
@@ -16,7 +17,8 @@
       "name": "Juan",
       "lastName": "Pérez",
       "email": "juan87@example.com",
-      "password": "qweasd123",
+      "password": "elevisor+455",
+      "passwordHash": "$2a$12$zeJYg1vamh/x9wWKNOZJr.G6nW692puJ/2MSxk/wpCzXWaT0ebUW6",
       "avatar": "https://via.placeholder.com/150",
       "roles": ["secretary"]
     },
@@ -26,7 +28,8 @@
       "name": "Pedro",
       "lastName": "Ramírez",
       "email": "pedro65@example.com",
-      "password": "1q2w3e4r",
+      "password": "hiMrbrownstono",
+      "passwordHash": "$2a$12$4GUJHdjDZPZKZI.XtpNse.Dnt1qVnUXqTrpRQ8tN.tmLp/T55PKO2",
       "avatar": "https://via.placeholder.com/150",
       "roles": ["manager"]
     }
