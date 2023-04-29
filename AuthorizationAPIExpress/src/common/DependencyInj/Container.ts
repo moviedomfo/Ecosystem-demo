@@ -16,7 +16,6 @@ container.register({
   refreshTokenService: asClass(RefreshTokenService).scoped(),
   userRepository: asClass(UserRepository).scoped(),
   cacheRepository: asClass(RedisCacheRepository).scoped(),
-
   authController: asClass(AuthController).scoped(),
   tokenController:asClass(TokenController).scoped()
 
@@ -27,5 +26,5 @@ export const refreshTokenService = container.resolve("refreshTokenService");
 export const userRepository = container.resolve("userRepository");
 export const cacheRepository = container.resolve("cacheRepository");
 export const authController = container.resolve("authController");
-export const tokenController = container.resolve("authController");
+export const tokenController = container.resolve("tokenController");
 export default container;

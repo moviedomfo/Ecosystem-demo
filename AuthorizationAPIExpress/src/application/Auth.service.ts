@@ -38,7 +38,7 @@ export default class AuthService implements IAuthService {
     if (req.grant_type === "refresh_token") {
       const tokenData = await this.refreshTokenService.RefreshToken(req.refresh_token);
 
-      const user: User = await this.userRepository.FindByUserName(tokenData.UserID);
+      const user: User = await this.userRepository.GetUserById(tokenData.UserID);
 
       const jwt = JWTFunctions.GenerateToken(user, req.client_id);
 

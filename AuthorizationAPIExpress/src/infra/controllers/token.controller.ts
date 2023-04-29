@@ -15,6 +15,8 @@ import {Token} from "@domain/Entities/token";
 export default class TokenController {
   constructor(private refreshTokenService: IRefreshTokenService) {}
 
+
+
   @route("/GetRefreshToken")
   @GET()
   public GetRefreshToken = async (req: Request, res: Response, next: NextFunction) => {

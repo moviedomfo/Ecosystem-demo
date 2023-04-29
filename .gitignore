@@ -25,7 +25,6 @@ Thumbs.db
 *.mov
 *.wmv
 .env
-*.bak
 *.user
 bin/
 obj/
@@ -35,4 +34,5 @@ OrdersAPIExpress/build/swagger.json
 OrdersAPIExpress/build/routes.ts
 ComerceAPIExpress/.env.production
 ComerceAPIExpress/.env.production
-OrdersAPIExpress/.env.production
+ComerceAPIExpress/src/application/Persons.service.ts.bak
+ComerceAPIExpress/src/common/helpers/handleErrorFunctions.ts.bak

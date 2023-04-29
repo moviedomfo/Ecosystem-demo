@@ -1,9 +1,11 @@
-import { verify } from 'jsonwebtoken';
-import container from "@common/Container";
+import {verify} from "jsonwebtoken";
+//import container from "@common/DependencyInj/Container";
 import express from "express";
 import TokenController from "@infra/controllers/token.controller";
+import { CreateContainer } from "@common/DependencyInj/DIContainerFactory";
 
 export const tokenRouter = express.Router();
+const container = CreateContainer()
 
 const controller: TokenController = container.resolve("tokenController") as TokenController;
 

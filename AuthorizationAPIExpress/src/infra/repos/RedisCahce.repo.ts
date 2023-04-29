@@ -2,7 +2,6 @@ import {ICacheRepository} from "@application/interfases/ICacheRepository";
 import {AppConstants} from "@common/commonConstants";
 import {RedisKey} from "@domain/Entities/RedisKey";
 import {RefreshToken} from "@domain/Entities/RefreshToken";
-import {Token} from "@domain/Entities/token";
 const redis = require("redis");
 
 /**Only responsibly  for store or cache the tokens. In redis*/
