@@ -5,15 +5,15 @@ module.exports = function (api) {
 
   let plugins = [
     "@babel/plugin-transform-typescript",
-    ["@babel/plugin-proposal-decorators", {legacy: true}],
+    ["@babel/plugin-proposal-decorators", { legacy: true }],
     [
       "module-resolver",
       {
         root: ["./"],
         alias: {
           "@common": "./src/common",
+          "@domain": "./src/domain",
           "@infra": "./src/infra",
-          "@models": "./src/models",
           "@services": "./src/services",
           "@application": "./src/application",
         },

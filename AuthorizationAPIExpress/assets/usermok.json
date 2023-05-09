@@ -2,10 +2,10 @@
   "Users": [
     {
       "id": "6bf87313-3d4d-4a6e-89b4-6d69e096e9d1",
-      "userName": "maria123",
+      "userName": "davendra",
       "name": "María",
       "lastName": "González",
-      "email": "maria123@example.com",
+      "email": "davendra@example.com",
       "password": "1234",
       "passwordHash": "$2a$12$iPWftDXhb91g6mU63CqU0e7coNxpilfkyaecy6h30CKQ1SWCb1Afy",
       "avatar": "https://via.placeholder.com/150",

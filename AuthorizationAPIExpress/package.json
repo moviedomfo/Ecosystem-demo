@@ -6,9 +6,11 @@
   "author": "moviedo",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/index.ts",
-    "build": "babel src --extensions \".ts,.js\" -d dist --copy-files",
-    "start": "npm run build && node dist/index.js",
-    "start3": "tsc babel-node --extensions \".ts,.js\" src/index.ts",
+    "build": "tsc",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start:babel2": "tsc babel-node --extensions \".ts,.js\" src/index.ts",
+    "build:babel1": "babel src --extensions \".ts,.js\" -d dist --copy-files",
+    "start:babel1": "npm run build:babel1 && node dist/index.js",
     "restart": "rimraf dist && npm run start",
     "test": "jest --verbose --silent --detectOpenHandles",
     "test:whatch": "yarn test -- --watchAll"

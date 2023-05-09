@@ -10,7 +10,7 @@ export default class RedisCacheRepository implements ICacheRepository {
 
   public async GetTk(refresTokenKey: string): Promise<RefreshToken> {
     return new Promise(async (resolve) => {
-      RedisCacheRepository.CreateClient();
+      await RedisCacheRepository.CreateClient();
 
       const refresTokenJson = await RedisCacheRepository.redisClient.get(refresTokenKey);
       if (!refresTokenJson) resolve(undefined);
@@ -22,7 +22,7 @@ export default class RedisCacheRepository implements ICacheRepository {
   public async GetAll(): Promise<RedisKey[]> {
     return new Promise(async (resolve) => {
       const list: RedisKey[] = [];
-      RedisCacheRepository.CreateClient();
+      await RedisCacheRepository.CreateClient();
       const redisClient = RedisCacheRepository.redisClient;
       const keys = await new Promise<string[]>((resolve, reject) => {
         redisClient.keys("*", (err, keys) => {
@@ -49,7 +49,7 @@ export default class RedisCacheRepository implements ICacheRepository {
   public PushTk = async (tk: RefreshToken, refresTokenKey: string) => {
     try {
       // console.log(`message was cached into ${AppConstants.REDIS_HOST}, message id : ${req.id}`);
-      RedisCacheRepository.CreateClient();
+      await RedisCacheRepository.CreateClient();
 
       await RedisCacheRepository.redisClient.setEx(refresTokenKey, Number(AppConstants.REDIS_EXPIRES_TIME) * 60, JSON.stringify(tk));
     } catch (err) {
@@ -59,7 +59,7 @@ export default class RedisCacheRepository implements ICacheRepository {
 
   public FlushAll = async () => {
     try {
-      RedisCacheRepository.CreateClient();
+      await RedisCacheRepository.CreateClient();
       await RedisCacheRepository.redisClient.flushall();
     } catch (err) {
       throw new Error("REDIS->" + err.message);
@@ -67,8 +67,12 @@ export default class RedisCacheRepository implements ICacheRepository {
   };
 
   public Remove = async (refresTokenKey: string) => {
-    RedisCacheRepository.CreateClient();
-    await RedisCacheRepository.redisClient.del(refresTokenKey);
+    try {
+      await RedisCacheRepository.CreateClient();
+      await RedisCacheRepository.redisClient.del(refresTokenKey);
+    } catch (err) {
+      throw new Error("REDIS->" + err.message);
+    }
   };
 
   static async CreateClient() {

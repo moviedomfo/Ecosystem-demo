@@ -34,5 +34,4 @@ OrdersAPIExpress/build/swagger.json
 OrdersAPIExpress/build/routes.ts
 ComerceAPIExpress/.env.production
 ComerceAPIExpress/.env.production
-ComerceAPIExpress/src/application/Persons.service.ts.bak
-ComerceAPIExpress/src/common/helpers/handleErrorFunctions.ts.bak
+*.ts.bak

@@ -2,14 +2,13 @@ import {User} from "@domain/Entities/User";
 import {AuthenticationReq, AuthenticationRes} from "@domain/DTOs/Auth/AuthorizationDto";
 import {ErrorCodeEnum, ErrorTypeEnum} from "@common/Enums/ErrorEnums";
 import {AppError} from "@common/ErrorHandle/AppError";
-import {ICacheRepository} from "./interfases/ICacheRepository";
 import {IAuthService} from "@domain/interfases/IAuthService";
 import {IUserRepository} from "./interfases/IUserRepository";
 import {JWTFunctions} from "@common/helpers/jwtFunctions";
 import HttpStatusCode from "@common/Enums/HttpStatusCode";
 import {LoginResultEnum} from "@common/Enums/LoginResultEnum";
 import {RefreshTokenReq, RefreshTokenRes} from "@domain/DTOs/Auth/RefreshTokenDto";
-import {GetUserReq, GetUserRes} from "@domain/DTOs/Auth/GetUserDto";
+import {GetUserReq, GetUserRes, UserSimpleViewDTO} from "@domain/DTOs/Auth/GetUserDto";
 import {IRefreshTokenService} from "@domain/interfases/IRefreshTokenService";
 
 export default class AuthService implements IAuthService {
@@ -48,7 +47,7 @@ export default class AuthService implements IAuthService {
     if (req.grant_type === "password") {
       const user = await this.userRepository.FindByUserName(req.username);
 
-      if (!user) throw new AppError(1, LoginResultEnum.LOGIN_USER_DOESNT_EXIST.toString(), "User not found", ErrorTypeEnum.SecurityException);
+      if (!user) throw new AppError(HttpStatusCode.UNAUTHORIZED, LoginResultEnum.LOGIN_USER_DOESNT_EXIST.toString(), "User not found", ErrorTypeEnum.SecurityException);
 
       const valid = await this.userRepository.VerifyPassword(req.password, user.passwordHash);
 
@@ -69,9 +68,16 @@ export default class AuthService implements IAuthService {
 
     const user = await this.userRepository.FindByUserName(req.username);
 
-    if (!user) throw new AppError(1, LoginResultEnum.LOGIN_USER_DOESNT_EXIST.toString(), "User not found", ErrorTypeEnum.SecurityException);
+    if (!user) throw new AppError(HttpStatusCode.UNAUTHORIZED, LoginResultEnum.LOGIN_USER_DOESNT_EXIST.toString(), "User not found", ErrorTypeEnum.SecurityException);
 
-    result.User = user;
+    const userSimpleView: UserSimpleViewDTO = {
+      id: user.id,
+      userName: user.userName,
+      email: user.email,
+      fullName: `${user.lastName}, ${user.name}`,
+      avatar: user.avatar
+    };
+    result.User = userSimpleView;
 
     return result;
   }

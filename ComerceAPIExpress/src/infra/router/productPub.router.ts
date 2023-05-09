@@ -1,3 +1,4 @@
+import checkTokenMeddeware from "@common/auth.middleware";
 import Container from "@common/ContainerOk";
 import ProductPubController from "@infra/controllers/ProductPub.controller";
 
@@ -7,6 +8,6 @@ export const productRouter = express.Router();
 
 const productPubController: ProductPubController = Container.resolve("productPubController") as ProductPubController;
 
-productRouter.post("/", productPubController.Create);
-productRouter.get("/", productPubController.GetAll);
-productRouter.get("/:id", productPubController.GetById);
+productRouter.post("/", checkTokenMeddeware, productPubController.Create);
+productRouter.get("/", checkTokenMeddeware, productPubController.GetAll);
+productRouter.get("/:id", checkTokenMeddeware, productPubController.GetById);

@@ -13,7 +13,7 @@ export const ExpressErrorHandler = (error: any, request: Request, response: Resp
   let appError: AppError;
   
   if (typeof AppError === error) appError = error as AppError;
-  else appError = GetAppError(error);
+  else appError = ExeptionFunctions.GetAppError(error);
 
   const err = {
     message: appError.message,
@@ -25,22 +25,4 @@ export const ExpressErrorHandler = (error: any, request: Request, response: Resp
   response.status(appError.statusCode).send(err);
 };
 
-const GetAppError = (error: any): AppError => {
-  let appError: AppError;
-  if ((error.name as string).startsWith("Sequelize")) {
-    appError = ExeptionFunctions.Parse_SequelizeError(error);
-  }
-  if ((error.name as string).startsWith("Kafka")) {
-    appError = ExeptionFunctions.Parse_KafkaError(error);
-  }
 
-  //Redis authentication required
-  if (error.message && error.message.startsWith("REDIS->")) {
-    appError = ExeptionFunctions.Parse_Redis(error);
-  }
-  if (error.response) appError.message = appError.message.concat(error.response.data.Message, "\n");
-
-  appError.statusCode = error.statusCode || appError.statusCode;
-
-  return appError;
-};

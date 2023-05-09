@@ -1,8 +1,19 @@
-import {AppError} from "@common/ErrorHandle/AppError";
+import {AppError, AppErrorToSent} from "@common/ErrorHandle/AppError";
 import {ErrorCodeEnum, ErrorTypeEnum} from "@common/Enums/ErrorEnums";
 import HttpStatusCode from "@common/Enums/HttpStatusCode";
 
 export class ExeptionFunctions {
+   /**
+   *
+   * @param statusCode
+   * @param message
+   * @param errorCode
+   * @param exType
+   * @returns
+   */
+  public static CreateAppError = (statusCode: HttpStatusCode, message: string, errorCode: string, exType: ErrorTypeEnum = ErrorTypeEnum.TecnicalException): AppErrorToSent => {
+    return new AppErrorToSent(statusCode, errorCode, message, exType);
+  };
   /**
    *
    * @param error

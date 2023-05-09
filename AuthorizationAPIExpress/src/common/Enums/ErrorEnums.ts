@@ -1,7 +1,7 @@
 export enum ErrorTypeEnum {
   FunctionalException = "FunctionalException",
   TecnicalException = "TecnicalException",
-  SecurityException = "SecurityException",
+  SecurityException = "SecurityException"
 }
 
 export enum ErrorCodeEnum {
@@ -15,5 +15,5 @@ export enum ErrorCodeEnum {
   KAFKA_TOPIC_NOT_EXIST = "5101",
   MONGO_TIMEOUT = "5200",
   REDIS = "5300",
-  REDIS_NOAUTH = "5301",
+  REDIS_NOAUTH = "5301"
 }

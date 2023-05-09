@@ -31,5 +31,5 @@
     "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src/**/*", "tests", "dirty"],
-  "exclude": ["node_modules", "**/build", "**/dist", "**/*.md", "**/rollup.config.js", "src/**/*.test.ts"]
+  "exclude": ["node_modules", "**/build", "**/dist", "**/*.md", "**/rollup.config.js", "src/**/*.test.ts", "src/__test__"]
 }

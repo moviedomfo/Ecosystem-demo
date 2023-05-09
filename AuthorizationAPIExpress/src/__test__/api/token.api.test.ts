@@ -11,13 +11,12 @@ describe("Token controller", () => {
   let jwt = "";
   let refresh_token = "";
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await createTk();
     jest.setTimeout(60000);
-    createTk();
   });
 
   it(`${rootPath}/GetRefreshToken grant->password`, async () => {
-    jest.setTimeout(60000);
     const req = new GetRefreshTkReq();
     req.refresh_token = refresh_token;
     const res = await api
@@ -47,7 +46,7 @@ describe("Token controller", () => {
 
   const createTk = async () => {
     const req = new AuthenticationReq();
-    req.username = "maria123";
+    req.username = "davendra";
     req.password = "1234";
     req.grant_type = "password";
     req.client_id = "pelsoftclient";
@@ -56,7 +55,6 @@ describe("Token controller", () => {
       .post(`/api/sec/authenticate/`)
       .set("Accept", "application/json")
       .send(req)
-      // .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDcSemACt8x4iTMCda8Yhe3iZaWbvV5XKSTbuAn0M')
       .expect(200)
       .expect("Content-Type", /application\/json/);
 

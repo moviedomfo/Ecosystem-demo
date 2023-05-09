@@ -1,6 +1,6 @@
 
 import {AuthenticationReq, AuthenticationRes} from "@domain/DTOs/Auth/AuthorizationDto";
-import { GetUserReq, GetUserRes } from "@domain/DTOs/Auth/GetUserDto";
+import { GetUserReq, GetUserRes, UserSimpleViewDTO } from "@domain/DTOs/Auth/GetUserDto";
 import { RefreshTokenReq, RefreshTokenRes } from "@domain/DTOs/Auth/RefreshTokenDto";
 
 export interface IAuthService {
@@ -9,4 +9,5 @@ export interface IAuthService {
   /** */
   Auth: (req: AuthenticationReq) => Promise<AuthenticationRes>;
   GetUser: (req: GetUserReq) => Promise<GetUserRes>;
+
 }

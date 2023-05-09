@@ -5,5 +5,14 @@ export class GetUserReq {
 }
 
 export class GetUserRes {
-  public User: User;
+  public User: UserSimpleViewDTO;
+}
+export interface UserSimpleViewDTO {
+  id: string;
+  userName: string;
+  fullName: string;
+  email: string;
+  avatar: string;
+  
+ 
 }

@@ -1,9 +1,8 @@
-import {evetBusRepo} from "./ContainerOk";
 import HttpStatusCode from "@common/Enums//HttpStatusCode";
-import {Token} from "@domain/Entities/Token";
+import {Token} from "@domain/Entities/token";
 import {JWTFunctions} from "./helpers/jwtFunctions";
 import {Request, Response, NextFunction} from "express";
-import {ExeptionFunctions} from "./helpers/ExeptionFunctions";
+import { ExeptionFunctions } from "./helpers/ExeptionFunctions";
 
 /**
  * Middleware function to check the validity of a JSON Web Token (JWT).
@@ -28,8 +27,7 @@ const checkTokenMeddeware = (request: Request, response: Response, next: NextFun
     } catch (err) {
       const e = ExeptionFunctions.CreateAppError(HttpStatusCode.UNAUTHORIZED, "Invalid token " + err.message, HttpStatusCode.UNAUTHORIZED.toString());
 
-      response.status(HttpStatusCode.UNAUTHORIZED).send(e);
-    }
+      response.status(HttpStatusCode.UNAUTHORIZED).send(e);    }
   } else {
     const e = ExeptionFunctions.CreateAppError(HttpStatusCode.UNAUTHORIZED, "Authorization header invalid", HttpStatusCode.UNAUTHORIZED.toString());
 
@@ -37,24 +35,8 @@ const checkTokenMeddeware = (request: Request, response: Response, next: NextFun
   }
 };
 function extractToken(authHeader: string): string | null {
-  if (!authHeader) return null;
   const tokenRegex = /^Bearer (.+)/;
   const match = authHeader.match(tokenRegex);
   return match ? match[1] : null;
 }
 export default checkTokenMeddeware;
-
-// import {expressjwt, GetVerificationKey} from "express-jwt";
-// import jwksRsa from "jwks-rsa";
-// import * as dotenv from "dotenv";
-
-// dotenv.config();
-// jwksRsa;
-// export const checkJwt = expressjwt({
-//   secret: jwksRsa.expressJwtSecret({cache: true, rateLimit: true, jwksRequestsPerMinute: 5, jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`}) as GetVerificationKey,
-
-//   // Validate the audience and the issuer.
-//   audience: process.env.AUTH0_AUDIENCE,
-//   issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-//   algorithms: ["RS256"],
-// });
