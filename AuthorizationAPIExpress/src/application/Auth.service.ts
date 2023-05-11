@@ -24,7 +24,7 @@ export default class AuthService implements IAuthService {
     /** this data comes from cached user data together with refresh_token   */
     const user: User = await this.userRepository.FindByUserName(tokenData.UserID);
 
-    const jwt = JWTFunctions.GenerateToken(user, req.client_id);
+    const jwt = JWTFunctions.GenerateToken(user, req.client_id,req.client_id);
 
     res.refresh_token = tokenData.Token;
     res.jwt = jwt;
@@ -39,7 +39,7 @@ export default class AuthService implements IAuthService {
 
       const user: User = await this.userRepository.GetUserById(tokenData.UserID);
 
-      const jwt = JWTFunctions.GenerateToken(user, req.client_id);
+      const jwt = JWTFunctions.GenerateToken(user, req.client_id,req.client_id);
 
       result.refresh_token = tokenData.Token;
       result.token = jwt;
@@ -52,7 +52,7 @@ export default class AuthService implements IAuthService {
       const valid = await this.userRepository.VerifyPassword(req.password, user.passwordHash);
 
       if (!valid) throw new AppError(1, LoginResultEnum.LOGIN_USER_OR_PASSWORD_INCORRECT.toExponential(), "Password is not correct", ErrorTypeEnum.SecurityException);
-      const jwt = JWTFunctions.GenerateToken(user, req.client_id);
+      const jwt = JWTFunctions.GenerateToken(user, req.client_id,req.client_id);
 
       const refreshToken = await this.refreshTokenService.CreateRefreshToken(user.id.toString(), "");
 

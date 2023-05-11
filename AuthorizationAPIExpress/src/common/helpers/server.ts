@@ -8,6 +8,7 @@ import morgan from "morgan";
 import {ExpressErrorHandler} from "@common/ErrorHandle/ExpressErrorHandler";
 import {authRouter} from "@infra/router/auth.router";
 import {tokenRouter} from "@infra/router/token.router";
+import { resourseclients } from "@infra/router/resourseclients.router";
 
 function CreateServer() {
   const app = express();
@@ -28,6 +29,7 @@ function CreateServer() {
   // no llamaba a su constructor y por ende quedaban undefined los Servicios inyectados
   app.use("/api/sec/", authRouter);
   app.use("/api/tk/", tokenRouter);
+  app.use("/api/resourseclients/", resourseclients);
   //loadContainer(app);
 
   //app.use(loadControllers("**/*.controller.ts", {cwd: __dirname}));

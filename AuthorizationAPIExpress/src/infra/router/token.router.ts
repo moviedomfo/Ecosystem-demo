@@ -1,4 +1,3 @@
-import {verify} from "jsonwebtoken";
 //import container from "@common/DependencyInj/Container";
 import express from "express";
 import TokenController from "@infra/controllers/token.controller";

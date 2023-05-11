@@ -36,11 +36,11 @@ export default class RefreshTokenService implements IRefreshTokenService {
     });
   }
 
-   /*
+  /*
    * Create new RefreshToken and store in cache
-   * @param userId 
-   * @param clientIp 
-   * @returns 
+   * @param userId
+   * @param clientIp
+   * @returns
    */
   public async CreateRefreshToken(userId: string, clientIp: string): Promise<RefreshToken> {
     return new Promise<RefreshToken>(async (resolve, reject) => {

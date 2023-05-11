@@ -15,7 +15,7 @@ export class JWTFunctions {
    * @param audienceId
    * @returns
    */
-  public static GenerateToken(user: User, audienceId: string): string {
+  public static GenerateToken(user: User, audienceId: string, clientId:string): string {
     // doesn´t works whitc this key loaded from config.
     // const privateKey2 = config.get<string>("server.privateKey");
 
@@ -28,7 +28,9 @@ export class JWTFunctions {
     const expiresIn_minutes = parseInt(AppConstants.JWT_Expires) * 60;
 
     try {
-      const privateKey = fs.readFileSync("./config/private_key.pem", "utf-8");
+      
+      //const privateKey = fs.readFileSync("./config/private_key.pem", "utf-8");
+      const privateKey = fs.readFileSync(`./config/${clientId}_private_key.pem`, "utf-8");
       // doesn´t works
       //const jwt2 = sign(payload, privateKey2, {expiresIn: expiresIn_minutes, audience, issuer: AppConstants.JWT_issuer.toString(), algorithm: "RS256"});
 

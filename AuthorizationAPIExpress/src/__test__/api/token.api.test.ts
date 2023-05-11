@@ -5,7 +5,7 @@ import {GetRefreshTkReq} from "../../domain/DTOs/Token/GetRefreshTkDto";
 import {RefreshToken} from "../../domain/Entities/RefreshToken";
 import {app, server} from "../../index";
 
-describe("Token controller", () => {
+describe("Test token controller", () => {
   const rootPath = "/api/tk";
   const api = supertest(app);
   let jwt = "";

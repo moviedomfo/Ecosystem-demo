@@ -35,3 +35,6 @@ OrdersAPIExpress/build/routes.ts
 ComerceAPIExpress/.env.production
 ComerceAPIExpress/.env.production
 *.ts.bak
+*pelsoft_00*.pem
+*pelsoft00*.pem
+OrdersAPIExpress/.env.production
