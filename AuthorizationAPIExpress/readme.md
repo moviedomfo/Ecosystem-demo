@@ -37,15 +37,12 @@ In addition, we have also implemented the generation of Refresh Tokens, which al
 PORT=3010
 BASE_URL = 'http://localhost'
 CLIENT_NAME='Authorization API Express'
-REDIS_USER = 'authExpress'
 REDIS_HOST='localhost:9092'
-JWT_SECRET='000111222333'
 JWT_Expires=5
 JWT_ExpiresRefreshToken=600
 JWT_AUDIENCE='https://pelsoft.com'
 JWT_ISSUER='notused'
-REDIS_PATH='e:/volumens/redis'
-REDIS_EXPIRES_TIME=30
+
 
 ## run redis container with compose
 ```
@@ -57,11 +54,35 @@ REDIS_EXPIRES_TIME=30
 run
 
 ```
-     docker-compose up docker-compose-redis.yml --build
+     docker-compose up 
 ```
+ se pue --build
 ##
+
 yarn test : use this script for simple unit testing
 yarn test --detectOpenHandles --watchAll we'll see -> collect and print open
-                              handles preventing detected
+handles preventing detected
 
-"test": "jest  --coverage --watchAll"
+"test": "jest --coverage --watchAll"
+
+
+
+## Dockerize
+
+You can use docker to deploy the api server. In this releasse we leave a dockerfile and a docker compose ready to use
+
+### generate image
+
+```
+    docker image build -t moviedomfo/express_auth .
+
+```
+
+### run a single container whitout reverse proxy
+
+```
+    docker run -d -p 3010:3010 --name express_auth moviedomfo/express_auth
+```
+
+- Navigate to this url to check the if correctly docker container is running
+  http://localhost:3009

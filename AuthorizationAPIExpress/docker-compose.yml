@@ -1,0 +1,19 @@
+version: "3.2"
+services:
+  authserver:
+    container_name: authserver
+    image: moviedomfo/express_auth
+    ports:
+      - 3030:${APP_PORT}
+    environment:
+      - SERVER_NAME="Socrates Authorization Server API  ${APP_PORT}"
+    # networks:
+    #   net_eco:
+    #     ipv4_address: 172.21.0.13
+# networking for the Redis container
+# networks:
+#   net_eco:
+#     ipam:
+#       #driver: default
+#       config:
+#         - subnet: 172.21.0.0/16

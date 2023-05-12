@@ -1,9 +1,7 @@
 import {verify, sign, JwtPayload} from "jsonwebtoken";
-import {Token} from "@domain/Entities/token";
+import {Token} from "@domain/Entities/Token";
 import {User} from "@domain/Entities/User";
 import {AppConstants} from "@common/commonConstants";
-import config from "config";
-// import { FileFunctions } from "./fileFunctions";
 import * as fs from "fs";
 
 //const privateKey = config.get<string>("privateKey");
@@ -15,10 +13,10 @@ export class JWTFunctions {
    * @param audienceId
    * @returns
    */
-  public static GenerateToken(user: User, audienceId: string, clientId:string): string {
+  public static GenerateToken(user: User, audienceId: string, clientId: string): string {
     // doesn´t works whitc this key loaded from config.
-    // const privateKey2 = config.get<string>("server.privateKey");
-
+    console;
+    console.log(__dirname);
     const payload = {
       _id: user.id,
       name: user.userName,
@@ -28,9 +26,12 @@ export class JWTFunctions {
     const expiresIn_minutes = parseInt(AppConstants.JWT_Expires) * 60;
 
     try {
-      
-      //const privateKey = fs.readFileSync("./config/private_key.pem", "utf-8");
-      const privateKey = fs.readFileSync(`./config/${clientId}_private_key.pem`, "utf-8");
+      let privateKey;
+      if (fs.existsSync("./../files")) privateKey = fs.readFileSync(`./../files/${clientId}_private_key.pem`, "utf-8");
+
+      if (fs.existsSync("./files")) privateKey = fs.readFileSync(`./files/${clientId}_private_key.pem`, "utf-8");
+      console.log(privateKey);
+
       // doesn´t works
       //const jwt2 = sign(payload, privateKey2, {expiresIn: expiresIn_minutes, audience, issuer: AppConstants.JWT_issuer.toString(), algorithm: "RS256"});
 
@@ -46,10 +47,13 @@ export class JWTFunctions {
   /**
    *
    * @param token
+   * @param token
    * @returns
    */
-  public static Verify(token: Token): JwtPayload {
-    const publicKey = fs.readFileSync("./config/public_key.pem", "utf-8");
+  public static Verify(token: Token, clientId: string = "pelsoftclient"): JwtPayload {
+    //if (clientId === "local") clientId = "pelsoftclient";
+
+    const publicKey = fs.readFileSync(`./files/${clientId}_public_key.pem`, "utf-8");
     // it's less safe than RSA
     //const virification = verify(token.jwt, AppConstants.JWT_SECRET);
     const virification = verify(token.jwt, publicKey) as JwtPayload;

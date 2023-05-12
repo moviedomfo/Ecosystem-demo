@@ -79,7 +79,7 @@ export default class RedisCacheRepository implements ICacheRepository {
     if (!RedisCacheRepository.redisClient) {
       RedisCacheRepository.redisClient = redis.createClient({
         socket: {
-          host: "localhost",
+          host: AppConstants.REDIS_HOST,
           port: 6379
         },
         password: "pletorico28"

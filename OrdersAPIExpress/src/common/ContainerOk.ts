@@ -3,8 +3,6 @@ import OrdersController from "@infra/controllers/orders.controller";
 import OrdersService from "@application/Orders.service";
 import OrdersMongoRepository from "@infra/repos/OrderMongo.repo";
 import KafkaEventBusRepository from "@infra/repos/EventBus.repo";
-import {scopePerRequest} from "awilix-express";
-import {Application} from "express";
 
 //Container par ase urilizado por ordersRouter (caso en el que funciona)
 const container = createContainer({

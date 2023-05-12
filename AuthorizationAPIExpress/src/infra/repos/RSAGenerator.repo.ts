@@ -8,20 +8,31 @@ export default class RSAGeneratorRepository {
   constructor() {
     RSAGeneratorRepository.CreateStore();
   }
+
+  /**
+   *
+   * @param clientId registered client id
+   * @returns
+   */
   public async CreatePublicPrivateKeys(clientId: string): Promise<RsaKeys> {
     return new Promise(async (resolve) => {
       const gen = new RSAGenerator();
 
       const rsa = await gen.GetPublicPrivateKeys();
 
-      FileFunctions.AppendFile(`./config/${clientId}_private_key.pem`, rsa.privateKey);
-      FileFunctions.AppendFile(`./config/${clientId}_public_key.pem`, rsa.publicKey);
+      FileFunctions.AppendFile(`./files/${clientId}_private_key.pem`, rsa.privateKey);
+      FileFunctions.AppendFile(`./files/${clientId}_public_key.pem`, rsa.publicKey);
       RSAGeneratorRepository.storage[clientId] = JSON.stringify(rsa);
 
       resolve(rsa);
     });
   }
 
+  /**
+   *
+   * @param clientId registered client id
+   * @returns
+   */
   public GetForClient = (clientId: string): RsaKeys | undefined => {
     try {
       const rsaJson = RSAGeneratorRepository.storage[clientId];
@@ -29,6 +40,8 @@ export default class RSAGeneratorRepository {
       const rsaKeys = JSON.parse(rsaJson) as RsaKeys;
       return rsaKeys;
     } catch (err) {
+      if (err instanceof AppError) throw err;
+
       throw new Error("RSA Gen->" + err.message);
     }
   };

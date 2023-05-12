@@ -30,9 +30,10 @@ module.exports = function (api) {
     sourceMaps: "inline",
     retainLines: true,
     ignore: [
+      "src/**/*.test.js",
       "src/__test__",
-      "**/__test__", // ignore the whole test directory
-      "**/*.test.ts" // ignore test files only
+      "**/__test__",
+      "**/*.test.js"
     ]
   };
 

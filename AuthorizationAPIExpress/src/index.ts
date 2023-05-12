@@ -1,17 +1,19 @@
-import "reflect-metadata";
+//import "reflect-metadata";
 import "dotenv/config";
 import {AppConstants} from "./common/commonConstants";
 import CreateServer from "@common/helpers/server";
 
 require("dotenv").config();
 
-if (!process.env.PORT) {
-  process.exit(1);
+if (!process.env.APP_PORT) {
+  console.error("env --> APP_PORT NOT FAOUND");
+
+  process.exit(1000);
 }
 const app = CreateServer();
 
-const PORT = process.env.PORT || 5000;
-const URL = `${process.env.BASE_URL}:${PORT}`;
+const PORT = process.env.APP_PORT;
+const URL = `${process.env.APP_BASE_URL}:${PORT}`;
 
 /**
  * Server Activation

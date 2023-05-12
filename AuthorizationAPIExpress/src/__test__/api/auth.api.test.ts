@@ -17,7 +17,7 @@ describe("Auth controller", () => {
   const api = supertest(app);
   let jwt = "";
   let refresh_token = "";
-
+  const client_id = "pelsoftclient";
   beforeEach(() => {
     jest.setTimeout(60000);
     cacheRepository = new InMemRedisCahceRepository();
@@ -29,7 +29,7 @@ describe("Auth controller", () => {
     req.username = "davendra";
     req.password = "1234";
     req.grant_type = "password";
-    req.client_id = "pelsoftclient";
+    req.client_id = client_id;
 
     const res = await api
       .post(`${rootPath}/authenticate/`)
@@ -53,7 +53,7 @@ describe("Auth controller", () => {
 
     req.refresh_token = refresh_token;
     req.grant_type = "refresh_token";
-    req.client_id = "pelsoftclient";
+    req.client_id = client_id;
 
     const res = await api
       .post(`${rootPath}/authenticate/`)
@@ -77,7 +77,6 @@ describe("Auth controller", () => {
       .get(`${rootPath}/getUser/`)
       .set("Accept", "application/json")
       .send(req)
-      // .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDcSemACt8x4iTMCda8Yhe3iZaWbvV5XKSTbuAn0M')
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
@@ -96,6 +95,7 @@ describe("Auth controller", () => {
       .set("Accept", "application/json")
       .send(req)
       .set("Authorization", `bearer ${jwt}`)
+      .set("clientId", `${client_id}`)
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
@@ -110,7 +110,7 @@ describe("Auth controller", () => {
     req.username = "noexiste";
     req.password = "1111";
     req.grant_type = "password";
-    req.client_id = "pelsoftclient";
+    req.client_id = client_id;
 
     const res = await api
       .post(`${rootPath}/authenticate/`)
@@ -124,14 +124,6 @@ describe("Auth controller", () => {
     const rt = await refreshTokenService.CreateRefreshToken("1da4a6a3-6cd4-4a2c-a4ea-f6dc2f6b9a88", "pelsoftclient");
     refresh_token = rt.Token;
 
-    // return new Promise<RefreshToken>(async (resolve) => {
-    //   const req = new GetRefreshTkReq();
-    //   req.refresh_token = refresh_token;
-    //   const res = await api.get(`${rootPath}/GetRefreshToken/`).set("Accept", "application/json").send(req);
-
-    //   const result = res.body as RefreshToken;
-    //   resolve(result);
-    // });
   };
 
   afterAll(() => {

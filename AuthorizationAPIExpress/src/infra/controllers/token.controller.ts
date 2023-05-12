@@ -1,12 +1,11 @@
 import {NextFunction, Request, Response} from "express";
-import {GET, route, DELETE, POST} from "awilix-express";
+import {GET, route, DELETE} from "awilix-express";
 import HttpStatusCode from "@common/Enums/HttpStatusCode";
 import {GetRefreshTkReq} from "@domain/DTOs/Token/GetRefreshTkDto";
 import {IRefreshTokenService} from "@domain/interfases/IRefreshTokenService";
-import {get} from "config";
 import {JWTFunctions} from "@common/helpers/jwtFunctions";
 import {VerifyJWTReq} from "@domain/DTOs/Token/VerifyJWTDto";
-import {Token} from "@domain/Entities/token";
+import {Token} from "@domain/Entities/Token";
 
 /**
  * A purchase order is issued by the buyer generator (¡random cron-job app) and and later is to be fulfilled by the vendor
@@ -14,8 +13,6 @@ import {Token} from "@domain/Entities/token";
 @route("/api/tk")
 export default class TokenController {
   constructor(private refreshTokenService: IRefreshTokenService) {}
-
-
 
   @route("/GetRefreshToken")
   @GET()
@@ -58,7 +55,7 @@ export default class TokenController {
       const reqBody: VerifyJWTReq = req.body as VerifyJWTReq;
       const tk: Token = new Token();
       tk.jwt = reqBody.jwt;
-      const response = JWTFunctions.Verify(tk);
+      const response = JWTFunctions.Verify(tk,reqBody.clientId);
 
       res.status(HttpStatusCode.OK).send(response);
     } catch (e) {
