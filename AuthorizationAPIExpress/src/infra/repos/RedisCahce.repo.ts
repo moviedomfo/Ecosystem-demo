@@ -19,6 +19,7 @@ export default class RedisCacheRepository implements ICacheRepository {
       resolve(refresToken);
     });
   }
+
   public async GetAll(): Promise<RedisKey[]> {
     return new Promise(async (resolve) => {
       const list: RedisKey[] = [];
@@ -88,6 +89,11 @@ export default class RedisCacheRepository implements ICacheRepository {
       try {
         await RedisCacheRepository.redisClient.connect();
       } catch (err) {
+        if (err.code === "ECONNREFUSED") {
+          RedisCacheRepository.redisClient.quit();
+          RedisCacheRepository.redisClient = undefined;
+        }
+
         throw new Error("REDIS->" + err.message);
       }
     }

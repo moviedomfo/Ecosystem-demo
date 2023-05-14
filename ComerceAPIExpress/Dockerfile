@@ -26,7 +26,7 @@ ADD ./.env.production ./.env
 # ENV PM2_HEALTH_PORT 3001
 ENV NODE_ENV production
 
-# EXPOSE ${PORT}
+# EXPOSE ${APP_PORT}
 # EXPOSE ${PM2_HEALTH_PORT}
 
 CMD  node index.js

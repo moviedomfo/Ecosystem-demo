@@ -1,6 +1,4 @@
 import {createContainer, asClass, InjectionMode} from "awilix";
-import {scopePerRequest} from "awilix-express";
-import {Application} from "express";
 import PersonsPubController from "../infra/controllers/PersonsPub.controller";
 import ProductPubController from "../infra/controllers/ProductPub.controller";
 import PersonsService from "../application/Persons.service";
@@ -9,6 +7,7 @@ import CustomersRepository from "../infra/repos/CustomersSQL.repo";
 import ProvidersRepository from "../infra/repos/ProvidersSQL.repo";
 import ProductService from "../application/Product.service";
 import ProductMongoRepository from "../infra/repos/ProductSQL.repo";
+import SecuritySettingsController from "@infra/controllers/securitySettings.controller";
 
 const Container = createContainer({
   injectionMode: InjectionMode.CLASSIC,
@@ -21,7 +20,9 @@ Container.register({
   productPubController: asClass(ProductPubController).scoped(),
   personsService: asClass(PersonsService).scoped(),
   personsPubController: asClass(PersonsPubController).scoped(),
-  evetBusRepo: asClass(KafkaEventBusRepository).scoped(),
+  evetBusRepo: asClass(KafkaEventBusRepository).scoped(),  
+  securitySettingsController: asClass(SecuritySettingsController).scoped(),
+
 });
 
 export const personsService = Container.resolve("personsService");

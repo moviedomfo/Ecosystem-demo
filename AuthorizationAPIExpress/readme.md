@@ -54,9 +54,15 @@ JWT_ISSUER='notused'
 run
 
 ```
-     docker-compose up 
+  docker run -d -p 3010:3010 --name express_auth moviedomfo/express_auth
 ```
- se pue --build
+
+or
+
+```
+   docker-compose up
+```
+
 ##
 
 yarn test : use this script for simple unit testing
@@ -64,8 +70,6 @@ yarn test --detectOpenHandles --watchAll we'll see -> collect and print open
 handles preventing detected
 
 "test": "jest --coverage --watchAll"
-
-
 
 ## Dockerize
 

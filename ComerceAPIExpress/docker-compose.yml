@@ -5,20 +5,25 @@ services:
     container_name: ercules
     image: moviedomfo/express_comerce
     ports:
-      - 3015:3008
+      - 3025:3016
     environment:
-      - SERVER_NAME="Ercules comerce ${PORT}"
+      - SERVER_NAME="Ercules comerce ${APP_PORT}"
+    volumes:
+      - /e/volumens/express/orders:/app/files
     networks:
       net_eco:
         ipv4_address: 172.20.0.3
+
   platon:
     image: moviedomfo/express_comerce
     container_name: platon
     ports:
-      - 3016:3008
+      - 3026:3016
     environment:
-      - SERVER_NAME="Platon comerce ${PORT}"
+      - SERVER_NAME="Platon comerce ${APP_PORT}"
       # - PORT=3016
+    volumes:
+      - /e/volumens/express/orders:/app/files
     networks:
       net_eco:
         ipv4_address: 172.20.0.4

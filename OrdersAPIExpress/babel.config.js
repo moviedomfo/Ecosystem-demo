@@ -30,5 +30,5 @@ module.exports = function (api) {
     retainLines: true,
   };
 
-  // ignore:['**/*.spec.ts']no se usa test no hace falta
+
 };

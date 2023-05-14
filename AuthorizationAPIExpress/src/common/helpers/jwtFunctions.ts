@@ -30,7 +30,7 @@ export class JWTFunctions {
       if (fs.existsSync("./../files")) privateKey = fs.readFileSync(`./../files/${clientId}_private_key.pem`, "utf-8");
 
       if (fs.existsSync("./files")) privateKey = fs.readFileSync(`./files/${clientId}_private_key.pem`, "utf-8");
-      console.log(privateKey);
+      //console.log(privateKey);
 
       // doesn´t works
       //const jwt2 = sign(payload, privateKey2, {expiresIn: expiresIn_minutes, audience, issuer: AppConstants.JWT_issuer.toString(), algorithm: "RS256"});

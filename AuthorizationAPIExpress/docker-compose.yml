@@ -1,12 +1,14 @@
 version: "3.2"
 services:
   authserver:
-    container_name: authserver
+    container_name: express_auth
     image: moviedomfo/express_auth
     ports:
       - 3030:${APP_PORT}
     environment:
-      - SERVER_NAME="Socrates Authorization Server API  ${APP_PORT}"
+      - SERVER_NAME="Authorization Server API  ${APP_PORT}"
+    volumes:
+      - /e/volumens/express/auth:/app/files
     # networks:
     #   net_eco:
     #     ipv4_address: 172.21.0.13

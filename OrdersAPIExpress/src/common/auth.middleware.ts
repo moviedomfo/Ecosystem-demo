@@ -1,5 +1,5 @@
 import HttpStatusCode from "@common/Enums//HttpStatusCode";
-import {Token} from "@domain/Entities/token";
+import {Token} from "@domain/Entities/Token";
 import {JWTFunctions} from "./helpers/jwtFunctions";
 import {Request, Response, NextFunction} from "express";
 import {ExeptionFunctions} from "./helpers/ExeptionFunctions";
@@ -17,12 +17,20 @@ import {ExeptionFunctions} from "./helpers/ExeptionFunctions";
  */
 const checkTokenMeddeware = (request: Request, response: Response, next: NextFunction) => {
   const authHeader = extractToken(request.headers.authorization);
+  //if clientid is´nt in the header. we use default
+  const clientId = request.headers.clientid ? request.headers.clientid.toString() : undefined;
+  if (!clientId) {
+    const e = ExeptionFunctions.CreateAppError(HttpStatusCode.BAD_REQUEST, "Client ID header is required", HttpStatusCode.BAD_REQUEST.toString());
+
+    response.status(HttpStatusCode.BAD_REQUEST).send(e);
+  }
+
   if (authHeader) {
     const token = extractToken(request.headers.authorization);
     const tk: Token = new Token();
     tk.jwt = token;
     try {
-      JWTFunctions.Verify(tk);
+      JWTFunctions.Verify(tk, clientId);
       next();
     } catch (err) {
       const e = ExeptionFunctions.CreateAppError(HttpStatusCode.UNAUTHORIZED, "Invalid token " + err.message, HttpStatusCode.UNAUTHORIZED.toString());

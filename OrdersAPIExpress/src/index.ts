@@ -7,17 +7,14 @@ import helmet from "helmet";
 import {AppConstants} from "@common/commonConstants";
 import morgan from "morgan";
 import {notFoundHandler} from "./common/not-found.middleware";
-
 import swaggerUi from "swagger-ui-express";
-import {loadControllers, scopePerRequest} from "awilix-express";
-import {loadContainer} from "@common/Container";
 import {ordersRouter} from "@infra/router/orders.router";
 import {errorHandler} from "@common/ErrorHandle/errorHandler";
-// import container from "@common/Container";
-//import {ordersRouter} from "./infra/router/orders.router";
+import {securitySettingsRouter} from "@infra/router/securitySettings.router";
+
 require("dotenv").config();
 
-if (!process.env.PORT) {
+if (!process.env.APP_PORT) {
   process.exit(1);
 }
 
@@ -61,6 +58,9 @@ app.use(
 // De esta forma funcionaba pero debia usar un Router donde el controller no
 // no llamaba a su constructor y por ende quedaban undefined los Servicios inyectados
 app.use("/api/orders", ordersRouter);
+
+app.use("/api/securitySettings", securitySettingsRouter);
+
 //loadContainer(app);
 
 //app.use(loadControllers("**/*.controller.ts", {cwd: __dirname}));
@@ -68,20 +68,16 @@ app.use("/api/orders", ordersRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-const URL = `${process.env.BASE_URL}:${PORT}`;
+const PORT = process.env.APP_PORT || 5000;
+const URL = `${process.env.APP_BASE_URL}:${PORT}`;
 
 /**
  * Server Activation
  */
 app.listen(PORT, () => {
-  console.log(
-    `-------------------------------------------------------------------------------`
-  );
-  console.log(` ${AppConstants.CLIENT_NAME} listening on port ${PORT}`);
+  console.log(`-------------------------------------------------------------------------------`);
+  console.log(` ${AppConstants.APP_CLIENT_NAME} listening on port ${PORT}`);
   console.log(` API url ${URL}`);
   console.log(` API doccumentation ${URL}/docs/`);
-  console.log(
-    `-------------------------------------------------------------------------------`
-  );
+  console.log(`-------------------------------------------------------------------------------`);
 });

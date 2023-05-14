@@ -58,8 +58,22 @@ You can use docker to deploy the api server. In this releasse we leave a dockerf
 - run container
 
 ```
-    docker run -d -p 3008:3008 --name express_comercepub moviedomfo/express_comercepub
+    docker run -d -p 3026:3016 --name express_comerce moviedomfo/express_comerce
 ```
+
+## Run the application using Docker Compose
+
+```
+    docker-compose up -d
+```
+
+- which volume:
+  First you need to create the maping in thge docker compose files for each container that you need
+  volumes:
+
+  - /e/volumens/express/orders:/app/files
+
+  run container maping to comerce_files created volume
 
 - Navigate to this url to check the if correctly docker container is running
   http://localhost:3008
@@ -75,8 +89,7 @@ Hay que ver que tenemos configurado en ./tsoa.json para ver el destino de la tra
 # RegisterRoutes
 
 To generate Routes class run
-`      pnpm build-tsoa  
- `
+`  pnpm build-tsoa`
 
 ## Important packages used in this app
 

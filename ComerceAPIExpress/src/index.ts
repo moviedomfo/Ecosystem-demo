@@ -14,9 +14,10 @@ import {loadControllers} from "awilix-express";
 import swaggerUi from "swagger-ui-express";
 import {logsMiddle} from "@common/log.middlewar";
 import {productRouter} from "@infra/router/productPub.router";
+import {securitySettingsRouter} from "@infra/router/securitySettings.router";
 require("dotenv").config();
 
-if (!process.env.PORT) {
+if (!process.env.APP_PORT) {
   process.exit(1);
 }
 
@@ -64,20 +65,20 @@ app.use("/api/persons/", logsMiddle);
 
 app.use("/api/products/", productRouter);
 app.use("/api/persons/", personRouter);
-
+app.use("/api/securitySettings", securitySettingsRouter);
 // Attach the first Error handling Middleware
 app.use(notFoundHandler);
 app.use(ExpressErrorHandler);
 
-const PORT = process.env.PORT || 5000;
-const URL = `${process.env.BASE_URL}:${PORT}`;
+const PORT = process.env.APP_PORT || 5000;
+const URL = `${process.env.APP_BASE_URL}:${PORT}`;
 
 /**
  * Server Activation
  */
 app.listen(PORT, () => {
   console.log(`-------------------------------------------------------------------------------`);
-  console.log(` ${AppConstants.CLIENT_NAME} listening on port ${PORT}`);
+  console.log(` ${AppConstants.APP_CLIENT_NAME} listening on port ${PORT}`);
   console.log(` API url ${URL}`);
   console.log(` API doccumentation ${URL}/docs/`);
   console.log(`-------------------------------------------------------------------------------`);
