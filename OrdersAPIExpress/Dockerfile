@@ -24,7 +24,7 @@ COPY --from=build /app/node_modules ./node_modules
 ADD ./.env.production ./.env
 
 ENV NODE_ENV production
-EXPOSE ${PORT}
+EXPOSE ${APP_PORT}
 
 CMD  node index.js
 

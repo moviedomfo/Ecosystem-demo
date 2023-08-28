@@ -4,9 +4,11 @@
 - [Customers & Provider registering](#pub_persons)
 - [Orders -customers online shopping](#pub_orders)
 - [Products - inventory ](#pub_product)
-- [Customers & Provider API](#PersonsAPIExpress)
+- [Customers & Provider API](#ComerceAPIExpress)
 - [Orers API](#OrdersAPIExpress)
 - [Kafka & docker](#Kafka-docker-images)
+- [nginx](#nginx-docker-image)
+- [Redis](#Redis-docker-image)
 
 ## Ecosystem express
 
@@ -43,18 +45,17 @@ This apps calls OrdersAPIExpress backend to create or perform Inserts in the ord
 
 ## ComerceAPIExpress
 
-The comerce backend . It's an  Express with typescript API that allows all CRUD operations for: customers providers and products
+The comerce backend . It's an Express with typescript API that allows all CRUD operations for: customers providers and products
 
-This api interact with sql server data and for each insert emit an event to the even-source. 
+This api interact with sql server data and for each insert emit an event to the even-source.
 For this purpose we implement kafka
-    api  -> POST http://localhost:6000/api/orders/
+api -> POST http://localhost:6001/api/orders/
 
 ## OrdersAPIExpress
 
 The Orders backend . It's an Express with typescript Express API that allows all CRUD operations for: orders
 This api interact with mongodb atlas server to store all orders and for each insert emit an event to the even-source. for this purpose
 we implement kafka
-
 
 #Implent kafka as event sousing
 
@@ -99,15 +100,14 @@ Next run :
 
 ```
 
- Below command will stop running containers, but it also removes the stopped containers as well as any networks that were created.
-   And.. for to remove vulumes append -v flag
+Below command will stop running containers, but it also removes the stopped containers as well as any networks that were created.
+And.. for to remove vulumes append -v flag
 
 ```
     docker-compose down
     or
     docker-compose down -v
 ```
-
 
 ### kafka documentations
 
@@ -132,4 +132,49 @@ Next run :
 
     yarn add i @kafkajs/confluent-schema-registry
 
- 
+## nginx docker image
+
+Run this commando to start up load balancer and reverse proxy for ours APIs
+
+```
+docker-compose up -d -f docker-compose-nginx.yml
+```
+
+If you open obove yml file you notice that we have several configurated things.
+
+1- Load balancer for image moviedomfo/express_comerce (#ComerceAPIExpress)
+In docker compose we instantiate two containers for this api. One called ulises socrates and another ulises
+We configure this with back section -->
+
+```
+    upstream back
+        server platon:INT_PORT;
+        server hercules:INT_PORT;
+```
+
+Calls http://localhost:6001/api/persons/ can be redirected to either platon or hercules based on the upstream configuration
+
+2- Reverse proxy for the previous services.
+
+    a-  location /platon/
+        For calls http://localhost:6001/platon/api/persons/
+    b-   location /hercules/
+    For calls as http://localhost:6001/hercules/api/persons/
+
+3 - Also, reverse porxy for moviedomfo/express_orders (#OrdersAPIExpress) dockers created in docker_file
+
+a- location /ulises/
+For calls http://localhost:6001/ulises/api/customers/
+b- location /platon/
+For calls as http://localhost:6001/platon/api/customers/
+
+## Redis docker image
+
+For the purpose of implementing tokens-cache among other things, our ecosystem uses Redis Cache.
+To facilitate the container deployment, I have prepared a YAML file ready to run with Docker Hub.
+
+Locate the directory where the "docker-compose-redis.yml" file is located. Root of all projects
+
+```
+    docker-compose -f docker-compose-redis.yml up -d
+```
