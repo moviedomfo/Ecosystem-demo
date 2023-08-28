@@ -5,5 +5,5 @@ export interface IProductRepository {
   Create: (req: CreateProductDto) => Promise<string>;
 
   GetById: (id: string) => Promise<ProductBE>;
-  GetAll: () => Promise<ProductBE[]>;
+  GetAll: (name?: string, page?:number, pageSize?:number) => Promise<ProductBE[]>;
 }

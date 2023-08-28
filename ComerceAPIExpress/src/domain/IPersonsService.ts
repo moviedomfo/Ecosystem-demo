@@ -16,7 +16,7 @@ export interface IPersonsService {
   /** */
   GetCustomerById: (id: string) => Promise<PersonBE>;
   GetProviderById: (id: string) => Promise<PersonBE>;
-  GetAllCustomers: () => Promise<PersonBE[]>;
-  GetAllProviders: () => Promise<PersonBE[]>;
+  GetAllCustomers: (name?: string,page:number,limit:number) => Promise<PersonBE[]>;
+  GetAllProviders: (page:number,limit:number) => Promise<PersonBE[]>;
   ClearAll: () => Promise<void>;
 }

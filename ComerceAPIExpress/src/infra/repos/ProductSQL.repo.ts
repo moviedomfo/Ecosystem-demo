@@ -70,8 +70,16 @@ export default class ProductMongoRepository implements IProductRepository {
       resolve();
     });
   }
+  /**
+   *
+   * @param name filter
+   * @param page requested page
+   * @param pageSize limit  or page size
+   * @returns
+   */
+  public async GetAll(name?: string, page: number = 1, pageSize: number = 10): Promise<ProductBE[]> {
+    const offset = (page - 1) * pageSize;
 
-  public async GetAll(name?: string): Promise<ProductBE[]> {
     return new Promise<ProductBE[]>(async (resolve, reject) => {
       const where = {
         Name: {
@@ -81,6 +89,8 @@ export default class ProductMongoRepository implements IProductRepository {
       try {
         const res = await ProductsSchema.findAll({
           where,
+          limit: pageSize,
+          offset,
         });
 
         const list = res.map((p) => {

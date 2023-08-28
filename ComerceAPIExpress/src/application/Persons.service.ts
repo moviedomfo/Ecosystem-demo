@@ -80,8 +80,8 @@ export default class PersonsService implements IPersonsService {
   }
 
   // @Get("/getAll")
-  public async GetAllCustomers(name?: string): Promise<PersonBE[]> {
-    return await this._customersRepository.GetAll(name);
+  public async GetAllCustomers(name?: string,page?:number,limit?:number): Promise<PersonBE[]> {
+    return await this._customersRepository.GetAll(name,page,limit);
   }
   // @Get("/getById")
   public async GetProviderById(id: string): Promise<PersonBE> {
@@ -93,7 +93,7 @@ export default class PersonsService implements IPersonsService {
   }
 
   // @Get("/getAll")
-  public async GetAllProviders(): Promise<PersonBE[]> {
+  public async GetAllProviders(page:number,limit:number): Promise<PersonBE[]> {
     return this._providersRepository.GetAll();
   }
   // @Get("/clearAll")j

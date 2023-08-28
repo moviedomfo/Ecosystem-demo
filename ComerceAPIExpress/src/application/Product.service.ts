@@ -21,7 +21,7 @@ export default class ProductService implements IProductService {
     return this.productRepo.GetById(id);
   }
   // @Get("/getAll")
-  public async GetAll(): Promise<ProductBE[]> {
-    return this.productRepo.GetAll();
+  public async GetAll(name?: string, page: number = 1, pageSize: number = 10): Promise<ProductBE[]> {
+    return this.productRepo.GetAll(name,page,pageSize);
   }
 }

@@ -69,9 +69,11 @@ export class ExeptionFunctions {
       errorCode = ErrorCodeEnum.SEQUALIZE_DATA;
       message = error.message;
       const errors: [String] = error.parent.errors as [String];
-      errors.forEach((element) => {
-        message += element;
-      });
+      if (errors) {
+        errors.forEach((element) => {
+          message += element;
+        });
+      }
     }
 
     const err: AppError = new AppError(500, errorCode, message, ErrorTypeEnum.TecnicalException);

@@ -11,7 +11,10 @@ export default class PersonsPubController {
   @GET()
   public GetAllProviders = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await this.personsService.GetAllProviders();
+       const {name, lastname, page, pageSize} = req.query;
+      const currentPage = parseInt(page as string) || 1; // Página actual
+      const limit = parseInt(pageSize as string) || 10; // Tamaño de página
+      const result = await this.personsService.GetAllProviders( currentPage, limit);
 
       if (result) res.status(200).send(result);
       else res.status(204).send();
@@ -39,11 +42,12 @@ export default class PersonsPubController {
   @GET()
   public GetAllCustomer = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {name, lastname} = req.query;
-
+      const {name, lastname, page, pageSize} = req.query;
+      const currentPage = parseInt(page as string) || 1; // Página actual
+      const limit = parseInt(pageSize as string) || 10; // Tamaño de página
       //const name = req.query.name;
       //const result = await personsService.GetAllCustomers(name);
-      const result = await this.personsService.GetAllCustomers();
+      const result = await this.personsService.GetAllCustomers(name?.toString() || null, currentPage, limit);
 
       if (result) res.status(200).send(result);
       else res.status(204).send();
