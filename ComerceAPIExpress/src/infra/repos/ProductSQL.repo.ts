@@ -44,7 +44,7 @@ export default class ProductMongoRepository implements IProductRepository {
       try {
         const res = await ProductsSchema.findByPk(id);
 
-        const product: ProductBE = {
+        const object = {
           Id: res.getDataValue("Id"),
           Name: res.getDataValue("Name"),
           Cost: res.getDataValue("Cost"),
@@ -57,6 +57,7 @@ export default class ProductMongoRepository implements IProductRepository {
           GeneratedDate: res.getDataValue("GeneratedDate"),
           // CreatedDate: res.getDataValue("CreatedDate"),
         };
+        const product = ProductBE.Create(object);
         resolve(product);
       } catch (error) {
         reject(error);
@@ -65,7 +66,7 @@ export default class ProductMongoRepository implements IProductRepository {
   }
 
   public async ClearAll(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, _reject) => {
       // ProductSchema.collection.deleteMany({});
       resolve();
     });
@@ -94,7 +95,7 @@ export default class ProductMongoRepository implements IProductRepository {
         });
 
         const list = res.map((p) => {
-          const item: ProductBE = {
+          const object = {
             Id: p.getDataValue("Id"),
             Name: p.getDataValue("Name"),
             Cost: p.getDataValue("Cost"),
@@ -106,6 +107,7 @@ export default class ProductMongoRepository implements IProductRepository {
             Department: p.getDataValue("Department"),
             GeneratedDate: p.getDataValue("GeneratedDate"),
           };
+          const item = ProductBE.Create(object);
           return item;
         });
         resolve(list);

@@ -7,7 +7,7 @@ import {AppError} from "./AppError";
 */
 // Error handling Middleware function reads the error message
 // and sends back a response in JSON format
-export const ExpressErrorHandler = (error: any, request: Request, response: Response, next: NextFunction) => {
+export const ExpressErrorHandler = (error: any, _request: Request, response: Response, _next: NextFunction) => {
   response.header("Content-Type", "application/json");
 
   let appError: AppError;

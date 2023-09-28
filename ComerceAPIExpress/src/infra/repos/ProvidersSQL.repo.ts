@@ -2,6 +2,7 @@ import {IPersonsRepository} from "@application/interfases/IPersonsRepository";
 import {PersonBE} from "@domain/Entities/PersonBE";
 import {PersonsSchema} from "./../schemas/sql.schemas";
 import {Op} from "sequelize";
+import {Entity} from "@common/CleanBases/Entity";
 
 /**Persist to mongodb Persons */
 export default class ProvidersRepository implements IPersonsRepository {
@@ -28,7 +29,17 @@ export default class ProvidersRepository implements IPersonsRepository {
   public GetById(id: string): Promise<PersonBE> {
     return new Promise<PersonBE>(async (resolve) => {
       const res = await PersonsSchema.findByPk(id);
-      const person: PersonBE = {
+      // const p: PersonBE = new PersonBE( res.getDataValue("Id")) ;
+      // p.Name= res.getDataValue("Name");
+      // p.Lastname= res.getDataValue("LastName");
+      // p.City= res.getDataValue("LastName");
+      // p.Phone= res.getDataValue("Phone");
+      // p.kafka_Topic= res.getDataValue("kafka_Topic");
+      // p.DocNumber= res.getDataValue("DocNumber");
+      // p.GeneratedDate= res.getDataValue("GeneratedDate");
+      // p.CreatedDate= res.getDataValue("CreatedDate");
+
+      const pObject = {
         Id: res.getDataValue("Id"),
         Name: res.getDataValue("Name"),
         Lastname: res.getDataValue("LastName"),
@@ -39,12 +50,13 @@ export default class ProvidersRepository implements IPersonsRepository {
         GeneratedDate: res.getDataValue("GeneratedDate"),
         CreatedDate: res.getDataValue("CreatedDate"),
       };
+      const person = PersonBE.Create(pObject);
       resolve(person);
     });
   }
 
   public async ClearAll(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, _reject) => {
       //PersonsSchema.cl.deleteMany({});
       resolve();
     });
@@ -55,7 +67,9 @@ export default class ProvidersRepository implements IPersonsRepository {
    * @param name
    * @returns
    */
-  public async GetAll(name?: string): Promise<PersonBE[]> {
+  public async GetAll(name?: string, page: number = 1, pageSize: number = 10): Promise<PersonBE[]> {
+    const offset = (page - 1) * pageSize;
+
     return new Promise<PersonBE[]>(async (resolve) => {
       const where = {
         Name: {
@@ -68,10 +82,12 @@ export default class ProvidersRepository implements IPersonsRepository {
 
       const res = await PersonsSchema.findAll({
         where,
+        limit: pageSize,
+        offset,
       });
 
       const list = res.map((p) => {
-        const person: PersonBE = {
+        const person = PersonBE.Create({
           Id: p.getDataValue("Id"),
           Name: p.getDataValue("Name"),
           Lastname: p.getDataValue("LastName"),
@@ -81,7 +97,7 @@ export default class ProvidersRepository implements IPersonsRepository {
           DocNumber: p.getDataValue("DocNumber"),
           GeneratedDate: p.getDataValue("GeneratedDate"),
           CreatedDate: p.getDataValue("CreatedDate"),
-        };
+        });
 
         return person;
       });

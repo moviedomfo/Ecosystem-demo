@@ -8,10 +8,14 @@ import ProvidersRepository from "../infra/repos/ProvidersSQL.repo";
 import ProductService from "../application/Product.service";
 import ProductMongoRepository from "../infra/repos/ProductSQL.repo";
 import SecuritySettingsController from "@infra/controllers/securitySettings.controller";
-
+/**
+ * Dependency Injection (DI) Container implemented with awilix 
+ */
 const Container = createContainer({
   injectionMode: InjectionMode.CLASSIC,
 });
+
+
 Container.register({
   customersRepo: asClass(CustomersRepository).scoped(),
   providersRepo: asClass(ProvidersRepository).scoped(),

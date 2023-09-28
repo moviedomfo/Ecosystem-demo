@@ -1,4 +1,4 @@
-import {AppConstants} from "@common/commonConstants";
+import {AppConstants} from "@common/CommonConstants";
 import {NextFunction, Request, Response} from "express";
 import {POST, route} from "awilix-express";
 import SavePublicKeyDto from "@domain/DTOs/SavePublicKeyDto";

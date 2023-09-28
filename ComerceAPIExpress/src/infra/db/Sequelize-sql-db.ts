@@ -1,10 +1,9 @@
-import {AppConstants} from "./../../common/commonConstants";
+import {AppConstants} from "../../common/CommonConstants";
 import {Sequelize} from "sequelize";
 const user = AppConstants.BD_USER;
 
 const database = AppConstants.BD_DATABASE_NAME;
 const password = AppConstants.BD_PWD;
-
 
 const db = new Sequelize(database, user, password, {
   dialect: "mssql",
@@ -16,6 +15,5 @@ const db = new Sequelize(database, user, password, {
     requestTimeout: 30000,
   },
 });
-
 
 export default db;

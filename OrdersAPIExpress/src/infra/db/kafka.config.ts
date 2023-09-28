@@ -1,4 +1,4 @@
-import {AppConstants} from "@common/commonConstants";
+import {AppConstants} from "@common/CommonConstants";
 import {KafkaConfig} from "kafkajs";
 
 export const kconfig: KafkaConfig = {

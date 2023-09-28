@@ -28,13 +28,13 @@ export class FileFunctions {
   }
 
   public static OpenFile(fileName: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve, _reject) => {
       const json = fs.readFileSync(fileName, 'utf8');
       console.log(json);
       resolve(json);
     });
   }
 
-  public static saveFile = (fileName: string, content: string) => ({});
+  public static saveFile = (_fileName: string, _content: string) => ({});
 
 }

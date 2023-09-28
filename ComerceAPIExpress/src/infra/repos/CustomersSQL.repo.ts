@@ -26,7 +26,7 @@ export default class CustomersRepository implements IPersonsRepository {
       //   f4,
       // };
       // console.log(fechas);
-      const person = {
+      const personSchema = {
         Name: req.Name,
         Lastname: req.Lastname,
         City: req.City,
@@ -39,7 +39,7 @@ export default class CustomersRepository implements IPersonsRepository {
       };
 
       try {
-        const cp = await PersonsSchema.create(person, {});
+        const cp = await PersonsSchema.create(personSchema, {});
 
         resolve(cp.getDataValue("Id"));
       } catch (err) {
@@ -52,7 +52,7 @@ export default class CustomersRepository implements IPersonsRepository {
     return new Promise<PersonBE>(async (resolve, reject) => {
       try {
         const res = await PersonsSchema.findByPk(id);
-        const person: PersonBE = {
+        const person = PersonBE.Create({
           Id: res.getDataValue("Id"),
           Name: res.getDataValue("Name"),
           Lastname: res.getDataValue("LastName"),
@@ -62,7 +62,7 @@ export default class CustomersRepository implements IPersonsRepository {
           DocNumber: res.getDataValue("DocNumber"),
           GeneratedDate: res.getDataValue("GeneratedDate"),
           CreatedDate: res.getDataValue("CreatedDate"),
-        };
+        });
         resolve(person);
       } catch (error) {
         reject(error);
@@ -71,7 +71,7 @@ export default class CustomersRepository implements IPersonsRepository {
   }
 
   public async ClearAll(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, _reject) => {
       //PersonsSchema.cl.deleteMany({});
       resolve();
     });
@@ -92,8 +92,8 @@ export default class CustomersRepository implements IPersonsRepository {
           where,
         });
 
-        const persons = res.map((p, index) => {
-          const person: PersonBE = {
+        const persons = res.map((p, _index) => {
+          const object = {
             Id: p.getDataValue("Id"),
             Name: p.getDataValue("Name"),
             Lastname: p.getDataValue("LastName"),
@@ -104,7 +104,7 @@ export default class CustomersRepository implements IPersonsRepository {
             GeneratedDate: p.getDataValue("GeneratedDate"),
             CreatedDate: p.getDataValue("CreatedDate"),
           };
-
+          const person = PersonBE.Create(object);
           return person;
         });
 

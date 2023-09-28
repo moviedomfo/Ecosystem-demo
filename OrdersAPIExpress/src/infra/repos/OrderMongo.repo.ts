@@ -2,7 +2,6 @@ import {OrderBE} from "@domain/Entities/OrderBE";
 import {IOrderRepository} from "@application/interfases/IOrderRepository";
 import {OrderDTO} from "@domain/DTOs/OrderDto";
 import OrderSchema from "@infra/schema/Order.schema";
-import "./../db/mongo-db";
 import {fileURLToPath} from "url";
 
 /**Persist to mongodb Orders */

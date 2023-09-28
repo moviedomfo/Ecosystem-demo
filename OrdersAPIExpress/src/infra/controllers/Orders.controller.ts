@@ -25,7 +25,7 @@ export default class OrdersController {
   };
   @route("/")
   @GET()
-  public GetAll = async (req: Request, res: Response, next: NextFunction) => {
+  public GetAll = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await this.ordersService.GetAll();
       //const result = JSON.stringify(req.body);
@@ -76,7 +76,7 @@ export default class OrdersController {
   };
   // @route("/")
   @DELETE()
-  public ClearAll = async (req: Request, res: Response, next: NextFunction) => {
+  public ClearAll = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       await this.ordersService.ClearAll();
       res.status(200).send();

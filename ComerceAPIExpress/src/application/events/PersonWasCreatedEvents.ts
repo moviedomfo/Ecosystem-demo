@@ -1,9 +1,11 @@
-import EntityBase from "@common/EntityBase";
-import EventBase from "@common/EventBase";
+import { Entity } from '@common/CleanBases/Entity';
+import EventBase from '@common/CleanBases/EventBase';
+
 import {IKafkaMessageDto} from "@domain/DTOs/MessageDto";
+import { PersonBE } from '@domain/Entities/PersonBE';
 
 export default class PersonWasCreatedEvent extends EventBase {
-  constructor(content: EntityBase, origin: string) {
+  constructor(content: PersonBE, origin: string) {
     super("PersonWasCreated", content, origin);
   }
 

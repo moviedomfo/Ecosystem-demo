@@ -1,4 +1,3 @@
-import {GetVerificationKey} from "express-jwt";
 import {PersonBE} from "@domain/Entities/PersonBE";
 import {IKafkaMessageDto, ImessageDto} from "@domain/DTOs/MessageDto";
 import {IEventBusRepository} from "./interfases/IEventBusRepository";
@@ -33,7 +32,8 @@ export default class PersonsService implements IPersonsService {
       // person.GeneratedDate = new Date(person.GeneratedDate);
 
       const id = await this._customersRepository.Insert(person);
-      person.Id = id;
+      const createdPerson = new  PersonBE(id);
+      
       // const msg: IKafkaMessageDto = {
       //   key: person.Id.toString(),
       //   command: "CreateCustomerEvent",
@@ -43,7 +43,7 @@ export default class PersonsService implements IPersonsService {
 
       /** send to Event Buss */
       //await this._EventBusRepo.PushToQueue(msg, "customers");
-      const event: PersonWasCreatedEvent = new PersonWasCreatedEvent(person, origin);
+      const event: PersonWasCreatedEvent = new PersonWasCreatedEvent(createdPerson, origin);
       await event.Emit();
     } catch (err) {
       //console.log("push err  " + JSON.stringify(err));
@@ -74,16 +74,13 @@ export default class PersonsService implements IPersonsService {
       throw err;
     }
   }
-  // @Get("/getById")
   public async GetCustomerById(id: string): Promise<PersonBE> {
     return this._customersRepository.GetById(id);
   }
 
-  // @Get("/getAll")
   public async GetAllCustomers(name?: string,page?:number,limit?:number): Promise<PersonBE[]> {
     return await this._customersRepository.GetAll(name,page,limit);
   }
-  // @Get("/getById")
   public async GetProviderById(id: string): Promise<PersonBE> {
     //try {
     return await this._providersRepository.GetById(id);
@@ -92,11 +89,9 @@ export default class PersonsService implements IPersonsService {
     // }
   }
 
-  // @Get("/getAll")
-  public async GetAllProviders(page:number,limit:number): Promise<PersonBE[]> {
+  public async GetAllProviders(_page:number,_limit:number): Promise<PersonBE[]> {
     return this._providersRepository.GetAll();
   }
-  // @Get("/clearAll")j
   public async ClearAll(): Promise<void> {
     return this._customersRepository.ClearAll();
   }

@@ -7,7 +7,7 @@ services:
     ports:
       - 3025:3016
     environment:
-      - SERVER_NAME="hercules comerce ${APP_PORT}"
+      - SERVER_NAME="hercules comerce ${PORT}"
     volumes:
       - /e/volumens/express/orders:/app/files
     networks:
@@ -20,7 +20,7 @@ services:
     ports:
       - 3026:3016
     environment:
-      - SERVER_NAME="Platon comerce ${APP_PORT}"
+      - SERVER_NAME="Platon comerce ${PORT}"
       # - PORT=3016
     volumes:
       - /e/volumens/express/orders:/app/files

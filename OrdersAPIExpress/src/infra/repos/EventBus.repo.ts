@@ -3,7 +3,7 @@ import {Kafka, Partitioners} from "kafkajs";
 
 import {ImessageDto} from "@domain/DTOs/MessageDto";
 import {IEventBusRepository} from "@application/interfases/IEventBusRepository";
-import {AppConstants} from "@common/commonConstants";
+import {AppConstants} from "@common/CommonConstants";
 
 export default class KafkaEventBusRepository implements IEventBusRepository {
   PushToQueue = async (req: ImessageDto, topic: string) => {
@@ -23,9 +23,7 @@ export default class KafkaEventBusRepository implements IEventBusRepository {
           },
         ],
       });
-      console.log(
-        `message was sended to TOPIC ${topic} from ${AppConstants.KAFKA_BROKERS}, message origin : ${req.origin}`
-      );
+      console.log(`message was sended to TOPIC ${topic} from ${AppConstants.KAFKA_BROKERS}, message origin : ${req.origin}`);
     } catch (err) {
       throw err;
 
