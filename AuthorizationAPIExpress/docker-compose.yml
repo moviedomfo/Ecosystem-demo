@@ -4,9 +4,9 @@ services:
     container_name: express_auth
     image: moviedomfo/express_auth
     ports:
-      - 3030:${APP_PORT}
+      - 3030:${PORT}
     environment:
-      - SERVER_NAME="Authorization Server API  ${APP_PORT}"
+      - SERVER_NAME="Authorization Server API  ${PORT}"
     volumes:
       - /e/volumens/express/auth:/app/files
     # networks:

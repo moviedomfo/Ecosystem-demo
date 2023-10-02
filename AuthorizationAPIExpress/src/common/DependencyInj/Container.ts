@@ -22,6 +22,7 @@ container.register({
   tokenController: asClass(TokenController).scoped(),
   resourseClientsController: asClass(ResourseClientsController).scoped(),
   rsaGeneratorRepository: asClass(RSAGeneratorRepository).scoped()
+  // evetBusRepo: asClass(KafkaEventBusRepository).scoped(),
 });
 
 export const authService = container.resolve("authService");
@@ -32,4 +33,6 @@ export const authController = container.resolve("authController");
 export const tokenController = container.resolve("tokenController");
 export const rsaGeneratorRepository = container.resolve("rsaGeneratorRepository");
 export const resourseClientsController = container.resolve("resourseClientsController");
+// export const evetBusRepo = container.resolve("evetBusRepo");
+
 export default container;

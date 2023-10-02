@@ -1,5 +1,4 @@
 import {NextFunction, Request, Response} from "express";
-import {POST, GET, route} from "awilix-express";
 import {IAuthService} from "@domain/interfases/IAuthService";
 import {AuthenticationReq} from "@domain/DTOs/Auth/AuthorizationDto";
 import {RefreshTokenReq} from "@domain/DTOs/Auth/RefreshTokenDto";
@@ -9,12 +8,11 @@ import RSAGeneratorRepository from "@infra/repos/RSAGenerator.repo";
 /**
  * A purchase order is issued by the buyer generator (¡random cron-job app) and and later is to be fulfilled by the vendor
  */
-@route("/api/resourseclient")
+
 export default class ResourseClientsController {
   constructor(private readonly rsaGeneratorRepository: RSAGeneratorRepository) {}
 
-  @route("/getPK")
-  @GET()
+
   public getPK = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {clientId} = req.query;
@@ -26,8 +24,7 @@ export default class ResourseClientsController {
     }
   };
 
-  @route("/generatePK")
-  @GET()
+
   public generatePK = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {clientId} = req.query;

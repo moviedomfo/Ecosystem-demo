@@ -4,18 +4,18 @@ import AuthController from "@infra/controllers/auth.controller";
 import TokenController from "@infra/controllers/token.controller";
 import UserRepository from "@infra/repos/UserMock.repo";
 import {createContainer, asClass, InjectionMode} from "awilix";
-import InMemRedisCahceRepository from "@infra/repos/InMemRedisCahce.repo";
+import InMemCahceRepository from "@infra/repos/InMemCahceRepository.repo";
 import ResourseClientsController from "@infra/controllers/resourseClients.controller";
 import RSAGeneratorRepository from "@infra/repos/RSAGenerator.repo";
 
 const containerTest = createContainer({
-  injectionMode: InjectionMode.CLASSIC,
+  injectionMode: InjectionMode.CLASSIC
 });
 containerTest.register({
   authService: asClass(AuthService).scoped(),
   refreshTokenService: asClass(RefreshTokenService).scoped(),
   userRepository: asClass(UserRepository).scoped(),
-  cacheRepository: asClass(InMemRedisCahceRepository).scoped(),
+  cacheRepository: asClass(InMemCahceRepository).scoped(),
   authController: asClass(AuthController).scoped(),
   tokenController: asClass(TokenController).scoped(),
   resourseClientsController: asClass(ResourseClientsController).scoped(),

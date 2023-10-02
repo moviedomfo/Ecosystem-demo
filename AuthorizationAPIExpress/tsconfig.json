@@ -9,7 +9,7 @@
     "sourceMap": true,
     "noLib": false,
     "allowJs": true,
-    "suppressImplicitAnyIndexErrors": true,
+  
     "skipLibCheck": true,
     // "rootDir": "./src",
     "outDir": "dist",
@@ -26,8 +26,7 @@
     "strict": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    // "types": ["reflect-metadata,"jest", "node"],
-    "types": ["reflect-metadata", "jest", "node"],
+    "types": [ "jest", "node"],
     "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src/**/*", "tests", "dirty"],

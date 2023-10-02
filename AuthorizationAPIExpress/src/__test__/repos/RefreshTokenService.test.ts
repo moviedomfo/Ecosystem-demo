@@ -4,7 +4,7 @@ import RefreshTokenService from "../../application/RefreshToken.service";
 import {describe, expect, test} from "@jest/globals";
 import {v4 as uuidv4} from "uuid";
 import {ICacheRepository} from "../../application/interfases/ICacheRepository";
-import InMemRedisCahceRepository from "../../infra/repos/InMemRedisCahce.repo";
+import InMemCahceRepository from "../../infra/repos/InMemCahceRepository.repo";
 import {RefreshToken} from "../../domain/Entities/RefreshToken";
 import {DateFunctions} from "../../common/helpers";
 import {json} from "stream/consumers";
@@ -17,7 +17,7 @@ describe("RefreshTokenService", () => {
   let _token = "";
 
   beforeEach(() => {
-    cacheRepository = new InMemRedisCahceRepository();
+    cacheRepository = new InMemCahceRepository();
     refreshTokenService = new RefreshTokenService(cacheRepository);
   });
 

@@ -27,7 +27,7 @@ COPY --from=build /app/node_modules ./node_modules
 ADD ./.env.production ./.env
 
 ENV NODE_ENV production
-EXPOSE ${APP_PORT}
+EXPOSE ${PORT}
 # Ejecutar el script "start"
 # CMD ["npm", "start:babel1"]
 CMD  node index.js

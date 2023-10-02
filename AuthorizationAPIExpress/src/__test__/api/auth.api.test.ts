@@ -4,11 +4,11 @@ import {describe, expect} from "@jest/globals";
 import supertest from "supertest";
 import {AuthenticationReq, AuthenticationRes} from "../../domain/DTOs/Auth/AuthorizationDto";
 import {app, server} from "../../index";
-import {GetRefreshTkReq} from "../../domain/DTOs/Token/GetRefreshTkDto";
-import {RefreshToken} from "../../domain/Entities/RefreshToken";
+//import {GetRefreshTkReq} from "../../domain/DTOs/Token/GetRefreshTkDto";
+//import {RefreshToken} from "../../domain/Entities/RefreshToken";
 import RefreshTokenService from "../../application/RefreshToken.service";
 import {ICacheRepository} from "../../application/interfases/ICacheRepository";
-import InMemRedisCahceRepository from "../../infra/repos/InMemRedisCahce.repo";
+import InMemCahceRepository from "../../infra/repos/InMemCahceRepository.repo";
 
 describe("Auth controller", () => {
   let cacheRepository: ICacheRepository;
@@ -19,8 +19,8 @@ describe("Auth controller", () => {
   let refresh_token = "";
   const client_id = "pelsoftclient";
   beforeEach(() => {
-    jest.setTimeout(60000);
-    cacheRepository = new InMemRedisCahceRepository();
+    //jest.setTimeout(60000);
+    cacheRepository = new InMemCahceRepository();
     refreshTokenService = new RefreshTokenService(cacheRepository);
   });
 
@@ -123,7 +123,6 @@ describe("Auth controller", () => {
   const setRefreshToken = async () => {
     const rt = await refreshTokenService.CreateRefreshToken("1da4a6a3-6cd4-4a2c-a4ea-f6dc2f6b9a88", "pelsoftclient");
     refresh_token = rt.Token;
-
   };
 
   afterAll(() => {

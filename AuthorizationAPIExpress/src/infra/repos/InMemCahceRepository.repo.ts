@@ -1,18 +1,17 @@
 import {ICacheRepository} from "@application/interfases/ICacheRepository";
-import {AppConstants} from "@common/commonConstants";
 import {RedisKey} from "@domain/Entities/RedisKey";
 import {RefreshToken} from "@domain/Entities/RefreshToken";
 
 /**Only responsibly  for store or cache the tokens. In redis*/
-export default class InMemRedisCahceRepository implements ICacheRepository {
+export default class InMemCahceRepository implements ICacheRepository {
   static storage: {[key: string]: string};
 
   public async GetTk(refresTokenKey: string): Promise<RefreshToken> {
-    InMemRedisCahceRepository.CreateStore();
+    InMemCahceRepository.CreateStore();
     return new Promise(async (resolve) => {
-      InMemRedisCahceRepository.CreateStore();
+      InMemCahceRepository.CreateStore();
 
-      const refresTokenJson = await InMemRedisCahceRepository.storage[refresTokenKey];
+      const refresTokenJson = await InMemCahceRepository.storage[refresTokenKey];
       if (refresTokenJson === undefined) {
         resolve(undefined);
       } else {
@@ -24,13 +23,13 @@ export default class InMemRedisCahceRepository implements ICacheRepository {
   }
 
   public async GetAll(): Promise<RedisKey[]> {
-    InMemRedisCahceRepository.CreateStore();
+    InMemCahceRepository.CreateStore();
     return new Promise(async (resolve) => {
       const list: RedisKey[] = [];
       // Recorrer el diccionario y agregar cada elemento al array
-      for (const key in InMemRedisCahceRepository.storage) {
-        if (InMemRedisCahceRepository.storage.hasOwnProperty(key)) {
-          const value = InMemRedisCahceRepository.storage[key];
+      for (const key in InMemCahceRepository.storage) {
+        if (InMemCahceRepository.storage.hasOwnProperty(key)) {
+          const value = InMemCahceRepository.storage[key];
           list.push(new RedisKey(key, value));
         }
       }
@@ -42,9 +41,9 @@ export default class InMemRedisCahceRepository implements ICacheRepository {
   public PushTk = async (tk: RefreshToken, refresTokenKey: string) => {
     try {
       // console.log(`message was cached into ${AppConstants.REDIS_HOST}, message id : ${req.id}`);
-      InMemRedisCahceRepository.CreateStore();
+      InMemCahceRepository.CreateStore();
 
-      InMemRedisCahceRepository.storage[refresTokenKey] = JSON.stringify(tk);
+      InMemCahceRepository.storage[refresTokenKey] = JSON.stringify(tk);
     } catch (err) {
       throw new Error("REDIS->" + err.message);
     }
@@ -53,20 +52,20 @@ export default class InMemRedisCahceRepository implements ICacheRepository {
   public FlushAll = async () => {
     try {
       // this.CreateClient();
-      InMemRedisCahceRepository.storage = {};
+      InMemCahceRepository.storage = {};
     } catch (err) {
       throw new Error("REDIS->" + err.message);
     }
   };
 
   public Remove = async (refresTokenKey: string) => {
-    InMemRedisCahceRepository.CreateStore();
-    delete InMemRedisCahceRepository.storage[refresTokenKey];
+    InMemCahceRepository.CreateStore();
+    delete InMemCahceRepository.storage[refresTokenKey];
   };
 
   static CreateStore() {
-    if (InMemRedisCahceRepository.storage === undefined) {
-      InMemRedisCahceRepository.storage = {};
+    if (InMemCahceRepository.storage === undefined) {
+      InMemCahceRepository.storage = {};
     }
   }
 }

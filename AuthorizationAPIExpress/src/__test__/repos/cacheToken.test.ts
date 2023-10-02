@@ -2,7 +2,7 @@ import {describe, expect, test} from "@jest/globals";
 import {v4 as uuidv4} from "uuid";
 import {ICacheRepository} from "../../application/interfases/ICacheRepository";
 import {RefreshToken} from "../../domain/Entities/RefreshToken";
-import InMemRedisCahceRepository from "../../infra/repos/InMemRedisCahce.repo";
+import InMemCahceRepository from "../../infra/repos/InMemCahceRepository.repo";
 import {CreateRefreshToken} from "../testUtils";
 
 // const usert
@@ -12,7 +12,7 @@ describe("CacheRepository test", () => {
   let _token = "";
   let refresh_token: RefreshToken;
   beforeEach(() => {
-    cacheRepository = new InMemRedisCahceRepository();
+    cacheRepository = new InMemCahceRepository();
   });
   describe("Complete crud", () => {
     it("1 should create refreshToken", async () => {

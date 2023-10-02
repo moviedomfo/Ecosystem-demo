@@ -43,7 +43,7 @@ export default class RefreshTokenService implements IRefreshTokenService {
    * @returns
    */
   public async CreateRefreshToken(userId: string, clientIp: string): Promise<RefreshToken> {
-    return new Promise<RefreshToken>(async (resolve, reject) => {
+    return new Promise<RefreshToken>((resolve, reject) => {
       try {
         const expireAt = DateFunctions.getExpirationDate(parseInt(AppConstants.JWT_ExpiresRefreshToken));
 
@@ -56,7 +56,7 @@ export default class RefreshTokenService implements IRefreshTokenService {
           UserID: userId,
           CreatedByIp: clientIp
         };
-        await this.cacheRepository.PushTk(rt, rt.Token);
+        this.cacheRepository.PushTk(rt, rt.Token);
 
         resolve(rt);
       } catch (err) {

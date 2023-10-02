@@ -13,7 +13,7 @@ describe("Test token controller", () => {
 
   beforeEach(async () => {
     await createTk();
-    jest.setTimeout(60000);
+    // jest.setTimeout(60000);
   });
 
   it(`${rootPath}/GetRefreshToken grant->password`, async () => {

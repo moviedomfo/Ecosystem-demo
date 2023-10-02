@@ -2,9 +2,8 @@
 import express from "express";
 import TokenController from "@infra/controllers/token.controller";
 import {CreateContainer} from "@common/DependencyInj/DIContainerFactory";
-import container from "@common/DependencyInj/Container";
 export const tokenRouter = express.Router();
-// const container = CreateContainer()
+const container = CreateContainer();
 
 const controller: TokenController = container.resolve("tokenController") as TokenController;
 
