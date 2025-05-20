@@ -93,8 +93,8 @@ export class Publisher {
           resolve(res.data);
         })
         .catch(function (error) {
-          let e = new Error(
-            'Importing customers finalized with errors : ' +
+          const e = new Error(
+            'Publish to persons API finalized with errors : ' +
               Helper.GetError(error)
           );
           reject(e);
@@ -118,12 +118,13 @@ export class Publisher {
   generatePerson(): Person {
     let p: Person = new Person();
     p.Id = uuidv4();
-    p.Name = faker.name.firstName();
-    p.Lastname = faker.name.lastName();
-    p.City = faker.address.city();
+    p.Name = faker.person.firstName();
+    p.Lastname = faker.person.lastName();
+    p.City = faker.location.city();
     p.Phone = faker.phone.number();
     p.GeneratedDate = new Date(); // Helper.getIso();
-    p.DocNumber = faker.random.numeric(8);
+    p.DocNumber = faker.number.int({ min: 1000000, max: 9999999 }).toString();
+    // p.DocType = faker.helpers.arrayElement(['DNI', 'Passport']);
     return p;
   }
 }

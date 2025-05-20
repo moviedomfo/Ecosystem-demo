@@ -17,6 +17,9 @@ export const errorHandler = (error: any, _request: Request, response: Response, 
   if ((error.name as string).startsWith("Kafka")) {
     appError = ExeptionFunctions.Parse_KafkaError(error);
   }
+  if(error.message){
+    appError  = ExeptionFunctions.Parse_Error(error);
+  }
   if (error.response) appError.message = appError.message.concat(error.response.data.Message, "\n");
 
   const status = error.statusCode || appError.statusCode;

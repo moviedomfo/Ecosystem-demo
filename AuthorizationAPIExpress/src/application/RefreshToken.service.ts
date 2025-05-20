@@ -1,20 +1,21 @@
-import {RefreshToken} from "@domain/Entities/RefreshToken";
-import {AppError} from "../common/ErrorHandle/AppError";
-import {AppConstants} from "@common/commonConstants";
-import {v4 as uuidv4} from "uuid";
-import {ICacheRepository} from "@application/interfases/ICacheRepository";
+import { RefreshToken } from "@domain/Entities/RefreshToken";
+import { AppError } from "../common/ErrorHandle/AppError";
+import { AppConstants } from "@common/commonConstants";
+import { v4 as uuidv4 } from "uuid";
+import { ICacheRepository } from "@application/interfases/ICacheRepository";
 import HttpStatusCode from "@common/Enums/HttpStatusCode";
-import {ErrorTypeEnum} from "@common/Enums/ErrorEnums";
-import {DateFunctions} from "@common/helpers";
-import {IRefreshTokenService} from "@domain/interfases/IRefreshTokenService";
+import { ErrorTypeEnum } from "@common/Enums/ErrorEnums";
+import { DateFunctions } from "@common/helpers";
+import { IRefreshTokenService } from "@domain/interfases/IRefreshTokenService";
 import dayjs from "dayjs";
+import { RedisKey } from "@domain/Entities/RedisKey";
 
 /**
  *
  *
  */
 export default class RefreshTokenService implements IRefreshTokenService {
-  constructor(private cacheRepository: ICacheRepository) {}
+  constructor(private cacheRepository: ICacheRepository) { }
 
   /** Check existent RefreshToken stored in cache and if every is ok regenerate new RefreshToken
    * and return it.
@@ -54,9 +55,12 @@ export default class RefreshTokenService implements IRefreshTokenService {
           Expires: expireAt,
           Created: DateFunctions.getCurrent(),
           UserID: userId,
+
           CreatedByIp: clientIp
         };
-        this.cacheRepository.PushTk(rt, rt.Token);
+        const redisKey = `refresh:user`;
+
+        this.cacheRepository.PushTk(rt, redisKey);
 
         resolve(rt);
       } catch (err) {
@@ -94,18 +98,33 @@ export default class RefreshTokenService implements IRefreshTokenService {
   /** Check existent RefreshToken stored in cache and if every is ok regenerate new RefreshToken
    * and return it.
    */
-  public async GetStoredRefreshToken(tokenKey: string): Promise<RefreshToken> {
-    return new Promise<RefreshToken>(async (resolve, reject) => {
-      try {
-        const rt = await this.cacheRepository.GetTk(tokenKey);
-        if (!rt) throw new AppError(HttpStatusCode.UNAUTHORIZED, "4400", "Refresh token was expired or not exist", ErrorTypeEnum.TecnicalException);
+  public async GetStoredRefreshToken(tokenKey: string): Promise<RefreshToken | undefined> {
 
-        resolve(rt);
-      } catch (err) {
-        reject(err);
+    const rt = await this.cacheRepository.GetTk(tokenKey);
+    if (!rt) {
+      throw new AppError(HttpStatusCode.UNAUTHORIZED, "4401", "Refresh token expired or not exist", ErrorTypeEnum.FunctionalException);
+    }
+
+    return rt;
+
+  };
+  /**
+   * 
+   * @param userId 
+   * @returns 
+   */
+  public async GetByUserId(userId: string): Promise<RedisKey[]> {
+    try {
+      const rt = await this.cacheRepository.GetByUserId(userId);
+      if (!rt) {
+        throw new AppError(HttpStatusCode.UNAUTHORIZED, "4401", "Refresh token expired", ErrorTypeEnum.FunctionalException);
       }
-    });
-  }
+
+      return rt;
+    } catch (err) {
+      throw err;
+    }
+  };
 
   public async Remove(tokenKey: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
@@ -121,7 +140,8 @@ export default class RefreshTokenService implements IRefreshTokenService {
   public async GetAllToken(): Promise<any[]> {
     return new Promise(async (resolve, reject) => {
       try {
-        const allItems = await this.cacheRepository.GetAll();
+        const filter = 'refresh:user:*';
+        const allItems = await this.cacheRepository.GetAll(filter);
 
         resolve(allItems);
       } catch (err) {

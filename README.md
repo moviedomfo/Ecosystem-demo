@@ -3,12 +3,12 @@
 - [Intro](#ecosystem_express)
 - [Customers & Provider registering](#pub_persons)
 - [Orders -customers online shopping](#pub_orders)
-- [Products - inventory ](#pub_product)
-- [Customers & Provider API](#ComerceAPIExpress)
-- [Orers API](#OrdersAPIExpress)
-- [Kafka & docker](#Kafka-docker-images)
+- [Products - inventory](#pub_product)
+- [Customers & Provider API](#comerceapiexpress)
+- [Orers API](#ordersapiexpress)
+- [Kafka & docker](#kafka-docker-images)
 - [nginx](#nginx-docker-image)
-- [Redis](#Redis-docker-image)
+- [Redis](#redis-docker-image)
 
 ## Ecosystem express
 
@@ -25,21 +25,21 @@ This app is a cron-job typescript app service that will randomly generate fake c
     provider post to /api/provider/
 
 3- Every person and provider generaded will sended to ComerceAPIExpress for it creation (sql server )
-api -> POST http://localhost:7000/api/persons/customers
-api -> POST http://localhost:7000/api/persons/providers
+api -> POST <http://localhost:7000/api/persons/customers>
+api -> POST <http://localhost:7000/api/persons/providers>
 
 ## pub_product
 
 This app is a cron-job typescript app service that will randomly generate & simulates products entering the shop werehause .-
 
 This apps calls ComerceAPIExpress backend to creato or perfomr Inserts in the product storage (sql server )
-api -> POST http://localhost:7000/api/products/
+api -> POST <http://localhost:7000/api/products/>
 
 ## pub_orders
 
 This app is a cron-job typescript app service that will randomly generate orders that simulates the customers online shopping .-
 To get porducts and customers for order creation this apps interacts with ComerceAPIExpress
-api -> GET http://localhost:7000/api/products/
+api -> GET <http://localhost:7000/api/products/>
 
 This apps calls OrdersAPIExpress backend to create or perform Inserts in the orders storage (mongo)
 
@@ -49,7 +49,7 @@ The comerce backend . It's an Express with typescript API that allows all CRUD o
 
 This api interact with sql server data and for each insert emit an event to the even-source.
 For this purpose we implement kafka
-api -> POST http://localhost:6001/api/orders/
+api -> POST <http://localhost:6001/api/orders/>
 
 ## OrdersAPIExpress
 
@@ -57,7 +57,7 @@ The Orders backend . It's an Express with typescript Express API that allows all
 This api interact with mongodb atlas server to store all orders and for each insert emit an event to the even-source. for this purpose
 we implement kafka
 
-#Implent kafka as event sousing
+# Implent kafka as event sousing
 
 ## Kafka docker images
 
@@ -93,11 +93,11 @@ We use Apache Kafka packaged by Bitnami
 
 Next run :
 
+-d para que lo corra en segundo plano, en modo background
+
 ```
    docker-compose up -d
-   docker-compose  -f docker-compose-kafka.yml up
-   docker-compose  up docker-compose-kafka.yml -d
-
+   docker-compose  -f docker-compose-kafka.yml up -d
 ```
 
 Below command will stop running containers, but it also removes the stopped containers as well as any networks that were created.
@@ -123,15 +123,6 @@ And.. for to remove vulumes append -v flag
 
     yarn add @kafkajs/confluent-schema-registry
 
-### kafka packages
-
-    pnpm i kafkajs
-    this trow this error ✕ missing peer openapi-types@>=7...so you have to install
-
-        pnpm openapi-types@>=7
-
-    yarn add i @kafkajs/confluent-schema-registry
-
 ## nginx docker image
 
 Run this commando to start up load balancer and reverse proxy for ours APIs
@@ -152,7 +143,7 @@ We configure this with back section -->
         server hercules:INT_PORT;
 ```
 
-Calls http://localhost:6001/api/persons/ can be redirected to either platon or hercules based on the upstream configuration
+Calls <http://localhost:6001/api/persons/> can be redirected to either platon or hercules based on the upstream configuration
 
 2- Reverse proxy for the previous services.
 
@@ -164,9 +155,9 @@ Calls http://localhost:6001/api/persons/ can be redirected to either platon or h
 3 - Also, reverse porxy for moviedomfo/express_orders (#OrdersAPIExpress) dockers created in docker_file
 
 a- location /ulises/
-For calls http://localhost:6001/ulises/api/customers/
+For calls <http://localhost:6001/ulises/api/customers/>
 b- location /platon/
-For calls as http://localhost:6001/platon/api/customers/
+For calls as <http://localhost:6001/platon/api/customers/>
 
 ## Redis docker image
 

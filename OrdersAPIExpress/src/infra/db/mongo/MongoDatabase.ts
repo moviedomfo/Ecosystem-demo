@@ -1,5 +1,5 @@
 import { AppConstants } from '@common/CommonConstants';
-import { MongoDatabaseCnn } from './MondoDatabaseCnn';
+import { MongoDatabaseCnn } from './MongoDatabaseCnn';
 
 (async () => {
   // const uri = `mongodb+srv://${AppConstants.BD_MONGODB_USER}:${AppConstants.BD_MONGODB_PWD}@cluster0.aa2koji.mongodb.net/?retryWrites=true&w=majority`;

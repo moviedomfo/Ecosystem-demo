@@ -1,6 +1,6 @@
-# Project comerce express
+# Project Commerce express
 
-API Gateway to take all messages from any publisher and send to correspondient kafka topic
+API Gateway to take all messages from any publisher and send to corespondents kafka topic
 
 ## Table of Contents
 
@@ -20,12 +20,12 @@ This API provide two principal enpoints:
 - %URL_BASE%/api/persons/persons
 - %URL_BASE%/api/products
 
-This POST enpoints recive an input with this format:
+This POST endpoints recive an input with this format:
 
 ```
 {
   "origin": "POSTMAN",
-  "content": "any related json to /comerce/xxxxx use case",
+  "content": "any related json to /commerce/xxxxx use case",
 }
 
 ```
@@ -94,3 +94,25 @@ To generate Routes class run
 ## Important packages used in this app
 
 sequelize, tedious,
+
+
+#server.ts
+
+🧠 ¿Por qué creamos server.ts?
+🎯 Objetivo:
+Separar la carga de paths alias (tsconfig-paths) del archivo principal index.ts, para evitar errores al correr ts-node en desarrollo sin depender de module-alias.
+🧩 Problema original
+Tu index.ts tenía:
+  import "module-alias/register";
+
+Y eso hace que, al hacer yarn dev, module-alias intente resolver paths como @common/... hacia dist/, cuando todavía ni existe esa carpeta porque no hiciste el build.
+
+Resultado: MODULE_NOT_FOUND
+
+En desarrollo (yarn dev) usamos tsconfig-paths (alias vía tsconfig.json)
+
+En producción (yarn build && yarn start) usamos tsc-alias + module-alias y dist/ ya existe
+
+Y Nodemon automáticamente detecta .ts y usa ts-node si encuentra una línea como esta en tu script:
+
+import "tsconfig-paths/register";

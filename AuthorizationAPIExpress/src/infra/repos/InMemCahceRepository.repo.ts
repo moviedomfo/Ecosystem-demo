@@ -1,10 +1,11 @@
-import {ICacheRepository} from "@application/interfases/ICacheRepository";
-import {RedisKey} from "@domain/Entities/RedisKey";
-import {RefreshToken} from "@domain/Entities/RefreshToken";
+import { ICacheRepository } from "@application/interfases/ICacheRepository";
+import { RedisKey } from "@domain/Entities/RedisKey";
+import { RefreshToken } from "@domain/Entities/RefreshToken";
 
 /**Only responsibly  for store or cache the tokens. In redis*/
 export default class InMemCahceRepository implements ICacheRepository {
-  static storage: {[key: string]: string};
+
+  static storage: { [key: string]: string };
 
   public async GetTk(refresTokenKey: string): Promise<RefreshToken> {
     InMemCahceRepository.CreateStore();
@@ -68,4 +69,9 @@ export default class InMemCahceRepository implements ICacheRepository {
       InMemCahceRepository.storage = {};
     }
   }
+
+  GetByUserId(userId: string): Promise<RedisKey[]> {
+    throw new Error("Method not implemented.");
+  }
+
 }

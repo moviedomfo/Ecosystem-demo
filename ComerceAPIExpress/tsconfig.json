@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
+  // "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
@@ -14,24 +14,42 @@
     "outDir": "dist",
     "baseUrl": "./",
     "paths": {
-      "@common/*": ["./src/common/*"],
-      "@infra/*": ["./src/infra/*"],
-      "@domain/*": ["./src/domain/*"],
-      "@application/*": ["./src/application/*"]
+      "@common/*": [
+        "./src/common/*"
+      ],
+      "@infra/*": [
+        "./src/infra/*"
+      ],
+      "@domain/*": [
+        "./src/domain/*"
+      ],
+      "@application/*": [
+        "./src/application/*"
+      ]
     },
-
     "noEmit": false,
     "strict": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "types": [],
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     /*In order to dynamically import json files : import data from './data.json'*/
     "resolveJsonModule": true,
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
     "noUnusedParameters": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/build", "**/dist", "**/*.md", "**/rollup.config.js", "src/**/*.test.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/build",
+    "**/dist",
+    "**/*.md",
+    "**/rollup.config.js",
+    "src/**/*.test.ts"
+  ]
 }

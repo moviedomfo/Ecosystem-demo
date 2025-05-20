@@ -1,5 +1,5 @@
-import {AppConstants} from "@common/CommonConstants";
-import {KafkaConfig} from "kafkajs";
+import { AppConstants } from "@common/CommonConstants";
+import { KafkaConfig } from "kafkajs";
 
 export const kconfig: KafkaConfig = {
   brokers: AppConstants.KAFKA_BROKERS,

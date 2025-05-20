@@ -1,10 +1,10 @@
 import HttpStatusCode from "@common/Enums/HttpStatusCode";
-import {FileFunctions} from "@common/helpers";
+import { FileFunctions } from "@common/helpers";
 import RSAGenerator from "@common/helpers/RSAGenerator";
-import {RsaKeys} from "@domain/Entities/RSAHeys";
-import {AppError} from "@common/ErrorHandle/AppError";
+import { RsaKeys } from "@domain/Entities/RSAHeys";
+import { AppError } from "@common/ErrorHandle/AppError";
 export default class RSAGeneratorRepository {
-  static storage: {[key: string]: string};
+  static storage: { [key: string]: string };
   constructor() {
     RSAGeneratorRepository.CreateStore();
   }

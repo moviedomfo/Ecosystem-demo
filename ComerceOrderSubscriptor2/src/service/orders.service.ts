@@ -1,7 +1,8 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { AppConstants } from '../utils/AppConstants';
 import { CreateOrderReq, OrderDTO, OrderItemsDto, Product } from '../models';
 import OrdersRepository from './OrdersSQL.repo';
+import { Console } from 'console';
 
 export default class OrdersService {
   private readonly repo: OrdersRepository;
@@ -10,8 +11,9 @@ export default class OrdersService {
   }
   /** */
   public async Insert(order: OrderDTO): Promise<any> {
-    await this.repo.Insert(order);
 
+    //await this.repo.Insert(order);
+    console.log('Fake insert order to SQL');
     // const url = AppConstants.BASE_ORDERS_URL + '/api/orders';
 
     // const data: CreateOrderReq = {

@@ -1,7 +1,7 @@
-import {ICacheRepository} from "@application/interfases/ICacheRepository";
-import {AppConstants} from "@common/commonConstants";
-import {RedisKey} from "@domain/Entities/RedisKey";
-import {RefreshToken} from "@domain/Entities/RefreshToken";
+import { ICacheRepository } from "@application/interfases/ICacheRepository";
+import { AppConstants } from "@common/commonConstants";
+import { RedisKey } from "@domain/Entities/RedisKey";
+import { RefreshToken } from "@domain/Entities/RefreshToken";
 const redis = require("redis");
 
 /**Only responsibly  for store or cache the tokens. In redis*/
@@ -9,50 +9,101 @@ export default class RedisCacheRepository implements ICacheRepository {
   private static redisClient: any;
 
   public async GetTk(refresTokenKey: string): Promise<RefreshToken> {
-    return new Promise(async (resolve) => {
+    try {
       await RedisCacheRepository.CreateClient();
 
       const refresTokenJson = await RedisCacheRepository.redisClient.get(refresTokenKey);
-      if (!refresTokenJson) resolve(undefined);
-      const refresToken = JSON.parse(refresTokenJson) as RefreshToken;
-
-      resolve(refresToken);
-    });
-  }
-
-  public async GetAll(): Promise<RedisKey[]> {
-    return new Promise(async (resolve) => {
-      const list: RedisKey[] = [];
-      await RedisCacheRepository.CreateClient();
-      const redisClient = RedisCacheRepository.redisClient;
-      const keys = await new Promise<string[]>((resolve, reject) => {
-        redisClient.keys("*", (err, keys) => {
-          if (err) reject(err);
-          resolve(keys);
-        });
-      });
-      // Iterar sobre todas las claves y obtener su valor
-      for (const key of keys) {
-        const value = await new Promise<string | null>((resolve, reject) => {
-          redisClient.get(key, (err, value) => {
-            if (err) reject(err);
-            resolve(value);
-          });
-        });
-        console.log(`${key}: ${value}`);
-        list.push(new RedisKey(key, value));
+      if (!refresTokenJson) {
+        return undefined;
       }
 
-      resolve(list);
-    });
+
+      const refresToken = JSON.parse(refresTokenJson) as RefreshToken;
+
+      return refresToken;
+    } catch (err) {
+      const error = new Error("REDIS->" + err.message);
+      throw error;
+    }
+
+  };
+
+  /**
+   * 
+   * @param userId getAllUserTokens
+   * @returns 
+   */
+  public async GetByUserId(userId: string): Promise<RedisKey[]> {
+    try {
+      await RedisCacheRepository.CreateClient();
+
+      const setKey = `refresh:user:${userId}`;
+      const keys = await RedisCacheRepository.redisClient.sMembers(setKey);
+
+      const rawTokens = await Promise.all(
+        keys.map((key) => RedisCacheRepository.redisClient.get(key))
+      );
+      // Filtrar tokens que estén null (expirados) y parsear a objetos
+      const tokens = rawTokens
+        .filter((t): t is string => t !== null)
+        .map((t) => JSON.parse(t) as RedisKey);
+
+      return tokens;
+
+    } catch (err) {
+      const error = new Error("REDIS->" + err.message);
+      throw error;
+    }
+
+  };
+
+  /**
+   * 
+   * @param filter refresh:user:*
+   * @returns 
+   */
+  public async GetAll(filter: string): Promise<RedisKey[]> {
+    await RedisCacheRepository.CreateClient();
+    const redisClient = RedisCacheRepository.redisClient;
+    const keys = await redisClient.keys(filter); // ⚠️ cuidado si hay muchas claves
+
+    const entries: RedisKey[] = [];
+
+    for (const key of keys) {
+      const type = await redisClient.type(key);
+
+      if (type === 'string') {
+        const value = await redisClient.get(key);
+        if (value !== null) {
+          entries.push(new RedisKey(key, value));
+        }
+      }
+    }
+
+
+    return entries;
   }
 
-  public PushTk = async (tk: RefreshToken, refresTokenKey: string) => {
+  /**
+   * 
+   * @param tk 
+   * @param keyIndexPrefix refresh:user
+   */
+  public PushTk = async (tk: RefreshToken, keyIndexPrefix: string) => {
     try {
       // console.log(`message was cached into ${AppConstants.REDIS_HOST}, message id : ${req.id}`);
       await RedisCacheRepository.CreateClient();
 
-      await RedisCacheRepository.redisClient.setEx(refresTokenKey, Number(AppConstants.REDIS_EXPIRES_TIME) * 60, JSON.stringify(tk));
+      const tokenKey = `${keyIndexPrefix}:${tk.UserID}:${tk.Token}`;
+      const userSetKey = `${keyIndexPrefix}:${tk.UserID}`; // 👈 clave del SET que agrupa los tokens de ese user
+
+      const time = Number(AppConstants.REDIS_EXPIRES_TIME) * 60;
+
+      await RedisCacheRepository.redisClient.setEx(tokenKey, time, JSON.stringify(tk));
+
+      // Agregás el token a un Set para ese usuario
+      await RedisCacheRepository.redisClient.sAdd(userSetKey, tokenKey);
+      // console.log(JSON.stringify(tk))
     } catch (err) {
       throw new Error("REDIS->" + err.message);
     }
@@ -75,17 +126,34 @@ export default class RedisCacheRepository implements ICacheRepository {
       throw new Error("REDIS->" + err.message);
     }
   };
-
+  public RemoveAllUserTokensByUserId = async (userId: string) => {
+    try {
+      await RedisCacheRepository.CreateClient();
+      const keys = await RedisCacheRepository.redisClient.keys(`refresh:user:${userId}:*`);
+      if (keys.length) await RedisCacheRepository.redisClient.del(...keys);
+    } catch (err) {
+      throw new Error("REDIS->" + err.message);
+    }
+  };
+  public RemoveAllUserTokens = async () => {
+    try {
+      await RedisCacheRepository.CreateClient();
+      const keys = await RedisCacheRepository.redisClient.keys(`refresh:user:*`);
+      if (keys.length) await RedisCacheRepository.redisClient.del(...keys);
+    } catch (err) {
+      throw new Error("REDIS->" + err.message);
+    }
+  };
   static async CreateClient() {
     if (!RedisCacheRepository.redisClient) {
-      RedisCacheRepository.redisClient = redis.createClient({
+      const c = {
         socket: {
           host: AppConstants.REDIS_HOST,
-          port: 6379
+          port: AppConstants.REDIS_PORT
         },
-        password: "pletorico28"
-        // username: "pletorico28",
-      });
+        password: AppConstants.REDIS_PASSWORD
+      }
+      RedisCacheRepository.redisClient = redis.createClient(c);
       try {
         await RedisCacheRepository.redisClient.connect();
       } catch (err) {

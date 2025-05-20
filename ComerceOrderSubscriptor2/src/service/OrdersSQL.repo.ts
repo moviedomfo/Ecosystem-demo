@@ -3,7 +3,7 @@ import { OrderDTO } from './../models/Order';
 import { OrderDetailsSchema, OrdersSchema } from './sql.schemas';
 import dayjs from 'dayjs';
 
-/**Persist to mongodb Persons */
+/**Persist to mongodb Orders */
 export default class OrdersRepository {
   public Insert(req: OrderDTO): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {

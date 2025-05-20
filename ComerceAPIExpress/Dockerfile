@@ -13,7 +13,6 @@ RUN npm run build
 FROM node:14.5.0-alpine
 LABEL maintainer="@moviedo"
 
-
 WORKDIR /app
 
 # copia los archivos compilados y node_modules

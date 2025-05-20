@@ -1,9 +1,10 @@
 import { AppConstants } from '../utils/AppConstants';
-import OrdersService from './Orders.service';
+import OrdersService from './orders.service';
 import { Helper } from '../utils/helper';
 import { Kafka, KafkaConfig } from 'kafkajs';
 import { ImessageDto } from '../models/MessageDto';
 import { OrderDTO } from '../models';
+import os from 'os';
 
 export class OrderSubscriptor {
   private readonly ordersService: OrdersService;
@@ -12,28 +13,45 @@ export class OrderSubscriptor {
   }
 
   public async Start() {
-    const publisherName = AppConstants.APP_NAME;
+
+    //clientId en la configuración de Kafka (KafkaConfig) es un identificador único para el cliente Kafka (ya sea producer o consumer). 
+    // No afecta directamente la lógica de suscripción ni los mensajes que se reciben, pero tiene roles importantes en monitoreo, logging y métricas.
+    const groupId = AppConstants.GROUP_ID;
+    const hostname = os.hostname();              // ej: 'node-api-01'
+
+    const clientId = `${AppConstants.APP_NAME}-${hostname}`;
+
 
     const kconfig: KafkaConfig = {
-      brokers: ['localhost:9092'],
+      brokers: [AppConstants.BROKERS],
       ssl: false,
-      clientId: 'order-subs-0001',
+      clientId: clientId,
     };
     const kafka = new Kafka(kconfig);
-    const consumer = kafka.consumer({ groupId: 'test-group' });
+    const consumer = kafka.consumer({
+      groupId: groupId,
+      // Si el topic 'orders' no existe, KafkaJS revisa si puede crear el topic automáticamente.
+      // false : recomendado para producción
+       allowAutoTopicCreation:false
+    });
     await consumer.connect();
     await consumer.subscribe({
       topic: AppConstants.TOPIC,
       fromBeginning: true,
     });
+
     Helper.LogConsole(
-      `------------------Order subscribber started  ${publisherName} and listening ${AppConstants.TOPIC} 
-      } --------------------`
+      `------------------ ClientId : ${clientId} listening TOPIC : ${AppConstants.TOPIC} --------------------`
+       
     );
 
+    // Usá autoCommit: false si querés controlar errores y evitar perder mensajes.
+    // autoCommit: true (default), Kafka hará el commit automáticamente cada autoCommitInterval, que podés configurar así:
+
     await consumer.run({
+      autoCommit: true, // ✅ true para q si todo va bien no los traae mas
       eachMessage: async ({ topic, partition, message }) => {
-        Helper.LogConsole(`TOPIC ${topic}`);
+        Helper.LogConsole(`TOPIC ${topic} - PARTITION ${partition}`);
         const orderMessageJson = message.value.toString();
         await Helper.LogConsole(orderMessageJson);
 

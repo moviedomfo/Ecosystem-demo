@@ -1,9 +1,9 @@
-import {kconfig} from "../db/kafka.config";
-import {Kafka, Partitioners} from "kafkajs";
+import { kconfig } from "../db/kafka.config";
+import { Kafka, Partitioners } from "kafkajs";
 
-import {ImessageDto} from "@domain/DTOs/MessageDto";
-import {IEventBusRepository} from "@application/interfases/IEventBusRepository";
-import {AppConstants} from "@common/CommonConstants";
+import { ImessageDto } from "@domain/DTOs/MessageDto";
+import { IEventBusRepository } from "@application/interfases/IEventBusRepository";
+import { AppConstants } from "@common/CommonConstants";
 
 export default class KafkaEventBusRepository implements IEventBusRepository {
   PushToQueue = async (req: ImessageDto, topic: string) => {
@@ -18,6 +18,7 @@ export default class KafkaEventBusRepository implements IEventBusRepository {
         topic,
         messages: [
           {
+            // key: define a que particion va a ir el mensaje
             key: req.key,
             value: JSON.stringify(req.content),
           },
@@ -27,14 +28,7 @@ export default class KafkaEventBusRepository implements IEventBusRepository {
     } catch (err) {
       throw err;
 
-      // console.log(
-      //   "*****************************Error from KAFKA *****************************        "
-      // );
-      // console.log(err.message);
-
-      // console.log(
-      //   "*****************************End ERROR  KAFKA *****************************        "
-      // );
+   
     }
   };
 }

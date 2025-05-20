@@ -1,7 +1,7 @@
-import {AppErrorToSent} from "./../ErrorHandle/AppError";
+import { AppErrorToSent } from "./../ErrorHandle/AppError";
 import HttpStatusCode from "@common/Enums/HttpStatusCode";
-import {AppError} from "@common/ErrorHandle/AppError";
-import {ErrorCodeEnum, ErrorTypeEnum} from "@common/ErrorHandle/ErrorEnums";
+import { AppError } from "@common/ErrorHandle/AppError";
+import { ErrorCodeEnum, ErrorTypeEnum } from "@common/ErrorHandle/ErrorEnums";
 export class ExeptionFunctions {
   /**
    *
@@ -134,6 +134,19 @@ export class ExeptionFunctions {
       message = error.message;
       message = message.slice(7); // remove REDIS->
     }
+
+    const err: AppError = new AppError(500, errorCode, message, ErrorTypeEnum.TecnicalException);
+
+    err.originalMessage = error.message;
+    err.name = ErrorCodeEnum.REDIS;
+
+    return err;
+  };
+  public static Parse_Error = (error: any): AppError => {
+
+    const errorCode = ErrorCodeEnum.UNKNOWED;
+    const message = error.message;
+
 
     const err: AppError = new AppError(500, errorCode, message, ErrorTypeEnum.TecnicalException);
 

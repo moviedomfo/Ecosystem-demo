@@ -6,24 +6,25 @@
   "scripts": {
     "start": "tsc && nodemon  --tls-min-v1.0   dist/app.js",
     "prod": "tsc && node --tls-min-v1.0  dist/app.js   ",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "author": "Marcelo F. Oviedo",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.9.0",
     "colors": "^1.4.0",
-    "dotenv": "^8.6.0",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.5.0",
     "faker": "^6.6.6",
-    "luxon": "^1.28.0",
     "mv": "^2.1.1",
-    "node-cron": "^2.0.3",
-    "typescript": "^4.8.3",
-    "typescript-logging": "^1.0.1",
-    "uuid": "^8.3.2"
+    "node-cron": "^4.0.5",
+    "typescript": "^5.8.3",
+    "typescript-logging": "^2.2.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.5.0",
-    "@types/node": "^14.18.31"
+    "@faker-js/faker": "^9.8.0",
+    "@types/node": "^22.15.18"
   }
 }

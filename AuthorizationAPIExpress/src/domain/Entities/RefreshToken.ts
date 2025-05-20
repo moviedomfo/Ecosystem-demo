@@ -10,7 +10,7 @@ export class RefreshToken {
   Created: any;
   /**The token gives from this ip */
   CreatedByIp: string;
-  /**the token belongs to this userid
-   */
+  /**the token belongs to this userid   */
   UserID: string;
+  
 }

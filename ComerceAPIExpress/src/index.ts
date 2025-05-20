@@ -3,17 +3,16 @@ import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import {notFoundHandler} from "@common/not-found.middleware";
-import {ExpressErrorHandler} from "./common/ErrorHandle/ExpressErrorHandler";
+import { notFoundHandler } from "@common/not-found.middleware";
+import { ExpressErrorHandler } from "./common/ErrorHandle/ExpressErrorHandler";
 import swaggerUi from "swagger-ui-express";
-import {logsMiddle} from "@common/log.middlewar";
-import {productRouter} from "@infra/router/productPub.router";
-import {securitySettingsRouter} from "@infra/router/securitySettings.router";
-import {personRouter} from "./infra/router/personPub.router";
-import {AppConstants} from "@common/CommonConstants";
-import "module-alias/register";
+import { logsMiddle } from "@common/log.middlewar";
+import { productRouter } from "@infra/router/productPub.router";
+import { securitySettingsRouter } from "@infra/router/securitySettings.router";
+import { personRouter } from "./infra/router/personPub.router";
+import { AppConstants } from "@common/CommonConstants";
 import "dotenv/config";
-import "./infra/db/mongo/MondoDatabase";
+import "./infra/db/mongo/MongoDatabase";
 const packageJson = require("./../package.json");
 
 require("dotenv").config();
@@ -32,7 +31,7 @@ app.set("view engine", "html");
  */
 app.use(helmet());
 app.use(cors());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(morgan("short"));

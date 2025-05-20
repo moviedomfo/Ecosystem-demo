@@ -81,7 +81,8 @@ export class Publisher {
     p.Unit = faker.science.unit().name;
     p.Lab = faker.science.chemicalElement().name;
     p.GeneratedDate = new Date(); //Helper.getTime_Iso();
-    p.Cost = faker.commerce.price(100, 200, 0);
+    
+    faker.commerce.price({ min: 100, max: 200, dec: 0 });
     p.Department = faker.commerce.department();
 
     return p;

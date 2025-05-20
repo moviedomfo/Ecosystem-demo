@@ -4,9 +4,9 @@ dotenv.config();
 
 export const AppConstants = {
   APP_NAME: process.env.APP_NAME,
-  BASE_COMERCE_URL: process.env.BASE_COMERCE_URL || 'http://localhost:3001',
-  BASE_ORDERS_URL: process.env.BASE_ORDERS_URL || 'http://localhost:3000',
-  Scheduling: process.env.SHEDULING || '* * * * *',
+  // BASE_COMERCE_URL: process.env.BASE_COMERCE_URL || 'http://localhost:3001',
+  // BASE_ORDERS_URL: process.env.BASE_ORDERS_URL || 'http://localhost:3000',
+  // Scheduling: process.env.SHEDULING || '* * * * *',
   Secconds: parseInt(process.env.SECONDS) || 1,
   BROKERS:process.env.BROKERS ,
   TOPIC:process.env.TOPIC ,
@@ -20,7 +20,8 @@ export const AppConstants = {
     'Access-Control-Allow-Headers':
       'Origin, Content-Type, Authorization, X-Auth-Token',
     'Content-Type': 'application/json',
-  }, BD_HOST: process.env.BD_HOST,
+  }, 
+  BD_HOST: process.env.BD_HOST,
   BD_INSTANCE: process.env.BD_INSTANCE,
   BD_DATABASE_NAME: process.env.BD_DATABASE_NAME,
   BD_PWD: process.env.BD_PWD,

@@ -1,4 +1,3 @@
-import { Entity } from '@common/CleanBases/Entity';
 import EventBase from '@common/CleanBases/EventBase';
 
 import {IKafkaMessageDto} from "@domain/DTOs/MessageDto";

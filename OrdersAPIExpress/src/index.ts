@@ -2,18 +2,19 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import helmet from "helmet";
-import {AppConstants} from "@common/CommonConstants";
 import morgan from "morgan";
-import {notFoundHandler} from "./common/not-found.middleware";
+import { AppConstants } from "@common/CommonConstants";
+import { notFoundHandler } from "@common/not-found.middleware";
 import swaggerUi from "swagger-ui-express";
-import {ordersRouter} from "@infra/router/orders.router";
-import {errorHandler} from "@common/ErrorHandle/errorHandler";
-import {securitySettingsRouter} from "@infra/router/securitySettings.router";
-//import "reflect-metadata";
-//import "module-alias/register";
+import { ordersRouter } from "@infra/router/orders.router";
+import { errorHandler } from "@common/ErrorHandle/errorHandler";
+import { securitySettingsRouter } from "@infra/router/securitySettings.router";
+import { kafkaRouter } from "@infra/router/kafka.router";
 import "dotenv/config";
+import "./infra/db/mongo/MongoDatabase";
 const packageJson = require("./../package.json");
-import "./infra/db/mongo/MondoDatabase";
+
+
 require("dotenv").config();
 
 if (!AppConstants.PORT) {
@@ -30,15 +31,11 @@ app.set("view engine", "html");
  */
 app.use(helmet());
 app.use(cors());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(morgan("short"));
-//app.use(morgan('combined'));
-//app.use(morgan('tiny'));
-// itemsRouter.use(morgan('dev'));
 
-/**set middleware to serve static files */
 app.use(express.static(__dirname + "/public"));
 
 app.get("/health", (_req, res) => {
@@ -54,20 +51,26 @@ app.get("/", function (_req, res) {
 });
 app.use(express.static("public"));
 
-app.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(undefined, {
-    swaggerOptions: {
-      url: "/swagger.json",
-    },
-  })
-);
+const swaggerRouter = express.Router();
+
+// swaggerRouter.use(swaggerUi.serve as express.RequestHandler);
+// swaggerRouter.get(
+//   '/',
+//   swaggerUi.setup(undefined, {
+//     swaggerOptions: {
+//       url: "/swagger.json",
+//     },
+//   }) as express.RequestHandler
+// );
+
+app.use('/docs', swaggerRouter);
+
+
 //  app.use(scopePerRequest(container));
 // De esta forma funcionaba pero debia usar un Router donde el controller no
 // no llamaba a su constructor y por ende quedaban undefined los Servicios inyectados
 app.use("/api/orders", ordersRouter);
-
+app.use("/api/kafka", kafkaRouter);
 app.use("/api/securitySettings", securitySettingsRouter);
 
 //loadContainer(app);

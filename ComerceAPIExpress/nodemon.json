@@ -1,5 +1,7 @@
 {
-  "watch": ["src/"],
+  "watch": [
+    "src/"
+  ],
   "delay": 2500,
   "execMap": {
     "ts": "node -r ts-node/register"

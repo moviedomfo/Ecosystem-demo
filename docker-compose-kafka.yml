@@ -10,7 +10,7 @@ services:
       - "zookeeper_data:/bitnami"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-      
+
     networks:
       - kafkanet
   kafka:
@@ -25,33 +25,31 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
-      
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://192.168.2.184:9092
+      # - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://host.docker.internal:9092
+
     depends_on:
       - zookeeper
     links:
       - "zookeeper:zookeeper"
-    
+
     deploy:
       resources:
         limits:
           memory: 2G
-      
+
     networks:
       - kafkanet
- 
 
 networks:
   kafkanet:
     driver: bridge
     ipam:
-     config:
-       - subnet: 192.168.200.0/24
+      config:
+        - subnet: 192.168.200.0/24
 
 volumes:
   zookeeper_data:
     driver: local
   kafka_data:
     driver: local
-
-

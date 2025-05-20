@@ -22,6 +22,10 @@ export class ExeptionFunctions {
    */
   public static GetAppError = (error: any): AppError => {
     let appError: AppError;
+    if (error instanceof AppError) {
+      appError = error as AppError;
+      return appError;
+    }
     if ((error.name as string).startsWith("Sequelize")) {
       appError = ExeptionFunctions.Parse_SequelizeError(error);
     }

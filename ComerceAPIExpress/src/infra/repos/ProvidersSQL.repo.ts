@@ -2,7 +2,6 @@ import {IPersonsRepository} from "@application/interfases/IPersonsRepository";
 import {PersonBE} from "@domain/Entities/PersonBE";
 import {PersonsSchema} from "./../schemas/sql.schemas";
 import {Op} from "sequelize";
-import {Entity} from "@common/CleanBases/Entity";
 
 /**Persist to mongodb Persons */
 export default class ProvidersRepository implements IPersonsRepository {

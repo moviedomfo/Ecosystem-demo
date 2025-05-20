@@ -1,6 +1,6 @@
 import {MokUsers, User} from "@domain/Entities/User";
 import {IUserRepository} from "@application/interfases/IUserRepository";
-import {compare, hash, hashSync} from "bcryptjs";
+import CryptoFunctions from "@common/helpers/CryptoFunctions";
 const mockData = require("../../../assets/usermok.json");
 
 /**Persist to mongodb Orders */
@@ -27,14 +27,14 @@ export default class UserMockRepository implements IUserRepository {
   }
 
   /**
-   *
+   * Función para generar un hash de una contraseña
    * @param password
    * @returns Hassed Passwword
    */
-  public HassPassword(password: string): Promise<string> {
-    //  Salt length to generate or salt to use, default to 10
-    const saltWorkFactor = 12;
-    return hash(password, saltWorkFactor);
+  public async HassPassword(password: string): Promise<string> {
+    const hash = await CryptoFunctions.HassPassword(password); // Generar el hash
+    return hash;
+
   }
 
   /**
@@ -44,13 +44,7 @@ export default class UserMockRepository implements IUserRepository {
    * @returns
    */
   public async VerifyPassword(password: string, hash: string): Promise<boolean> {
-    //  Salt length to generate or salt to use, default to 10
-    const salt = 12;
+    return await CryptoFunctions.VerifyPassword(password, hash);
 
-    // let p = await this.HassPassword("1234");
-    // p = await this.HassPassword("elevisor+455");
-    // p = await this.HassPassword("hiMrbrownstono");
-    // p = await this.HassPassword("Pletolince21++");
-    return compare(password, hash);
   }
 }

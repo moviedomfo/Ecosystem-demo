@@ -54,10 +54,10 @@ export class Helper {
 
     return d;
   }
-   /* 
-   returns YYYYMMDD_ prefix
-   */
-   public static getFileNamePrefix(): String {
+  /* 
+  returns YYYYMMDD_ prefix
+  */
+  public static getFileNamePrefix(): String {
     const d = dayjs().format("YYYYMMDD_");
     return d;
   }
@@ -74,7 +74,7 @@ export class Helper {
     return dt;
   }
   public static getMonth_MM(): String {
-    const  dt = dayjs().format("MM");
+    const dt = dayjs().format("MM");
     return dt;
   }
 
@@ -123,16 +123,27 @@ export class Helper {
     console.log(colors.blue(Helper.getTime_Iso() + ' ' + message));
   }
 
-  public static GetError(error): string {
-    let message = error.message;
-    if (error.response)
-      message = message.concat(error.response.data.Message, '\n');
-    return message;
+
+  public static GetError(error: any): string {
+    if (!error) return 'Error desconocido';
+
+    if (error.code === 'ECONNREFUSED') {
+      const addressInfo = error.errors?.map((e: any) => `${e.address}:${e.port}`).join(' o ');
+      return `No se pudo conectar al servidor en ${addressInfo}. Asegurate de que esté iniciado.`;
+    }
+
+    if (error.code === 'ETIMEDOUT') {
+      return 'La conexión tardó demasiado en responder. Verifica tu red o el servidor.';
+    }
+
+    if (error.response) {
+      return `El servidor respondió con el código ${error.response.status}: ${error.response.statusText}`;
+    }
+
+    if (error.request) {
+      return 'La solicitud fue enviada pero no se recibió respuesta del servidor.';
+    }
+
+    return error.message || 'Ocurrió un error desconocido durante la solicitud HTTP.';
   }
-
-  // public static Log = (message: string) => ({
-
-  //   Helper.catFacturas.info(() => message);
-  //   Helper.catFacturas.info(() => "Performing magic once more: " + name);
-  // });
 }

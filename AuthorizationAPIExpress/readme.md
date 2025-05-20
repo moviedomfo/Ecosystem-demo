@@ -42,28 +42,10 @@ JWT_Expires=5
 JWT_ExpiresRefreshToken=600
 JWT_AUDIENCE='https://pelsoft.com'
 JWT_ISSUER='notused'
-
-
-## run redis container with compose
+NODE_ENV="production" // development or production
 ```
 
-## Redis docker ref [likn](https://kb.objectrocket.com/redis/run-redis-with-docker-compose-1055)
-
-## In aour porject we can run redis in local dockerhub runing the below command
-
-run
-
-```
-  docker run -d -p 3010:3010 --name express_auth moviedomfo/express_auth
-```
-
-or
-
-```
-   docker-compose up
-```
-
-##
+## Unit test
 
 yarn test : use this script for simple unit testing
 yarn test --detectOpenHandles --watchAll we'll see -> collect and print open
@@ -89,4 +71,14 @@ You can use docker to deploy the api server. In this releasse we leave a dockerf
 ```
 
 - Navigate to this url to check the if correctly docker container is running
-  http://localhost:3009
+  <http://localhost:3009>
+
+## run redis container with docker compose
+
+- Redis docker ref [likn](https://kb.objectrocket.com/redis/run-redis-with-docker-compose-1055)
+
+Locate the directory where the "docker-compose-redis.yml" file is located. Root of all projects
+
+```
+    docker-compose -f docker-compose-redis.yml up -d
+```

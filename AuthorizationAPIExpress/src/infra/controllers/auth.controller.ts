@@ -3,10 +3,10 @@ import {IAuthService} from "@domain/interfases/IAuthService";
 import {AuthenticationReq} from "@domain/DTOs/Auth/AuthorizationDto";
 import {RefreshTokenReq} from "@domain/DTOs/Auth/RefreshTokenDto";
 import HttpStatusCode from "@common/Enums/HttpStatusCode";
-import {GetUserReq, UserSimpleViewDTO} from "@domain/DTOs/Auth/GetUserDto";
+import {GetUserReq} from "@domain/DTOs/Auth/GetUserDto";
 
 /**
- * A purchase order is issued by the buyer generator (¡random cron-job app) and and later is to be fulfilled by the vendor
+ * Controller responsible for handling authentication operations.
  */
 export default class AuthController {
   constructor(private readonly authService: IAuthService) {}

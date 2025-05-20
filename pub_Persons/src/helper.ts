@@ -133,13 +133,35 @@ export class Helper {
   public static LogConsoleCyan(message: string): void {
     console.log(colors.cyan(Helper.getTime_Iso() + ' ' + message));
   }
+  public static GetError(error: any): string {
+    if (!error) return 'Error desconocido';
 
-  public static GetError(error): string {
-    let message = error.message;
-    if (error.response)
-      message = message.concat(error.response.data.message, '\n');
-    return message;
+    if (error.code === 'ECONNREFUSED') {
+      const addressInfo = error.errors?.map((e: any) => `${e.address}:${e.port}`).join(' o ');
+      return `No se pudo conectar al servidor en ${addressInfo}. Asegurate de que esté iniciado.`;
+    }
+
+    if (error.code === 'ETIMEDOUT') {
+      return 'La conexión tardó demasiado en responder. Verifica tu red o el servidor.';
+    }
+
+    if (error.response) {
+      return `El servidor respondió con el código ${error.response.status}: ${error.response.statusText}`;
+    }
+
+    if (error.request) {
+      return 'La solicitud fue enviada pero no se recibió respuesta del servidor.';
+    }
+
+    return error.message || 'Ocurrió un error desconocido durante la solicitud HTTP.';
   }
+
+  // public static GetError(error): string {
+  //   let message = error.message;
+  //   if (error.response)
+  //     message = message.concat(error.response.data.message, '\n');
+  //   return message;
+  // }
 
   // public static Log = (message: string) => ({
 
