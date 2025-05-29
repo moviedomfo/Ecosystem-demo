@@ -10,7 +10,7 @@
 * [NGINX](#nginx-docker-image)
 * [Redis](#redis-docker-image)
 
-## Ecosystem Express
+## Ecosystem Express Diagram
 
 ```mermaid
 flowchart TD
@@ -35,8 +35,8 @@ flowchart TD
     Comerce --> Kafka
     Orders --> Mongo
     Orders --> Kafka
-    Kafka --> Subscriptor
-    Subscriptor --> Comerce
+    Kafka -->> Subscriptor
+    Subscriptor --> Ingress
 
     classDef external fill:#DAF7A6,stroke:#333,stroke-width:2px;
     class SQL,Mongo,Kafka,Redis external;
