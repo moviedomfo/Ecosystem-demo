@@ -1,171 +1,194 @@
 # Table of Contents
 
-- [Intro](#ecosystem_express)
-- [Customers & Provider registering](#pub_persons)
-- [Orders -customers online shopping](#pub_orders)
-- [Products - inventory](#pub_product)
-- [Customers & Provider API](#comerceapiexpress)
-- [Orers API](#ordersapiexpress)
-- [Kafka & docker](#kafka-docker-images)
-- [nginx](#nginx-docker-image)
-- [Redis](#redis-docker-image)
+* [Introduction](#ecosystem_express)
+* [Customer & Provider Registration](#pub_persons)
+* [Orders – Customer Online Shopping](#pub_orders)
+* [Products – Inventory](#pub_product)
+* [Customer & Provider API](#comerceapiexpress)
+* [Orders API](#ordersapiexpress)
+* [Kafka & Docker](#kafka-docker-images)
+* [NGINX](#nginx-docker-image)
+* [Redis](#redis-docker-image)
 
-## Ecosystem express
+## Ecosystem Express
 
-Demo of microservices ecosystem interconected interconnected with each other using DDD clean architecture and CQRS
-The transaction between microservices was solved using Event Soursing with kafka ....
+Demo of a microservices ecosystem interconnected using Domain-Driven Design (DDD), Clean Architecture, and CQRS.
+Transactions between microservices are handled using Event Sourcing with Kafka.
 
-## pub_persons
+## pub\_persons
 
-This app is a cron-job typescript app service that will randomly generate fake customers and providers .
-1- Generate ramdom persons
-2- Performs calls to ComerceAPIExpress backend to get info from customers aand providers:
+This is a TypeScript cron-job service that randomly generates fake customers and providers.
 
-    customer post to /api/customer/
-    provider post to /api/provider/
+1. Generate random persons
+2. Each generated person or provider is sent to `ComerceAPIExpress` for creation in SQL Server:
 
-3- Every person and provider generaded will sended to ComerceAPIExpress for it creation (sql server )
-api -> POST <http://localhost:7000/api/persons/customers>
-api -> POST <http://localhost:7000/api/persons/providers>
+   * `POST http://[host]:[port]/api/persons/customers`
+   * `POST http://[host]:[port]/api/persons/providers`
 
-## pub_product
+## pub\_product
 
-This app is a cron-job typescript app service that will randomly generate & simulates products entering the shop werehause .-
+This is a TypeScript cron-job service that randomly generates and simulates products being added to the warehouse.
 
-This apps calls ComerceAPIExpress backend to creato or perfomr Inserts in the product storage (sql server )
-api -> POST <http://localhost:7000/api/products/>
+The service calls the `ComerceAPIExpress` backend to create or insert products into SQL Server:
 
-## pub_orders
+* `POST http://[host]/api/products/`
 
-This app is a cron-job typescript app service that will randomly generate orders that simulates the customers online shopping .-
-To get porducts and customers for order creation this apps interacts with ComerceAPIExpress
-api -> GET <http://localhost:7000/api/products/>
+**Auth**: This service obtains authentication tokens through the `AuthorizationAPIExpress` API, which issues a JWT and refresh token using a simple asymmetric key authentication process.
 
-This apps calls OrdersAPIExpress backend to create or perform Inserts in the orders storage (mongo)
+## pub\_orders
+
+This is a TypeScript cron-job service that randomly generates fake customer orders to simulate online shopping behavior.
+
+To get product and customer data, this service interacts with `ComerceAPIExpress`.
+
+* `GET http://[host]:[port]/api/orders/`
+
+Then it sends the orders to the `OrdersAPIExpress` backend to store them in MongoDB:
+
+* `POST http://[ordersHost]:[port]/api/orders/`
+
+## ComerceOrderSubscriber
+
+This is a TypeScript cron-job service that continuously listens to the Kafka topic `[Orders]`.
+
+Each order received is automatically sent to `ComerceAPIExpress` using the following endpoint:
+
+* `POST http://[host]:[port]/api/orders/`
+
+Note: In this API, the orders will be stored in SQL Server (they were originally stored in MongoDB and in the Kafka event bus).
 
 ## ComerceAPIExpress
 
-The comerce backend . It's an Express with typescript API that allows all CRUD operations for: customers providers and products
+This is the commerce backend. It's an Express + TypeScript API that supports CRUD operations for customers, providers, and products.
 
-This api interact with sql server data and for each insert emit an event to the even-source.
-For this purpose we implement kafka
-api -> POST <http://localhost:6001/api/orders/>
+The publisher services `pub_product` and `pub_persons` use this API to perform create operations.
+
+It also emits events to the event source (Kafka) on every insert.
+
+* `POST http://[comerceHost]:[port]//api/orders/`
 
 ## OrdersAPIExpress
 
-The Orders backend . It's an Express with typescript Express API that allows all CRUD operations for: orders
-This api interact with mongodb atlas server to store all orders and for each insert emit an event to the even-source. for this purpose
-we implement kafka
+This is the orders backend. It's an Express + TypeScript API that supports CRUD operations for orders.
 
-# Implent kafka as event sousing
+The API interacts with MongoDB Atlas to store all orders and emits an event to the event source for every insert.
 
-## Kafka docker images
+* Kafka Topic: `Orders`
 
-Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications
+## AuthorizationAPIExpress
 
-We use Apache Kafka packaged by Bitnami
+This API is responsible for authenticating other apps that call resource APIs such as `ComerceAPIExpress` and `OrdersAPIExpress`.
 
-## Run the application using Docker Compose
+* `POST http://[AuthHost]:[port]/api/sec/authenticate`
 
-### we use local docker-compose-kafka.yml content what should it contain this
+The authorization mechanism uses Redis to store a token blacklist and to manage token revocation.
 
-```
-    zookeeper:
-        image: docker.io/bitnami/zookeeper:3.8
-        ports:
-        - "2181:2181"
-        volumes:
-        - "zookeeper_data:/bitnami"
-        environment:
-        - ALLOW_ANONYMOUS_LOGIN=yes
-    kafka:
-        image: docker.io/bitnami/kafka:3.2
-        ports:
-        - "9092:9092"
-        volumes:
-        - "kafka_data:/bitnami"
-        environment:
-        - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-        - ALLOW_PLAINTEXT_LISTENER=yes
-        depends_on:
-        - zookeeper
+# Deploying Components with Docker
+
+First, navigate to the folder of each component. Each one contains a `Dockerfile` and a `docker-compose.yml` file.
+
+These files allow you to build and deploy the Docker images and containers for each API and third-party service such as Redis and Kafka.
+
+> ⚠️ Note: In this example, MongoDB is not deployed locally because we are using a free Atlas cloud account: [https://cloud.mongodb.com](https://cloud.mongodb.com)
+
+### Build and Deploy APIs
+
+```bash
+cd D:\Ecosystem\AuthorizationAPIExpress
+
+docker image build -t moviedomfo/eco-api-auth .
+docker-compose up -d
 ```
 
-Next run :
+```bash
+cd D:\Ecosystem\OrdersAPIExpress
 
--d para que lo corra en segundo plano, en modo background
-
-```
-   docker-compose up -d
-   docker-compose  -f docker-compose-kafka.yml up -d
+docker image build -t moviedomfo/eco-api-orders .
+docker-compose up -d
 ```
 
-Below command will stop running containers, but it also removes the stopped containers as well as any networks that were created.
-And.. for to remove vulumes append -v flag
+```bash
+cd D:\Ecosystem\ComerceAPIExpress
 
-```
-    docker-compose down
-    or
-    docker-compose down -v
+docker image build -t moviedomfo/eco-api-comerce .
+docker-compose up -d
 ```
 
-### kafka documentations
+### Summary – Build All Images
 
-    https://www.npmjs.com/package/kafkajs
-    https://www.youtube.com/watch?v=EiDLKECLcZw
-
-### kafka packages
-
-    yarn add kafkajs
-    this trow this error ✕ missing peer openapi-types@>=7...so you have to install
-
-        pnpm openapi-types@>=7
-
-    yarn add @kafkajs/confluent-schema-registry
-
-## nginx docker image
-
-Run this commando to start up load balancer and reverse proxy for ours APIs
-
-```
-docker-compose up -d -f docker-compose-nginx.yml
+```bash
+docker image build -t moviedomfo/eco-api-auth .
+docker image build -t moviedomfo/eco-api-orders .
+docker image build -t moviedomfo/eco-api-comerce .
 ```
 
-If you open obove yml file you notice that we have several configurated things.
+## Implementing Kafka as Event Sourcing
 
-1- Load balancer for image moviedomfo/express_comerce (#ComerceAPIExpress)
-In docker compose we instantiate two containers for this api. One called ulises socrates and another ulises
-We configure this with back section -->
+### Kafka Docker Images
 
+Apache Kafka is a distributed streaming platform used to build real-time data pipelines and applications. It can function as a message broker or a log aggregator.
+
+We use the Bitnami-packaged version of Apache Kafka.
+
+## Running the Application with Docker Compose
+
+We use `docker-compose-kafka.yml`. To run it in the background:
+
+```bash
+docker-compose up -d
+docker-compose -f docker-compose-kafka.yml up -d
 ```
-    upstream back
-        server platon:INT_PORT;
-        server hercules:INT_PORT;
+
+To stop and remove all running containers and networks:
+
+```bash
+docker-compose down
+# or, to also remove volumes
+docker-compose down -v
 ```
 
-Calls <http://localhost:6001/api/persons/> can be redirected to either platon or hercules based on the upstream configuration
+## NGINX Docker Image
 
-2- Reverse proxy for the previous services.
+To start the load balancer and reverse proxy for our APIs:
 
-    a-  location /platon/
-        For calls http://localhost:6001/platon/api/persons/
-    b-   location /hercules/
-    For calls as http://localhost:6001/hercules/api/persons/
-
-3 - Also, reverse porxy for moviedomfo/express_orders (#OrdersAPIExpress) dockers created in docker_file
-
-a- location /ulises/
-For calls <http://localhost:6001/ulises/api/customers/>
-b- location /platon/
-For calls as <http://localhost:6001/platon/api/customers/>
-
-## Redis docker image
-
-For the purpose of implementing tokens-cache among other things, our ecosystem uses Redis Cache.
-To facilitate the container deployment, I have prepared a YAML file ready to run with Docker Hub.
-
-Locate the directory where the "docker-compose-redis.yml" file is located. Root of all projects
-
+```bash
+docker-compose -f docker-compose-nginx.yml up -d
 ```
-    docker-compose -f docker-compose-redis.yml up -d
+
+In the configuration file (`docker-compose-nginx.yml`), we define:
+
+1. **Load Balancer for ComerceAPIExpress**:
+
+   * We create two containers: `platon` and `hercules`.
+   * These are configured in the `upstream back` section:
+
+     ```nginx
+     upstream back {
+       server platon:INT_PORT;
+       server hercules:INT_PORT;
+     }
+     ```
+
+   * Requests like `http://localhost:6001/api/persons/` will be routed to either `platon` or `hercules`.
+
+2. **Reverse Proxy for These Services**:
+
+   * `http://localhost:6001/platon/api/persons/`
+   * `http://localhost:6001/hercules/api/persons/`
+
+3. **Reverse Proxy for OrdersAPIExpress**:
+
+   * `http://localhost:6001/ulises/api/customers/`
+   * `http://localhost:6001/platon/api/customers/`
+
+## Redis Docker Image
+
+To enable token caching and blacklisting, the ecosystem uses Redis Cache.
+
+To deploy Redis using Docker Compose:
+
+```bash
+docker-compose -f docker-compose-redis.yml up -d
 ```
+
+Make sure to run this command from the root directory where `docker-compose-redis.yml` is located.

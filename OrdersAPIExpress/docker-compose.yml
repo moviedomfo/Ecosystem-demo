@@ -2,7 +2,7 @@ version: "3.2"
 services:
   socrates:
     container_name: socrates
-    image: moviedomfo/express_orders
+    image: moviedomfo/eco-api-orders
     ports:
       - 3035:${APP_PORT}
     environment:
@@ -13,7 +13,7 @@ services:
     volumes:
       - /e/volumens/express/orders:/app/files
   ulises:
-    image: moviedomfo/express_orders
+    image: moviedomfo/eco-api-orders
     container_name: ulises
     ports:
       - 3036:${APP_PORT}
@@ -24,7 +24,8 @@ services:
       net_eco:
         ipv4_address: 172.21.0.14
     volumes:
-      - /e/volumens/express/orders:/app/files
+      - /d/eco:/app/files
+
 # networking for the Redis container
 networks:
   net_eco:

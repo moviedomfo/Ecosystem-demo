@@ -1,15 +1,14 @@
-import {OrderBE} from "@domain/Entities/OrderBE";
-import {IOrderRepository} from "@application/interfases/IOrderRepository";
-import {OrderDTO} from "@domain/DTOs/OrderDto";
+import { OrderBE } from "@domain/Entities/OrderBE";
+import { IOrderRepository } from "@application/interfases/IOrderRepository";
+import { OrderDTO } from "@domain/DTOs/OrderDto";
 import OrderSchema from "@infra/schema/Order.schema";
-import {fileURLToPath} from "url";
+import { fileURLToPath } from "url";
 
 /**Persist to mongodb Orders */
 export default class OrdersMongoRepository implements IOrderRepository {
-  public Insert(order: OrderDTO): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
+  public async Insert(order: OrderDTO): Promise<string> {
+    try {
       const now = new Date();
-
       const pschema = new OrderSchema({
         OrderId: order.OrderId,
         PersonId: order.PersonId,
@@ -19,26 +18,24 @@ export default class OrdersMongoRepository implements IOrderRepository {
         Status: order.Status,
         GeneratedDate: order.GeneratedDate,
       });
-      try {
-        await pschema.save();
-        resolve();
-      } catch (err) {
-        reject(err);
-      }
-    });
+
+      const savedOrder = await pschema.save();
+      const id = savedOrder._id.toString();
+      console.log("Order._ID generado por MongoDB:", id);
+
+      return id;
+    } catch (err) {
+      console.error("Error al insertar Order:", err);
+      throw err;
+    }
   }
+
 
   public GetById(id: string): Promise<OrderBE> {
     return new Promise<OrderBE>(async (resolve, reject) => {
       try {
         const res = await OrderSchema.findById(id);
 
-        // const orderBE = {
-        //   OrderId: res.OrderId,
-        //   PersonId: res.PersonId,
-        //   CreatedDate: res.CreatedDate,
-        //   OrderDetail: res.OrderDetail,
-        // };
 
         resolve(res);
       } catch (err) {
@@ -70,20 +67,20 @@ export default class OrdersMongoRepository implements IOrderRepository {
 
       let fields = includeDetails
         ? {
-            OrderId: 1,
-            PersonId: 1,
-            Department: 1,
-            createdAt: 1,
-            Status: 1,
-            OrderDetail: 1,
-          }
+          OrderId: 1,
+          PersonId: 1,
+          Department: 1,
+          createdAt: 1,
+          Status: 1,
+          OrderDetail: 1,
+        }
         : {
-            OrderId: 1,
-            PersonId: 1,
-            Department: 1,
-            createdAt: 1,
-            Status: 1,
-          };
+          OrderId: 1,
+          PersonId: 1,
+          Department: 1,
+          createdAt: 1,
+          Status: 1,
+        };
       try {
         const res = await OrderSchema.find(query, fields);
 

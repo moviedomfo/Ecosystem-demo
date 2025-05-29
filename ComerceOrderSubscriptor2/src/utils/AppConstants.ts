@@ -1,16 +1,22 @@
 import * as dotenv from 'dotenv';
+const nodeEnv = process.env.NODE_ENV;
 
-dotenv.config();
+if (nodeEnv && nodeEnv !== 'development') {
+  dotenv.config({ path: `.env.${nodeEnv}` });
+} else {
+  dotenv.config(); // carga .env (por defecto o si está en desarrollo local)
+}
 
+console.log("NODE_ENV", process.env.NODE_ENV);
 export const AppConstants = {
   APP_NAME: process.env.APP_NAME,
   // BASE_COMERCE_URL: process.env.BASE_COMERCE_URL || 'http://localhost:3001',
-  // BASE_ORDERS_URL: process.env.BASE_ORDERS_URL || 'http://localhost:3000',
+  BASE_ORDERS_URL: process.env.BASE_ORDERS_URL || '',
   // Scheduling: process.env.SHEDULING || '* * * * *',
   Secconds: parseInt(process.env.SECONDS) || 1,
-  BROKERS:process.env.BROKERS ,
-  TOPIC:process.env.TOPIC ,
-  GROUP_ID:process.env.GROUP_ID ,
+  BROKERS: process.env.BROKERS,
+  TOPIC: process.env.TOPIC,
+  GROUP_ID: process.env.GROUP_ID,
   HEADERS: {
     crossDomain: 'true',
     Accept: 'application/json',
@@ -20,13 +26,13 @@ export const AppConstants = {
     'Access-Control-Allow-Headers':
       'Origin, Content-Type, Authorization, X-Auth-Token',
     'Content-Type': 'application/json',
-  }, 
+  },
   BD_HOST: process.env.BD_HOST,
   BD_INSTANCE: process.env.BD_INSTANCE,
   BD_DATABASE_NAME: process.env.BD_DATABASE_NAME,
   BD_PWD: process.env.BD_PWD,
   BD_USER: process.env.BD_USER,
-  DB_PORT : process.env.BD_PORT,
-  
+  DB_PORT: process.env.BD_PORT,
+
 };
 

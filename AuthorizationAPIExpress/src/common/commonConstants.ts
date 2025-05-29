@@ -3,6 +3,7 @@ require("dotenv").config();
  * Common constats
  */
 export const AppConstants = {
+  APP_PORT: process.env.APP_PORT as string || "5000",
   Verion: process.env.APP_VERSION as string,
   COMPANY: "Pelsoft",
   CLIENT_NAME: process.env.APP_CLIENT_NAME,

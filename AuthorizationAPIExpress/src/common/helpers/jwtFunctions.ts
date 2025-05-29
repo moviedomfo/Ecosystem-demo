@@ -1,7 +1,7 @@
-import {verify, sign, JwtPayload} from "jsonwebtoken";
-import {Token} from "@domain/Entities/Token";
-import {User} from "@domain/Entities/User";
-import {AppConstants} from "@common/commonConstants";
+import { verify, sign, JwtPayload } from "jsonwebtoken";
+import { Token } from "@domain/Entities/Token";
+import { User } from "@domain/Entities/User";
+import { AppConstants } from "@common/commonConstants";
 import * as fs from "fs";
 
 //const privateKey = config.get<string>("privateKey");
@@ -27,15 +27,21 @@ export class JWTFunctions {
 
     try {
       let privateKey;
-      if (fs.existsSync("./../files")) privateKey = fs.readFileSync(`./../files/${clientId}_private_key.pem`, "utf-8");
+      // if (fs.existsSync("./../files")) {
+      //   privateKey = fs.readFileSync(`./../files/${clientId}_private_key.pem`, "utf-8");
+      //   console.log("Existt in ../files");
+      // }
 
-      if (fs.existsSync("./files")) privateKey = fs.readFileSync(`./files/${clientId}_private_key.pem`, "utf-8");
-      //console.log(privateKey);
+      if (fs.existsSync("./files")) {
+        privateKey = fs.readFileSync(`./files/${clientId}_private_key.pem`, "utf-8");
+
+
+      }
 
       // doesn´t works
       //const jwt2 = sign(payload, privateKey2, {expiresIn: expiresIn_minutes, audience, issuer: AppConstants.JWT_issuer.toString(), algorithm: "RS256"});
 
-      const jwt = sign(payload, privateKey, {expiresIn: expiresIn_minutes, audience, issuer: AppConstants.JWT_issuer.toString(), algorithm: "RS256"});
+      const jwt = sign(payload, privateKey, { expiresIn: expiresIn_minutes, audience, issuer: AppConstants.JWT_issuer.toString(), algorithm: "RS256" });
 
       // it's less safe than RSA
       //return sign(payload, AppConstants.JWT_SECRET, {expiresIn: expiresIn_minutes, audience, issuer: AppConstants.JWT_issuer.toString()});

@@ -1,10 +1,15 @@
 
 const colors = require("colors");
 import * as fs from 'fs';
-
 import 'dayjs/locale/es';
 import dayjs from 'dayjs';
-
+import { AxiosError } from 'axios';
+interface ErrorResponseData {
+  message?: string;
+  originalMessage?: string;
+  errorCode?: string;
+  status?: number;
+}
 
 export class Helper {
 
@@ -144,8 +149,54 @@ export class Helper {
     );
   }
 
+
   public static GetError(error: any): string {
-    if (!error) return 'Error desconocido';
+    if (!error) return '❌ Error desconocido';
+
+    // ⚠️ Errores de red conocidos
+    switch (error.code) {
+      case 'ECONNREFUSED':
+        return '❌ No se pudo conectar al servidor. Verificá que esté activo y que el puerto sea accesible.';
+      case 'ENOTFOUND':
+        return '🌐 No se pudo encontrar el servidor. Verificá la URL o tu conexión a internet.';
+      case 'ECONNABORTED':
+      case 'ETIMEDOUT':
+        return '⏳ El servidor tardó demasiado en responder. Reintentá más tarde.';
+      case 'EAI_AGAIN':
+      case 'ERR_NETWORK':
+        return '📴 Problema de red o conexión intermitente. Verificá tu acceso a internet.';
+    }
+
+    const axiosErr = error as AxiosError;
+
+    // ✅ El servidor respondió con un error HTTP (4xx, 5xx)
+    if (axiosErr.response) {
+      const status = axiosErr.response.status;
+      const statusText = axiosErr.response.statusText;
+      const data = axiosErr.response?.data as ErrorResponseData;
+
+      const customMessage = data?.message;
+      const originalMessage = data?.originalMessage;
+      // Si viene un mensaje del backend, lo usamos
+      if (customMessage) {
+        return `🛑 Error del servidor (${status}): ${customMessage}, ${originalMessage}`;
+      }
+
+      // Si no viene mensaje del backend, usamos el genérico
+      return `🛑 Error del servidor (${status} ${statusText}): ${axiosErr.message}`;
+    }
+
+    // 📨 La solicitud fue enviada pero no hubo respuesta (corte de red, etc)
+    if (axiosErr.request) {
+      return '❗ Se envió la solicitud pero no se recibió respuesta del servidor. Puede estar caído.';
+    }
+
+    // 🧨 Otro error desconocido
+    return `⚠️ ${axiosErr.message || 'Ocurrió un error desconocido durante la solicitud HTTP.'}`;
+  }
+
+
+  public static GetErrorOld(error: any): string {
 
     if (error.code === 'ECONNREFUSED') {
       const addressInfo = error.errors?.map((e: any) => `${e.address}:${e.port}`).join(' o ');
@@ -155,9 +206,9 @@ export class Helper {
     if (error.code === 'ETIMEDOUT') {
       return 'La conexión tardó demasiado en responder. Verifica tu red o el servidor.';
     }
-
+    let axiosErr: AxiosError = error as AxiosError;
     if (error.response) {
-      return `El servidor respondió con el código ${error.response.status}: ${error.response.statusText}`;
+      return `El servidor respondió con el código ${error.response.status}: ${axiosErr.message}`;
     }
 
     if (error.request) {

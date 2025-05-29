@@ -1,23 +1,25 @@
-import {CreateOrderReq} from "@domain/DTOs/OrderDto";
-import {IOrdersService} from "@domain/IOrderService";
-import {NextFunction, Request, Response} from "express";
-import {parseBoolean} from "@common/helpers/paramsValidators";
-import {GET, POST, DELETE, route} from "awilix-express";
+import { CreateOrderReq } from "@domain/DTOs/OrderDto";
+import { IOrdersService } from "@domain/IOrdersService";
+import { NextFunction, Request, Response } from "express";
+import { parseBoolean } from "@common/helpers/paramsValidators";
+import { GET, POST, DELETE, route } from "awilix-express";
 
 /**
  * A purchase order is issued by the buyer generator (¡random cron-job app) and and later is to be fulfilled by the vendor
  */
 @route("/api/orders")
 export default class OrdersController {
-  constructor(private readonly ordersService: IOrdersService) {}
+  constructor(private readonly ordersService: IOrdersService) { }
   @route("/")
   @POST()
-  public OrderCreate = async (req: Request, res: Response, next: NextFunction) => {
+  public Create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqBody: CreateOrderReq = req.body as CreateOrderReq;
 
-      await this.ordersService.CreateOrder(reqBody.Content, reqBody.Origin);
-      res.status(200).send(reqBody.Content);
+      const id = await this.ordersService.CreateOrder(reqBody.Content, reqBody.Origin);
+      res.status(200).send({
+        orderId: id
+      });
     } catch (e) {
       console.log("push err  " + JSON.stringify(e));
       next(e);

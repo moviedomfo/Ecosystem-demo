@@ -8,11 +8,11 @@ This enqueueds messages will be recibed for those subscribers who requiere it. F
 
 ## Table of Contents
 
-- [Intro](#Intro)
-- [Push message to kafka topic ](#Push-message-to-kafka-topic)
+- [Intro](#intro)
+- [Push message to kafka topic](#Push-message-to-kafka-topic)
 - [Database](#mongodb-hosted)
-- [Run locally](#Run-locally)
-- [Dockerize](#Dockerize)
+- [Run locally](#run-locally)
+- [Dockerize](#dockerize)
 - [Validation](#Validation-Chain-API)
 
 ## Intro
@@ -46,7 +46,7 @@ This POST enpoint recive an input with this format:
     ```
 
 [4] Additionally if you have dockerhub installed. We leave you a dockerfil ready!!
-pleasse ref to [Dockerize](#Dockerize)
+pleasse ref to [Dockerize](#dockerize)
 
 # Microservices
 
@@ -57,18 +57,18 @@ You can use docker to deploy the api server. In this releasse we leave a dockerf
 ### generate image
 
 ```
-    docker image build -t moviedomfo/express_orders .
+    docker image build -t moviedomfo/eco-api-orders .
 
 ```
 
 ### run a single container whitout reverse proxy
 
 ```
-    docker run -d -p 3009:3009 --name express_order moviedomfo/express_order
+    docker run -d -p 3009:3009 --name eco-api-orders moviedomfo/eco-api-orders
 ```
 
 - Navigate to this url to check the if correctly docker container is running
-  http://localhost:3009
+  <http://localhost:3009>
 
 ## Run the application using Docker Compose
 

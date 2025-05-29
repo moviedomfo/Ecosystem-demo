@@ -12,7 +12,7 @@ API Gateway to take all messages from any publisher and send to corespondents ka
 
 ## Intro
 
-This API provide two principal enpoints:
+This API provide 3 enpoints:
 
 ## Push message to kafka topic
 
@@ -20,20 +20,10 @@ This API provide two principal enpoints:
 - %URL_BASE%/api/persons/persons
 - %URL_BASE%/api/products
 
-This POST endpoints recive an input with this format:
-
-```
-{
-  "origin": "POSTMAN",
-  "content": "any related json to /commerce/xxxxx use case",
-}
-
-```
-
 ## Run locally
 
 [1] Firs clone the repo locally
-[2] run -> pnpm install or yarn install
+[2] run -> yarn install
 [3] run dev command
 
     ```

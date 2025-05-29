@@ -1,11 +1,11 @@
 import { createContainer, asClass, InjectionMode } from "awilix";
 import OrdersController from "@infra/controllers/Orders.controller";
-import OrdersService from "@application/Orders.service";
 import OrdersMongoRepository from "@infra/repos/OrderMongo.repo";
 import KafkaEventBusRepository from "@infra/repos/EventBus.repo";
 import SecuritySettingsController from "@infra/controllers/securitySettings.controller";
 import KafkaController from "@infra/controllers/Kafka.controller";
 import KafkaAdminRepository from "@infra/repos/KafkaAdmin.repo";
+import { OrderService } from "@application/Orders.service";
 
 //Container
 const container = createContainer({
@@ -13,13 +13,13 @@ const container = createContainer({
 });
 
 container.register({
-  ordersService: asClass(OrdersService).scoped(),
+  ordersService: asClass(OrderService).scoped(),
   ordersRepo: asClass(OrdersMongoRepository).scoped(),
   ordersController: asClass(OrdersController).scoped(),
   eventBusRepo: asClass(KafkaEventBusRepository).scoped(),
   securitySettingsController: asClass(SecuritySettingsController).scoped(),
-  kafkaRepo:asClass(KafkaAdminRepository).scoped(),
-  kafkaController:asClass(KafkaController).scoped(),
+  kafkaRepo: asClass(KafkaAdminRepository).scoped(),
+  kafkaController: asClass(KafkaController).scoped(),
 });
 
 export const ordersRepo = container.resolve("ordersRepo");

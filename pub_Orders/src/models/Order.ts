@@ -1,9 +1,10 @@
 export class CreateOrderReq {
   public Content: OrderDTO;
   public Origin: string;
-  
+
 }
 export class OrderDTO {
+  public _id: string;
   public OrderId: string;
   public PersonId: string;
   public Department: string;

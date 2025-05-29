@@ -1,21 +1,21 @@
 version: "3.2"
 services:
   authserver:
-    container_name: express_auth
-    image: moviedomfo/express_auth
+    container_name: eco-api-auth
+    image: moviedomfo/eco-api-auth
     ports:
       - 3030:${PORT}
     environment:
       - SERVER_NAME="Authorization Server API  ${PORT}"
     volumes:
-      - /e/volumens/express/auth:/app/files
+      - /d/eco:/app/files
     # networks:
     #   net_eco:
     #     ipv4_address: 172.21.0.13
-# networking for the Redis container
-# networks:
-#   net_eco:
-#     ipam:
-#       #driver: default
-#       config:
-#         - subnet: 172.21.0.0/16
+    # networking for the Redis container
+    # networks:
+    #   net_eco:
+    #     ipam:
+    #       #driver: default
+    #       config:
+    #         - subnet: 172.21.0.0/16

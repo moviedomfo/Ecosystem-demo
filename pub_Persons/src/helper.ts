@@ -1,12 +1,16 @@
 import { DateTime } from '../node_modules/luxon';
 import dayjs from 'dayjs';
-var colors = require('colors');
-
-import * as fs from 'fs';
-import { readFileSync } from 'fs';
-import * as path from 'path';
 import { AxiosError } from 'axios';
+const colors = require("colors");
+import * as fs from 'fs';
 
+
+interface ErrorResponseData {
+  message?: string;
+  originalMessage?: string;
+  errorCode?: string;
+  status?: number;
+}
 export class Helper {
   public static WriteFile(fileName, data): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -130,42 +134,55 @@ export class Helper {
   public static LogConsole(message: string): void {
     console.log(colors.blue(Helper.getTime_Iso() + ' ' + message));
   }
+
   public static LogConsoleCyan(message: string): void {
     console.log(colors.cyan(Helper.getTime_Iso() + ' ' + message));
   }
+
   public static GetError(error: any): string {
-    if (!error) return 'Error desconocido';
+    if (!error) return '❌ Error desconocido';
 
-    if (error.code === 'ECONNREFUSED') {
-      const addressInfo = error.errors?.map((e: any) => `${e.address}:${e.port}`).join(' o ');
-      return `No se pudo conectar al servidor en ${addressInfo}. Asegurate de que esté iniciado.`;
+    // ⚠️ Errores de red conocidos
+    switch (error.code) {
+      case 'ECONNREFUSED':
+        return '❌ No se pudo conectar al servidor. Verificá que esté activo y que el puerto sea accesible.';
+      case 'ENOTFOUND':
+        return '🌐 No se pudo encontrar el servidor. Verificá la URL o tu conexión a internet.';
+      case 'ECONNABORTED':
+      case 'ETIMEDOUT':
+        return '⏳ El servidor tardó demasiado en responder. Reintentá más tarde.';
+      case 'EAI_AGAIN':
+      case 'ERR_NETWORK':
+        return '📴 Problema de red o conexión intermitente. Verificá tu acceso a internet.';
     }
 
-    if (error.code === 'ETIMEDOUT') {
-      return 'La conexión tardó demasiado en responder. Verifica tu red o el servidor.';
+    const axiosErr = error as AxiosError;
+
+    // ✅ El servidor respondió con un error HTTP (4xx, 5xx)
+    if (axiosErr.response) {
+      const status = axiosErr.response.status;
+      const statusText = axiosErr.response.statusText;
+      const data = axiosErr.response?.data as ErrorResponseData;
+
+      const customMessage = data?.message;
+      const originalMessage = data?.originalMessage;
+      // Si viene un mensaje del backend, lo usamos
+      if (customMessage) {
+        return `🛑 Error del servidor (${status}): ${customMessage}, ${originalMessage}`;
+      }
+
+      // Si no viene mensaje del backend, usamos el genérico
+      return `🛑 Error del servidor (${status} ${statusText}): ${axiosErr.message}`;
     }
 
-    if (error.response) {
-      return `El servidor respondió con el código ${error.response.status}: ${error.response.statusText}`;
+    // 📨 La solicitud fue enviada pero no hubo respuesta (corte de red, etc)
+    if (axiosErr.request) {
+      return '❗ Se envió la solicitud pero no se recibió respuesta del servidor. Puede estar caído.';
     }
 
-    if (error.request) {
-      return 'La solicitud fue enviada pero no se recibió respuesta del servidor.';
-    }
-
-    return error.message || 'Ocurrió un error desconocido durante la solicitud HTTP.';
+    // 🧨 Otro error desconocido
+    return `⚠️ ${axiosErr.message || 'Ocurrió un error desconocido durante la solicitud HTTP.'}`;
   }
 
-  // public static GetError(error): string {
-  //   let message = error.message;
-  //   if (error.response)
-  //     message = message.concat(error.response.data.message, '\n');
-  //   return message;
-  // }
 
-  // public static Log = (message: string) => ({
-
-  //   Helper.catFacturas.info(() => message);
-  //   Helper.catFacturas.info(() => "Performing magic once more: " + name);
-  // });
 }

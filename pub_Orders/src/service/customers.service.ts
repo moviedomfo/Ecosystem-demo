@@ -2,34 +2,32 @@ import { PersonBE } from '../models';
 import axios from 'axios';
 import { AppSettings } from '../utils/AppSettings';
 import { Helper } from '../utils/helper';
+import SecurityService from './security.service';
 
 
 export default class CustomersService {
-  public persons: PersonBE[];
+  public persons: PersonBE[] = [];
 
-  public Init(): Promise<void> {
-    return new Promise<any>(async (resolve, reject) => {
-      this.persons = await this.GetAll();
-      resolve('');
-    });
+
+  public async Init(): Promise<void> {
+
+    this.persons = await this.GetAll();
   }
 
-  
   async GetAll(): Promise<PersonBE[]> {
-    const url = AppSettings.BASE_COMERCE_URL + '/api/persons/customers';
-    return new Promise<any>((resolve, reject) => {
-      return axios
-        .get<any>(url, { headers: AppSettings.HEADERS })
-        .then((res) => {
-          resolve(res.data);
-        })
-        .catch(function (error) {
-          let e = new Error(
-            'Getting PersonBE errors : ' + Helper.GetError(error)
-          );
-          reject(e);
-        });
-    });
+    const url = `${AppSettings.BASE_COMERCE_URL}/api/persons/customers`;
+    const headers = {
+      ...AppSettings.HEADERS,
+      Authorization: SecurityService.currentLogin
+        ? `Bearer ${SecurityService.currentLogin.token}`
+        : undefined,
+    };
+    try {
+      const res = await axios.get<any>(url, { headers });
+      return res.data;
+    } catch (error) {
+      throw new Error(`Getting PersonBE errors: ${Helper.GetError(error)}`);
+    }
   }
 
   /**get reamdom person from cache */
@@ -37,7 +35,14 @@ export default class CustomersService {
     if (!this.persons) {
       await this.Init();
     }
-    const index = Math.floor(Math.random() * this.persons.length - 1);
-    return this.persons[index];
+    if (this.persons.length === 0) {
+      throw new Error('No persons available to select from.');
+    }
+
+    const index = Math.floor(Math.random() * this.persons.length);
+
+    const person = this.persons[index];
+
+    return person;
   }
 }

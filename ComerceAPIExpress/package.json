@@ -5,11 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "nodemon ./src/server.ts", 
+    "dev": "nodemon ./src/server.ts",
     "build": "tsc && tsc-alias && copy package.json dist",
     "buildlocal": "tsc && tsc-alias && copyfiles -u 1 src/**/*.json && copy package.json dist",
     "cpfiles": "copyfiles -u 1 src/**/*.json dist",
-    "restart": "rimraf dist && npm run start"
+    "restart": "rimraf dist && npm run start",
+    "build:docker": "tsc && tsc-alias"
   },
   "nodemonConfig": {
     "ignore": [

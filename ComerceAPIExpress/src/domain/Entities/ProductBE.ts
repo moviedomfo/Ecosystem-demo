@@ -1,8 +1,8 @@
-import {Entity} from "@common/CleanBases/Entity";
-import {count} from "console";
+import { Entity } from "@common/CleanBases/Entity";
 
 export class ProductBE extends Entity<string> {
   public Name: string;
+  
 
   public Cost: string;
   public Count: number;
@@ -17,9 +17,9 @@ export class ProductBE extends Entity<string> {
   // }
 
   static Create(object: any): ProductBE {
-    const {Id, Name, Cost, Count, Unit, Lab, Description, Department, GeneratedDate, CreatedDate} = object;
+    const { Id, Name, Cost, Count, Unit, Lab, Description, Department, GeneratedDate, CreatedDate } = object;
     const item: ProductBE = new ProductBE(Id);
-
+    
     item.Name = Name;
     item.Cost = Cost;
     item.Count = Count;

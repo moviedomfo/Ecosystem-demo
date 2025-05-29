@@ -13,11 +13,12 @@ import { personRouter } from "./infra/router/personPub.router";
 import { AppConstants } from "@common/CommonConstants";
 import "dotenv/config";
 import "./infra/db/mongo/MongoDatabase";
+import { ordersRouter } from "@infra/router/orders.router";
 const packageJson = require("./../package.json");
 
 require("dotenv").config();
 
-if (!AppConstants.PORT) {
+if (!AppConstants.APP_PORT) {
   process.exit(1);
 }
 
@@ -64,19 +65,21 @@ app.use("/api/persons/", logsMiddle);
 
 app.use("/api/products/", productRouter);
 app.use("/api/persons/", personRouter);
+app.use("/api/orders/", ordersRouter);
+
 app.use("/api/securitySettings", securitySettingsRouter);
 // Attach the first Error handling Middleware
 app.use(notFoundHandler);
 app.use(ExpressErrorHandler);
 
-const URL = `${process.env.APP_BASE_URL}:${AppConstants.PORT}`;
+const URL = `${process.env.APP_BASE_URL}:${AppConstants.APP_PORT}`;
 
 /**
  * Server Activation
  */
-app.listen(AppConstants.PORT, () => {
+app.listen(AppConstants.APP_PORT, () => {
   console.log(`-------------------------------------------------------------------------------`);
-  console.log(` ${AppConstants.APP_CLIENT_NAME} V${packageJson.version}  listening on port ${AppConstants.PORT}`);
+  console.log(` ${AppConstants.APP_CLIENT_NAME} V${packageJson.version}  listening on port ${AppConstants.APP_PORT}`);
   console.log(` API url ${URL}`);
   console.log(` API doccumentation ${URL}/docs/`);
   console.log(`-------------------------------------------------------------------------------`);

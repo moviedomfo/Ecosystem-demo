@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eco-api-auth
+  labels:
+    app: eco-api-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eco-api-auth
+  template:
+    metadata:
+      labels:
+        app: eco-api-auth
+    spec:
+      containers:
+        - name: eco-api-auth
+          image: moviedomfo/eco-api-auth:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3010
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: APP_VERSION
+              value: "1.0"
+            - name: APP_PORT
+              value: "3010" 
+            - name: APP_BASE_URL
+              value: "http://eco.local"
+            - name: APP_CLIENT_NAME
+              value: "Authorization API Express"
+            - name: REDIS_USER
+              value: "authExpress"
+            - name: REDIS_HOST
+              value: "192.168.2.184"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: "Pletorico+-"
+            - name: JWT_Expires
+              value: "50"
+            - name: JWT_ExpiresRefreshToken
+              value: "600"
+            - name: JWT_AUDIENCE
+              value: "https://pelsoft.com"
+            - name: JWT_ISSUER
+              value: "notused"
+          volumeMounts:
+            - name: file-volume
+              mountPath: /files
+      restartPolicy: Always 
+
+      volumes:
+      - name: file-volume
+        persistentVolumeClaim:
+          claimName: files-eco-pvc
+

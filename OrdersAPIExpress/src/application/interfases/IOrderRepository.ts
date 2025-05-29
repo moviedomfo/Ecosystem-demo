@@ -2,7 +2,7 @@ import {OrderDTO} from "@domain/DTOs/OrderDto";
 import {OrderBE} from "@domain/Entities/OrderBE";
 
 export interface IOrderRepository {
-  Insert: (req: OrderDTO) => Promise<void>;
+  Insert: (req: OrderDTO) => Promise<string>;
   GetById: (id: string) => Promise<OrderBE>;
   GetAll: () => Promise<OrderBE[]>;
   GetByParams: (
