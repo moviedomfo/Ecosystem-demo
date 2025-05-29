@@ -12,6 +12,36 @@
 
 ## Ecosystem Express
 
+```mermaid
+flowchart TD
+    User([User or Publisher])
+    Ingress([Ingress Controller\neco.local])
+    Auth([AuthorizationAPIExpress])
+    Comerce([ComerceAPIExpress])
+    Orders([OrdersAPIExpress])
+    SQL[(SQL Server)]
+    Mongo[(MongoDB Atlas)]
+    Kafka[(Kafka)]
+    Redis[(Redis)]
+    Subscriptor([ComerceOrderSubscriptor])
+
+    User -->|HTTP| Ingress
+    Ingress -->|/auth| Auth
+    Ingress -->|/comerce| Comerce
+    Ingress -->|/orders| Orders
+
+    Auth --> Redis
+    Comerce --> SQL
+    Comerce --> Kafka
+    Orders --> Mongo
+    Orders --> Kafka
+    Kafka --> Subscriptor
+    Subscriptor --> Comerce
+
+    classDef external fill:#DAF7A6,stroke:#333,stroke-width:2px;
+    class SQL,Mongo,Kafka,Redis external;
+```
+
 Demo of a microservices ecosystem interconnected using Domain-Driven Design (DDD), Clean Architecture, and CQRS.
 Transactions between microservices are handled using Event Sourcing with Kafka.
 
