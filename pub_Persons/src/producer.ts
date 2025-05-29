@@ -6,27 +6,35 @@ import { v4 as uuidv4 } from 'uuid';
 import { AppSettings } from './AppSettings';
 import { Helper } from './helper';
 import { Person } from './model';
+import SecurityService from './security.service';
 const https = require('https');
 const messagesAmount = 2;
 const cron = require('node-cron');
 
 export class Publisher {
-  constructor() {}
+  private readonly securityService: SecurityService;
+
+  constructor() {
+    this.securityService = new SecurityService()
+  }
 
   public async Start() {
+    SecurityService.currentLogin = await this.securityService.Auth('davendra', '1234');
+
     const publisherName = AppSettings.APP_NAME;
     //at every minute
-    cron.schedule('8 * * * *', async () => {
+    // cron.schedule('8 * * * *', async () => {
+    //   await this.DoWork_Providers_Arrivements();
+    // });
+    setInterval(async () => {
       await this.DoWork_Providers_Arrivements();
-    });
-
+    }, AppSettings.Secconds * 1350);
     setInterval(async () => {
       await this.DoWork_Custommers_Arrivements();
     }, AppSettings.Secconds * 1000);
 
     Helper.LogConsole(
-      `------------------Publisher started  ${
-        publisherName || ''
+      `------------------Publisher started  ${publisherName || ''
       } --------------------`
     );
     Helper.LogConsole(`API url ${AppSettings.BASE_URL}`);
@@ -62,21 +70,25 @@ export class Publisher {
       type: 9000,
       origin: AppSettings.APP_NAME,
     };
-    return new Promise<any>((resolve, reject) => {
-      return axios
-        .post<any>(url, data, { headers: AppSettings.HEADERS })
-        .then((res) => {
-          resolve(res.data);
-        })
-        .catch(function (error) {
-          let e = new Error(
-            'Importing finalized with errors : ' + Helper.GetError(error)
-          );
-          reject(e);
-        });
-    });
-  }
+    const headers = {
+      ...AppSettings.HEADERS,
+      Authorization: SecurityService.currentLogin
+        ? `Bearer ${SecurityService.currentLogin.token}`
+        : undefined,
+    };
+    try {
+      const response = await axios.post<any>(url, data, { headers });
+      return response.data;
+    } catch (error) {
+      throw new Error(`Importing finalized with errors: ${Helper.GetError(error)}`);
+    }
 
+  }
+  /**
+   * 
+   * @param person 
+   * @returns 
+   */
   private async SendCustomer(person: Person): Promise<any> {
     const url = AppSettings.BASE_URL + '/api/persons/customer';
 
@@ -86,20 +98,20 @@ export class Publisher {
       type: 8000,
       origin: AppSettings.APP_NAME,
     };
-    return new Promise<any>((resolve, reject) => {
-      return axios
-        .post<any>(url, data, { headers: AppSettings.HEADERS })
-        .then((res) => {
-          resolve(res.data);
-        })
-        .catch(function (error) {
-          const e = new Error(
-            'Publish to persons API finalized with errors : ' +
-              Helper.GetError(error)
-          );
-          reject(e);
-        });
-    });
+    const headers = {
+      ...AppSettings.HEADERS,
+      Authorization: SecurityService.currentLogin
+        ? `Bearer ${SecurityService.currentLogin.token}`
+        : undefined,
+    };
+    try {
+      const response = await axios.post<any>(url, data, { headers });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        'Publish to persons API finalized with errors: ' + Helper.GetError(error)
+      );
+    }
   }
 
   static async exitAfterSend() {

@@ -5,6 +5,7 @@ export class CreateOrderReq {
 }
 
 export class OrderDTO {
+  public _id: string;
   public OrderId: string;
   public PersonId: string;
   public Department: string;

@@ -6,8 +6,7 @@
   "scripts": {
     "start_": "tsc && nodemon  --tls-min-v1.0   dist/app.js",
     "start": "tsc && nodemon dist/app.js",
-    "prod": "tsc && node --tls-min-v1.0  dist/app.js   ",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prod": "tsc && cross-env NODE_ENV=production node --tls-min-v1.0 dist/app.js"
   },
   "author": "Marcelo F. Oviedo",
   "license": "ISC",
@@ -27,6 +26,7 @@
   "devDependencies": {
     "@faker-js/faker": "^9.8.0",
     "@types/node": "^22.15.18",
+    "cross-env": "^7.0.3",
     "ts-node": "^10.9.2"
   }
 }

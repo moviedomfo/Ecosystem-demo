@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eco-api-comerce
+  labels:
+    app: eco-api-comerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eco-api-comerce
+  template:
+    metadata:
+      labels:
+        app: eco-api-comerce
+    spec:
+      containers:
+        - name: eco-api-comerce
+          image: moviedomfo/eco-api-comerce:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3012
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: APP_PORT
+              value: "3012"
+            - name: APP_VERSION
+              value: "2.0"
+            - name: APP_CLIENT_NAME
+              value: "Comerce API Express"
+            - name: APP_CLIENT_ID
+              value: eco_comerce_Express
+            - name: APP_BASE_URL
+              value: http://localhost
+            - name: APP_FILES_PATH
+              value: ./files
+            - name: BD_PORT
+              value: "7780"
+            - name: BD_HOST
+              value: 192.168.2.106
+            - name: BD_INSTANCE
+              value: SQLEXPRESS2019
+            - name: BD_USER
+              value: sport
+            - name: BD_PWD
+              value: Lince22+-*
+            - name: BD_DATABASE_NAME
+              value: sportmanager
+            - name: BD_MONGO_URI
+              value: mongodb+srv://pelsoft:Pletorico+-@clusterx.qeihfxk.mongodb.net/?retryWrites=true&w=majority&appName=ClusterX
+            - name: BD_MONGO_USER
+              value: pelsoft
+            - name: BD_MONGO_PWD
+              value: Pletorico+-
+            - name: BD_MONGO_DB_NAME
+              value: comerce
+            - name: KAFKA_BROKERS
+              value: 192.168.2.184:9092
+            - name: KAFKA_CLIENT_ID
+              value: comerceExpress
+
+          volumeMounts:
+            - name: file-volume
+              mountPath: /app/files
+      volumes:
+      - name: file-volume
+        persistentVolumeClaim:
+          claimName: files-eco-pvc

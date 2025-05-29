@@ -1,5 +1,5 @@
 //require("dotenv").config();
-import {get} from "env-var";
+import { get } from "env-var";
 import "dotenv/config";
 
 /**
@@ -7,7 +7,7 @@ import "dotenv/config";
  */
 export const AppConstants = {
   COMPANY: "Pelsoft",
-  PORT: get("PORT").default("5000").asPortNumber(),
+  APP_PORT: get("APP_PORT").default("5000").asPortNumber(),
   APP_VERSION: get("APP_VERSION").required().asString(),
   APP_CLIENT_ID: get("APP_CLIENT_ID").required().asString(),
   APP_CLIENT_NAME: get("APP_CLIENT_NAME").required().asString(),

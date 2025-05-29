@@ -1,9 +1,9 @@
-import {OrderDTO} from "@domain/DTOs/OrderDto";
-import {OrderBE} from "./Entities/OrderBE";
+import { OrderDTO } from "@domain/DTOs/OrderDto";
+import { OrderBE } from "./Entities/OrderBE";
 
 export interface IOrdersService {
   GetById: (id: string) => Promise<OrderBE>;
-  CreateOrder: (req: OrderDTO, origin: string) => Promise<void>;
+  CreateOrder: (req: OrderDTO, origin: string) => Promise<string>;
   GetAll: () => Promise<OrderBE[]>;
   GetByParams: (
     startDate: Date,

@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && nodemon  --tls-min-v1.0   dist/app.js",
-    "prod": "tsc && node --tls-min-v1.0  dist/app.js   ",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prod": "tsc && cross-env NODE_ENV=production node --tls-min-v1.0 dist/app.js"
   },
   "author": "Marcelo F. Oviedo",
   "license": "ISC",
@@ -14,6 +13,7 @@
     "@kafkajs/confluent-schema-registry": "^3.3.0",
     "axios": "^1.9.0",
     "colors": "^1.4.0",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "kafkajs": "^2.2.4",

@@ -1,0 +1,4 @@
+resources:
+  - eco-api-deploy.yaml
+  - eco-api-services.yaml
+  - eco-api-ingress.yaml

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eco-api-orders
+  labels:
+    app: eco-api-orders
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eco-api-orders
+  template:
+    metadata:
+      labels:
+        app: eco-api-orders
+    spec:
+      containers:
+        - name: eco-api-orders
+          image: moviedomfo/eco-api-orders:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3011
+          env:
+              - name: NODE_ENV
+                value: "production"
+              - name: APP_PORT
+                value: "3011"
+              - name: APP_VERSION
+                value: "2.0"
+              - name: APP_CLIENT_ID
+                value: "orderExpress"
+              - name: APP_CLIENT_NAME
+                value: "Order API Express"
+              - name: APP_FILES_PATH
+                value: "./files"
+              - name: APP_BASE_URL
+                value: "http://localhost"
+              - name: BD_MONGO_URI
+                value: "mongodb+srv://pelsoft:Pletorico+-@clusterx.qeihfxk.mongodb.net/?retryWrites=true&w=majority&appName=ClusterX"
+              - name: BD_MONGO_USER
+                value: "pelsoft"
+              - name: BD_MONGO_PWD
+                value: "Pletorico+-"
+              - name: BD_MONGO_DB_NAME
+                value: "comerce"
+              - name: AUTH0_AUDIENCE
+                value: "https://pelsoft.com"
+              - name: AUTH0_DOMAIN
+                value: "pelsoftmfo.auth0.com"
+              - name: KAFKA_CLIENT_ID
+                value: "orderExpress"
+              - name: KAFKA_BROKERS
+                value: "192.168.2.184:9092"
+          volumeMounts:
+            - name: file-volume
+              mountPath: /app/files
+      volumes:
+      - name: file-volume
+        persistentVolumeClaim:
+          claimName: files-eco-pvc

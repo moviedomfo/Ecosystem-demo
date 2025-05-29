@@ -2,40 +2,46 @@ import axios from 'axios';
 import { AppSettings } from '../utils/AppSettings';
 import { Helper } from './../utils/helper';
 import { Product } from '../models';
+import SecurityService from './security.service';
 
 export default class ProductsService {
-  public products: Product[];
+  public products: Product[]=[];
 
-  public Init(): Promise<void> {
-    return new Promise<any>(async (resolve, reject) => {
-      this.products = await this.GetAll();
-      resolve('');
-    });
+
+  public async Init(): Promise<void> {
+
+    this.products = await this.GetAll();
   }
-
-  // @Get("/getAll")
+  // 
   async GetAll(): Promise<Product[]> {
-    const url = AppSettings.BASE_COMERCE_URL + '/api/products';
-    return new Promise<any>((resolve, reject) => {
-      return axios
-        .get<any>(url, { headers: AppSettings.HEADERS })
-        .then((res) => {
-          resolve(res.data);
-        })
-        .catch(function (error) {
-          let e = new Error(
-            'Getting productos errors : ' + Helper.GetError(error)
-          );
-          reject(e);
-        });
-    });
+
+    const url = `${AppSettings.BASE_COMERCE_URL}/api/products`;
+    const headers = {
+      ...AppSettings.HEADERS,
+      Authorization: SecurityService.currentLogin
+        ? `Bearer ${SecurityService.currentLogin.token}`
+        : undefined,
+    };
+    try {
+      const response = await axios.get<any>(url, { headers });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        `Getting productos errors: ${Helper.GetError(error)}`
+      );
+    }
   }
   /**retrive random product */
   public async getRandom() {
     if (this.products.length === 0) {
       await this.Init();
     }
-    return this.products[Math.floor(Math.random() * this.products.length - 1)];
+    if (this.products.length === 0) {
+      throw new Error('No products available to select from.');
+    }
+
+    return this.products[Math.floor(Math.random() * this.products.length)];
+
   }
 
   /*  returns details quantity (items count)

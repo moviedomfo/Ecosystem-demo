@@ -1,12 +1,12 @@
-import {IOrdersService} from "./../domain/IOrderService";
-import {OrderBE} from "@domain/Entities/OrderBE";
-import {IOrderRepository} from "./interfases/IOrderRepository";
-import {ImessageDto} from "@domain/DTOs/MessageDto";
-import {IEventBusRepository} from "./interfases/IEventBusRepository";
-import {CreateOrderReq, OrderDTO} from "@domain/DTOs/OrderDto";
-import {v4 as uuidv4} from "uuid";
+import { IOrdersService } from "@domain/IOrdersService";
+import { OrderBE } from "@domain/Entities/OrderBE";
+import { IOrderRepository } from "./interfases/IOrderRepository";
+import { ImessageDto } from "@domain/DTOs/MessageDto";
+import { IEventBusRepository } from "./interfases/IEventBusRepository";
+import { CreateOrderReq, OrderDTO } from "@domain/DTOs/OrderDto";
+import { v4 as uuidv4 } from "uuid";
 
-export default class OrdersService implements IOrdersService {
+export class OrderService implements IOrdersService {
   // private readonly _ordersRepo: IOrderRepository;
   // private readonly _eventBusRepo: IEventBusRepository;
   constructor(private ordersRepo: IOrderRepository, private eventBusRepo: IEventBusRepository) {
@@ -14,24 +14,23 @@ export default class OrdersService implements IOrdersService {
     // this._eventBusRepo = eventBusRepo;
   }
 
-  public async CreateOrder(order: OrderDTO, origin: string): Promise<void> {
+  public async CreateOrder(order: OrderDTO, origin: string): Promise<string> {
     order.OrderId = uuidv4();
     order.Status = "created";
     // try {
-    await this.ordersRepo.Insert(order);
+    const id = await this.ordersRepo.Insert(order);
 
     const msg: ImessageDto = {
       command: "CreateOrderEvent",
       content: JSON.stringify(order),
-      key: order.OrderId,
+      key: id,
       origin: origin,
     };
 
     /** send to Event Buss */
     await this.eventBusRepo.PushToQueue(msg, "orders");
-    // } catch (err) {
-    //   throw err;
-    // }
+
+    return id;
   }
 
   public async GetAll(): Promise<OrderBE[]> {

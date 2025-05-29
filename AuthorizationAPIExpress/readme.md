@@ -60,14 +60,13 @@ You can use docker to deploy the api server. In this releasse we leave a dockerf
 ### generate image
 
 ```
-    docker image build -t moviedomfo/express_auth .
-
+    docker image build -t moviedomfo/eco-api-auth .
 ```
 
 ### run a single container whitout reverse proxy
 
 ```
-    docker run -d -p 3010:3010 --name express_auth moviedomfo/express_auth
+    docker run -d -p 3010:3010 --name eco-api-auth moviedomfo/eco-api-auth
 ```
 
 - Navigate to this url to check the if correctly docker container is running

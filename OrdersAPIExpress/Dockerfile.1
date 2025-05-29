@@ -1,5 +1,5 @@
 # Build Stage 1
-FROM node:14.5.0-alpine as build
+FROM node:23.11.1-alpine as build
 
 WORKDIR /app
 COPY package*.json ./
@@ -15,7 +15,7 @@ COPY ./dist ./dist
 # RUN npm run build
 
 # CREATE IMAGE STEP
-FROM node:14.5.0-alpine
+FROM node:23.11.1-alpine
 LABEL maintainer="Pelsoft SF by @moviedo"
 
 # RUN npm install pm2@3.5.1 -g

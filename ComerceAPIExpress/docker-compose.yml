@@ -23,11 +23,10 @@ services:
       - SERVER_NAME="Platon comerce ${PORT}"
       # - PORT=3016
     volumes:
-      - /e/volumens/express/orders:/app/files
+      - /d/eco:/app/files
     networks:
       net_eco:
         ipv4_address: 172.20.0.4
-
   # comerce-nginx:
   #   container_name: comerce-nginx
   #   image: nginx:latest
@@ -46,7 +45,7 @@ services:
   #     net_eco:
   #       ipv4_address: 172.20.0.5
 
-# networking for the Redis container
+  # networking for the Redis container
 networks:
   net_eco:
     ipam:
