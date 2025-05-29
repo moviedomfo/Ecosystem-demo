@@ -35,7 +35,7 @@ flowchart TD
     Comerce --> Kafka
     Orders --> Mongo
     Orders --> Kafka
-    Kafka --> Subscriptor
+    Kafka -.-> Subscriptor
     Subscriptor --> Ingress
 
     classDef external fill:#DAF7A6,stroke:#333,stroke-width:2px;
